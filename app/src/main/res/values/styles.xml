@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="ListingsLeftTextBox">
+        <item name="android:layout_marginStart">120dp</item>
+        <item name="android:elevation">4dp</item>
+        <item name="fontFamily">@font/lato_regular</item>
+    </style>
+
+    <style name="ListingsRightTextBox">
+        <item name="android:layout_marginStart">245dp</item>
+        <item name="android:elevation">4dp</item>
+        <item name="fontFamily">@font/lato_regular</item>
+    </style>
+</resources>

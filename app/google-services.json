@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "243484675674",
+    "project_id": "helplah-27204",
+    "storage_bucket": "helplah-27204.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:243484675674:android:aa753818bd73d642ab5263",
+        "android_client_info": {
+          "package_name": "com.example.helplah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "243484675674-5pulf26gv6he4sipt8if9t58jt11glio.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcYHBRXoW18LpgBIJi6Dox5HSB6stDgQU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "243484675674-5pulf26gv6he4sipt8if9t58jt11glio.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
