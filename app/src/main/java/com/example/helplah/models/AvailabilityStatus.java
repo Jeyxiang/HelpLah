@@ -2,12 +2,12 @@ package com.example.helplah.models;
 
 public class AvailabilityStatus {
 
-    private static final int fourHours = 1;
-    private static final int OneDay = 2;
-    private static final int TwoDay = 3;
-    private static final int ThreeDays = 4;
-    private static final int OneWeek = 5;
-    private static final int Unavailable = 6;
+    public static final int fourHours = 1;
+    public static final int oneDay = 2;
+    public static final int twoDays = 3;
+    public static final int threeDays = 4;
+    public static final int oneWeek = 5;
+    public static final int unavailable = 6;
 
     public static String getAvailabilityText(int status) {
         String message;

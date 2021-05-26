@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/full_screen_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".ListingsDialogFragment">
+
+    <TextView
+        style="@style/AppTheme.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="15dp"
+        android:text="Filter" />
+
+    <!-- Sort by -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/icon_sort"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            app:tint="@color/greySecondary"
+            app:srcCompat="@drawable/ic_baseline_sort_24" />
+
+        <Spinner
+            android:id="@+id/spinner_sort_listings"
+            style="@style/AppTheme.FilterSpinner"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/icon_sort"
+            android:entries="@array/sort_by_listings" />
+    </RelativeLayout>
+
+    <!-- Availability filters -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/availabilityTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Title"
+            android:fontFamily="@font/lato_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Availability: " />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/availability_4_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.FilterCheckBox"
+            app:layout_constraintTop_toBottomOf="@id/availabilityTitle"
+            android:layout_marginStart="40dp"
+            android:text="@string/availability_4_hours"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/availability_1_day"
+            style="@style/AppTheme.FilterCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/availability_1_day"
+            android:layout_marginStart="200dp"
+            app:layout_constraintTop_toBottomOf="@id/availabilityTitle" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/availability_2_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.FilterCheckBox"
+            android:layout_marginStart="40dp"
+            app:layout_constraintTop_toBottomOf="@id/availability_4_hours"
+            android:text="@string/availability_2_days"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/availability_3_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.FilterCheckBox"
+            app:layout_constraintTop_toBottomOf="@id/availability_1_day"
+            android:layout_marginStart="200dp"
+            android:text="@string/availability_3_day"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/availability_1_week"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.FilterCheckBox"
+            android:layout_marginStart="40dp"
+            app:layout_constraintTop_toBottomOf="@id/availability_2_days"
+            android:text="@string/availability_1_week"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/languageTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/AppTheme.Title"
+            android:fontFamily="@font/lato_regular"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:text="Preferred Language:"/>
+
+        <RadioGroup
+            android:id="@+id/languageRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/languageTitle">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/languageNoPreference"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language_no_preference" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/languageEnglish"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language_english"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/languageMandarin"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language_mandarin"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/languagMalay"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language_malay"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/languageTamil"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language_tamil"/>
+        </RadioGroup>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Cancel and apply buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_cancel"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="@color/greySecondary"
+            android:theme="@style/ThemeOverlay.FilterButton" />
+
+
+        <Button
+            android:id="@+id/button_apply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Apply"
+            android:backgroundTint="@color/colorPrimary" />
+
+    </LinearLayout>
+
+</LinearLayout>

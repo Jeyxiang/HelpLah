@@ -6,4 +6,30 @@
     <string name="bottom_navigation_item4">Account</string>
     <string name="content_description_search">Searching</string>
     <string name="content_description_filter">Filtering</string>
+
+    <string name="availability_4_hours">4 Hours</string>
+    <string name="availability_1_day">1 Day</string>
+    <string name="availability_2_days">2 Days</string>
+    <string name="availability_3_day">3 Days</string>
+    <string name="availability_1_week">1 Week</string>
+
+    <string name="language_english">English</string>
+    <string name="language_mandarin">Mandarin</string>
+    <string name="language_malay">Malay</string>
+    <string name="language_tamil">Tamil</string>
+    <string name="language_no_preference">No Preference</string>
+
+
+    <string name="sort_by_score">Sort by Score</string>
+    <string name="sort_by_number_of_reviews">Sort by Popularity</string>
+    <string name="sort_by_price_ascending">Sort by Price (Ascending)</string>
+    <string name="sort_by_price_descending">Sort by Price (Descending)</string>
+
+    <!-- Ways to sort business listings -->
+    <string-array name="sort_by_listings">
+        <item>@string/sort_by_score</item>
+        <item>@string/sort_by_number_of_reviews</item>
+        <item>@string/sort_by_price_ascending</item>
+        <item>@string/sort_by_price_descending</item>
+    </string-array>
 </resources>

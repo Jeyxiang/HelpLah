@@ -2,6 +2,7 @@ package com.example.helplah.models;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Abstracts a business listing in the app.
@@ -27,9 +28,8 @@ public class Listings {
     public static final String LANGUAGE_CHINESE = "Chinese";
     public static final String LANGUAGE_MALAY = "Malay";
     public static final String LANGUAGE_TAMIL = "Tamil";
-
-    public static final ArrayList<String> languageList = new ArrayList<>(Arrays.asList(LANGUAGE_ENGLISH,
-            LANGUAGE_CHINESE, LANGUAGE_TAMIL, LANGUAGE_MALAY));
+    public static final ArrayList<String> ALL_LANGUAGES= new ArrayList<>(Arrays.asList(LANGUAGE_ENGLISH,
+            LANGUAGE_CHINESE, LANGUAGE_MALAY, LANGUAGE_TAMIL));
 
     private String name;
     private String description;
@@ -44,6 +44,7 @@ public class Listings {
     private int phoneNumber;
     private String website;
     private Services servicesList;
+    private HashMap<String, Boolean> languagesSpoken;  // TODO
 
     // Firestore requires empty constructor to run
     public Listings() {}

@@ -3,20 +3,21 @@ package com.example.helplah.models;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
+
 /**
- * Class to abstract a query made based on this and serach.
+ * Class to construct a query made based on filters and sort.
  */
 public class ListingsQuery {
 
     private final FirebaseFirestore db;
     
-    private int availability = 0;
-    private int minNumOfReviews = -1;
-    private double minReviewScore = -1;
+    private ArrayList<Integer> availability = new ArrayList<>();
     private String service = null;
     private String sortBy = null;
-    private String language = null;
+    private String preferredLanguage = null; // TODO
     private boolean ascending = false;
+    private boolean isEmpty = true;
 
     public ListingsQuery(FirebaseFirestore db) {
         this.db = db;
@@ -29,18 +30,13 @@ public class ListingsQuery {
         if (this.hasService()) {
             query = query.whereArrayContains(Listings.FIELD_SERVICES_LIST, this.service);
         }
-        if (this.hasLanguage()) {
-            //query = query.w
+        if (this.hasPreferredLanguage()) {
+            // TODO
         }
         if (this.hasAvailability()) {
-            query = query.whereEqualTo(Listings.FIELD_AVAILABILITY, this.availability);
+            query = query.whereIn(Listings.FIELD_AVAILABILITY, this.availability);
         }
-        if (this.hasNumberOfReviews()) {
-            query = query.whereGreaterThanOrEqualTo(Listings.FIELD_NUMBER_OF_REVIEWS, this.minNumOfReviews);
-        }
-        if (this.hasMinReviewScore()) {
-            query = query.whereGreaterThanOrEqualTo(Listings.FIELD_REVIEW_SCORE, this.minReviewScore);
-        } if (this.hasSortBy()) {
+        if (this.hasSortBy()) {
             if (this.isAscending()) {
                 query = query.orderBy(this.sortBy, Query.Direction.ASCENDING);
             } else {
@@ -51,15 +47,7 @@ public class ListingsQuery {
     }
 
     public boolean hasAvailability() {
-        return this.availability != 0;
-    }
-
-    public boolean hasNumberOfReviews() {
-        return this.minNumOfReviews != -1;
-    }
-
-    public boolean hasMinReviewScore() {
-        return this.minReviewScore != -1d;
+        return !this.availability.isEmpty();
     }
 
     public boolean hasSortBy() {
@@ -70,44 +58,45 @@ public class ListingsQuery {
         return this.service != null;
     }
 
-    public boolean hasLanguage() {
-        return this.language != null;
+    public boolean hasPreferredLanguage() {
+        return this.preferredLanguage != null;
     }
 
-    public void setAvailability(int availability) {
-        this.availability = availability;
-    }
-
-    public void setMinNumOfReviews(int minNumOfReviews) {
-        if (minNumOfReviews >= 0) {
-            this.minNumOfReviews = minNumOfReviews;
+    public void setAvailability(int... availability) {
+        for (int i : availability) {
+            if (i >= 1 && i <= 5 && !this.availability.contains(i)) {
+                this.availability.add(i);
+            }
         }
-    }
-
-    public void setMinReviewScore(double minReviewScore) {
-        if (minReviewScore >= 0d && minReviewScore <= 5d) {
-            this.minReviewScore = minReviewScore;
-        }
+        this.isEmpty = false;
     }
 
     public void setService(String service) {
         if (Services.ALLSERVICES.contains(service)) {
             this.service = service;
         }
+        this.isEmpty = false;
     }
 
     public void setSortBy(String field, boolean ascending) {
         if (Listings.sortable.contains(field)) {
             this.sortBy = field;
+            this.ascending = ascending;
         }
-        if (ascending) {
-            this.ascending = true;
-        } else {
-            this.ascending = false;
+        this.isEmpty = false;
+    }
+
+    public void setPreferredLanguage(String preferredLanguage) {
+        if (preferredLanguage != null && Listings.ALL_LANGUAGES.contains(preferredLanguage)) {
+            this.preferredLanguage = preferredLanguage;
         }
     }
     
     public boolean isAscending() {
         return this.ascending;
+    }
+
+    public boolean isEmpty() {
+        return this.isEmpty;
     }
 }
