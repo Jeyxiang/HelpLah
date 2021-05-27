@@ -41,6 +41,7 @@ public class BusinessListings extends AppCompatActivity implements
 
         this.listingsToolBar = findViewById(R.id.searchTopAppBar);
         setToolBarListener(this.listingsToolBar);
+        this.listingsToolBar.setNavigationOnClickListener(x -> finish());
         this.rvListings = findViewById(R.id.rvListings);
 
         // Create filter dialog
@@ -51,6 +52,7 @@ public class BusinessListings extends AppCompatActivity implements
         ListingsQuery q = new ListingsQuery(FirebaseFirestore.getInstance());
         if (category != null) {
             q.setService(category);
+            this.listingsToolBar.setTitle("Results for " + category + "s");
         } else {
             throw new IllegalArgumentException("Must pass a: " + Services.SERVICE);
         }
@@ -76,7 +78,7 @@ public class BusinessListings extends AppCompatActivity implements
         this.rvAdapter = new ListingsAdapter(options, this);
         rvListings.setAdapter(rvAdapter);
         rvListings.setLayoutManager(new LinearLayoutManager(this));
-        checkIfEmptyQuery();
+        //checkIfEmptyQuery();
     }
 
     private void changeQuery(Query newQuery) {
@@ -88,7 +90,7 @@ public class BusinessListings extends AppCompatActivity implements
                 .build();
 
         this.rvAdapter.updateOptions(options);
-        checkIfEmptyQuery();
+        //checkIfEmptyQuery();
     }
 
     private void checkIfEmptyQuery() {

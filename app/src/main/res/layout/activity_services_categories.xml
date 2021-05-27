@@ -8,60 +8,68 @@
     android:background="@color/white"
     tools:context=".viewmodel.MainActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categoryRecyclerView"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/categoryConstraintLayout"
-        android:layout_above="@+id/categoryBottomNavigation"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="3dp"/>
+        android:layout_height="match_parent"
+        android:layout_above="@id/categoryBottomNavigation" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/categoryConstraintLayout"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:background="@drawable/blue_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="316dp"
-            android:layout_height="101dp"
-            android:layout_marginStart="9dp"
-            android:layout_marginEnd="15dp"
-            android:fontFamily="@font/lato_bold"
-            android:text="What are you looking for?"
-            android:textColor="#E8E2E2"
-            android:textSize="36dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.936" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/categorySearchView"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="#CAC7C7"
-            android:drawableLeft="@drawable/ic_baseline_search_24"
-            android:fontFamily="@font/lato_regular"
-            android:hint="  Search ..."
-            android:inputType="text"
-            android:textColor="#80ffffff"
-            android:textColorHint="#80ffffff"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="wrap_content" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/categoryConstraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="@drawable/blue_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="250dp"
+                    android:layout_height="101dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:text="What are you looking for?"
+                    android:textColor="#E8E2E2"
+                    android:textSize="36sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/categorySearchView" />
+
+                <com.mancj.materialsearchbar.MaterialSearchBar
+                    android:id="@+id/categorySearchView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="7dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="15dp"
+                    app:mt_searchBarColor="#90ffffff"
+                    app:mt_placeholder="Search..."
+                    app:mt_hint="Search for a category or business"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/categoryConstraintLayout"
+                android:overScrollMode="never"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="3dp"/>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/categoryBottomNavigation"

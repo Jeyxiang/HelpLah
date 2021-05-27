@@ -3,28 +3,29 @@ package com.example.helplah.viewmodel;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.models.Services;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 public class ServicesCategoriesActivity extends AppCompatActivity implements CategoriesAdapter.onCategorySelected {
 
     public static final String TAG = "ServicesCategoryActivities";
 
     RecyclerView recyclerView;
-    TextView searchView;
+    MaterialSearchBar searchView;
 
 
-    int[] categoriesImages = {R.drawable.ic_baseline_plumbing_24, R.drawable.ic_baseline_electrical_services_24,
-            R.drawable.plumbing_logos, R.drawable.plumbing_logos, R.drawable.plumbing_logos,
-            R.drawable.plumbing_logos, R.drawable.plumbing_logos,
-            R.drawable.plumbing_logos};
+    int[] categoriesImages = {R.drawable.ic_baseline_electrical_services_24, R.drawable.ic_baseline_plumbing_24,
+            R.drawable.ic_baseline_cleaning_services_24, R.drawable.ic_baseline_home_repair_service_24,
+            R.drawable.ic_baseline_airport_shuttle_24, R.drawable.ic_baseline_lock_24,
+            R.drawable.ic_baseline_pest_control_24, R.drawable.plumbing_logos};
 
     String[] categories;
 
@@ -42,6 +43,7 @@ public class ServicesCategoriesActivity extends AppCompatActivity implements Cat
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2,
                 GridLayoutManager.VERTICAL, false);
         this.recyclerView.setAdapter(mAdapter);
+        ViewCompat.setNestedScrollingEnabled(this.recyclerView, false);
         this.recyclerView.setLayoutManager(gridLayoutManager);
     }
 

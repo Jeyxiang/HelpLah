@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:menu="@menu/search_top_app_bar"
-                android:background="#192c96"
+                android:background="@color/googleBlue"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary" >
 
@@ -30,8 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/AppTheme.Title"
-                    android:textColor="#95F5F0F1"
-                    android:text="Sear" />
+                    android:textColor="#95F5F0F1" />
 
             </com.google.android.material.appbar.MaterialToolbar>
 
