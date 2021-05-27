@@ -49,6 +49,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/listingsCoordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="10dp"
+        android:elevation="10dp"
+        android:layout_above="@id/BottomNavigation" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/BottomNavigation"
         android:layout_width="match_parent"

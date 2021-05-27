@@ -1,5 +1,7 @@
 package com.example.helplah.models;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,6 +11,10 @@ import java.util.HashMap;
  */
 public class Listings {
 
+    // Name of the collection in firebase that stores the business listings
+    public static final String DATABASE_COLLECTION = "Businesses";
+
+    // Static fields to query database with
     public static final String FIELD_NAME = "name";
     public static final String FIELD_PRICE = "minPrice";
     public static final String FIELD_REVIEW_SCORE = "reviewScore";
@@ -21,9 +27,12 @@ public class Listings {
     public static final String FIELD_AVAILABILITY = "availability";
     public static final String FIELD_LANGUAGE = "language";
 
+    // Properties which the user can sort on
     public static final ArrayList<String> sortable = new ArrayList<>(Arrays.asList(FIELD_NAME,
             FIELD_PRICE, FIELD_NUMBER_OF_REVIEWS, FIELD_REVIEW_SCORE));
 
+
+    // Languages spoken by the company TODO
     public static final String LANGUAGE_ENGLISH = "English";
     public static final String LANGUAGE_CHINESE = "Chinese";
     public static final String LANGUAGE_MALAY = "Malay";
@@ -65,6 +74,10 @@ public class Listings {
         this.website = website;
         this.servicesList = servicesList;
         this.language = language;
+    }
+
+    public static void uploadListingToDatabase(Listings listing) {
+        FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION).add(listing);
     }
 
     public Services getServicesList() {
@@ -127,7 +140,7 @@ public class Listings {
         return reviewScore;
     }
 
-    public void updateReviewScore(double newScore) {
+    public void addReview(double newScore) {
         double oldScore = numberOfReviews * reviewScore;
         IncrementNumberOfReviews();
         this.reviewScore = (oldScore + newScore) / getNumberOfReviews();

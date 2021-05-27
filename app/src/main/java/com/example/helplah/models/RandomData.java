@@ -13,7 +13,7 @@ public class RandomData {
 
     public static void fillDatabase(int numberOfItems) {
         for (int i = 0 ; i < numberOfItems; i++) {
-            FirebaseFirestore.getInstance().collection("Businesses").add(randomListing());
+            FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION).add(randomListing());
         }
     }
 

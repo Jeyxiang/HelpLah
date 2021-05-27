@@ -15,6 +15,7 @@ import com.example.helplah.models.Listings;
 import com.example.helplah.models.ListingsQuery;
 import com.example.helplah.models.Services;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -75,6 +76,7 @@ public class BusinessListings extends AppCompatActivity implements
         this.rvAdapter = new ListingsAdapter(options, this);
         rvListings.setAdapter(rvAdapter);
         rvListings.setLayoutManager(new LinearLayoutManager(this));
+        checkIfEmptyQuery();
     }
 
     private void changeQuery(Query newQuery) {
@@ -86,6 +88,14 @@ public class BusinessListings extends AppCompatActivity implements
                 .build();
 
         this.rvAdapter.updateOptions(options);
+        checkIfEmptyQuery();
+    }
+
+    private void checkIfEmptyQuery() {
+        if (this.rvAdapter != null && this.rvAdapter.getItemCount() == 0) {
+            Log.d(TAG, "checkIfEmptyQuery: No results");
+            Snackbar.make(findViewById(R.id.listingsCoordinatorLayout), "No results found", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     @Override

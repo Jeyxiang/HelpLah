@@ -15,7 +15,8 @@ public class ListingsQuery {
     public static final String TAG = "ListingsQuery";
 
     private final FirebaseFirestore db;
-    
+
+    // Fields to query on
     private ArrayList<Integer> availability = new ArrayList<>();
     private String service = null;
     private String sortBy = null;
@@ -29,7 +30,7 @@ public class ListingsQuery {
 
     public Query createQuery() {
 
-        Query query = this.db.collection("Businesses");
+        Query query = this.db.collection(Listings.DATABASE_COLLECTION);
 
         if (this.hasService()) {
             query = query.whereArrayContains(Listings.FIELD_SERVICES_LIST, this.service);
@@ -66,6 +67,7 @@ public class ListingsQuery {
         return this.preferredLanguage != null;
     }
 
+    // Set the query to search based on certain availability
     public void setAvailability(int... availability) {
         for (int i : availability) {
             Log.d(TAG, "setAvailability: " + i);
@@ -76,6 +78,7 @@ public class ListingsQuery {
         this.isEmpty = false;
     }
 
+    // Set the query to search based on the type of service provided
     public void setService(String service) {
         if (Services.ALLSERVICES.contains(service)) {
             this.service = service;
@@ -83,6 +86,7 @@ public class ListingsQuery {
         this.isEmpty = false;
     }
 
+    // Set the query to sort by a field as listed in Listings.sortable
     public void setSortBy(String field, boolean ascending) {
         if (Listings.sortable.contains(field)) {
             this.sortBy = field;
