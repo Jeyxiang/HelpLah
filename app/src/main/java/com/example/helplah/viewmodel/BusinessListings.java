@@ -1,4 +1,4 @@
-package com.example.helplah;
+package com.example.helplah.viewmodel;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,20 +9,26 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.helplah.R;
 import com.example.helplah.adapters.ListingsAdapter;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.ListingsQuery;
 import com.example.helplah.models.Services;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class BusinessListings extends AppCompatActivity {
+public class BusinessListings extends AppCompatActivity implements
+        ListingsDialogFragment.FilterListener,
+        ListingsAdapter.onListingSelectedListener {
 
     private static final String TAG = "Business Listings Activity";
 
     private RecyclerView rvListings;
     private Toolbar listingsToolBar;
+    private ListingsAdapter rvAdapter;
+    private PagedList.Config rvConfig;
 
     private Query query;
     private ListingsDialogFragment filterDialog;
@@ -40,30 +46,51 @@ public class BusinessListings extends AppCompatActivity {
         setFinishOnTouchOutside(false);
         this.filterDialog = new ListingsDialogFragment();
 
+        String category = getIntent().getExtras().getString(Services.SERVICE);
         ListingsQuery q = new ListingsQuery(FirebaseFirestore.getInstance());
-        q.setService(Services.ELECTRICIAN);
-        q.setAvailability(1,2);
+        if (category != null) {
+            q.setService(category);
+        } else {
+            throw new IllegalArgumentException("Must pass a: " + Services.SERVICE);
+        }
+
         q.setSortBy(Listings.FIELD_REVIEW_SCORE, false);
         this.query = q.createQuery();
         getQuery(this.query);
     }
 
-    protected void getQuery(Query q) {
-        PagedList.Config config = new PagedList.Config.Builder()
+    private void getQuery(Query q) {
+        this.rvConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(15)
-                .setPageSize(10)
+                .setInitialLoadSizeHint(10)
+                .setPageSize(5)
                 .setPrefetchDistance(5)
                 .build();
 
         FirestorePagingOptions<Listings> options = new FirestorePagingOptions.Builder<Listings>()
                 .setLifecycleOwner(this)
-                .setQuery(q, config, Listings.class)
+                .setQuery(q, this.rvConfig, Listings.class)
                 .build();
 
-        ListingsAdapter adapter = new ListingsAdapter(options);
-        rvListings.setAdapter(adapter);
+        this.rvAdapter = new ListingsAdapter(options, this);
+        rvListings.setAdapter(rvAdapter);
         rvListings.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void changeQuery(Query newQuery) {
+        this.query = newQuery;
+
+        FirestorePagingOptions<Listings> options = new FirestorePagingOptions.Builder<Listings>()
+                .setLifecycleOwner(this)
+                .setQuery(newQuery, this.rvConfig, Listings.class)
+                .build();
+
+        this.rvAdapter.updateOptions(options);
+    }
+
+    @Override
+    public void onFilter(Query query) {
+        changeQuery(query);
     }
 
     public void setToolBarListener(Toolbar toolbar) {
@@ -71,6 +98,7 @@ public class BusinessListings extends AppCompatActivity {
             switch (menuItem.getItemId()) {
                 case R.id.topBarSearch:
                     Log.i(BusinessListings.TAG, "searching clicked");
+                    onSearchOptionClicked();
                     return true;
                 case R.id.topBarFilter:
                     onFilterOptionClicked();
@@ -81,7 +109,17 @@ public class BusinessListings extends AppCompatActivity {
         });
     }
 
+    public void onSearchOptionClicked() {
+        // TODO
+    }
+
     public void onFilterOptionClicked() {
         this.filterDialog.show(getSupportFragmentManager(), BusinessListings.TAG);
+    }
+
+    @Override
+    public void onListingClicked(DocumentSnapshot listing) {
+        // Go to listing description
+        Log.d(TAG, "onListingClicked: " + listing.get(Listings.FIELD_NAME));
     }
 }

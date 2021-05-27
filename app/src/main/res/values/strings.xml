@@ -4,6 +4,7 @@
     <string name="bottom_navigation_item2">Job Requests</string>
     <string name="bottom_navigation_item3">Chats</string>
     <string name="bottom_navigation_item4">Account</string>
+
     <string name="content_description_search">Searching</string>
     <string name="content_description_filter">Filtering</string>
 
@@ -24,6 +25,18 @@
     <string name="sort_by_number_of_reviews">Sort by Popularity</string>
     <string name="sort_by_price_ascending">Sort by Price (Ascending)</string>
     <string name="sort_by_price_descending">Sort by Price (Descending)</string>
+
+    <!-- Services provided by the app -->
+    <string-array name="service_providers">
+        <item>Plumbing</item>
+        <item>Electrician</item>
+        <item>Air-Conditioning</item>
+        <item>Cleaning</item>
+        <item>Movers</item>
+        <item>LockSmith</item>
+        <item>Painting</item>
+        <item>Pest Control</item>
+    </string-array>
 
     <!-- Ways to sort business listings -->
     <string-array name="sort_by_listings">

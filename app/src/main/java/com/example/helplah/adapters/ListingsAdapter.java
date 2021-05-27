@@ -14,16 +14,27 @@ import com.example.helplah.models.AvailabilityStatus;
 import com.example.helplah.models.Listings;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAdapter.ListingsViewHolder> {
 
-    public ListingsAdapter(FirestorePagingOptions<Listings> options) {
+    public interface onListingSelectedListener {
+
+        void onListingClicked(DocumentSnapshot listing);
+
+    }
+
+    private onListingSelectedListener mListener;
+
+    public ListingsAdapter(FirestorePagingOptions<Listings> options, onListingSelectedListener listener) {
         super(options);
+        this.mListener = listener;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull ListingsViewHolder holder, int position, @NonNull Listings model) {
-        holder.bind(model);
+        DocumentSnapshot snapshot = getItem(position);
+        holder.bind(snapshot, this.mListener);
     }
 
     @NonNull
@@ -53,13 +64,25 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
             this.listingRatingBar = itemView.findViewById(R.id.listingRatingBar);
         }
 
-        public void bind(Listings model) {
-            this.listingPrice.setText("From $" + (int) model.getMinPrice());
-            this.listingAvailability.setText(AvailabilityStatus.getAvailabilityText(model.getAvailability()));
-            this.listingName.setText(model.getName());
-            this.listingScore.setText(String.format("%.1f", model.getReviewScore()));
-            this.listingNumOfReviews.setText("(" + model.getNumberOfReviews() + ")");
-            this.listingRatingBar.setRating((float) model.getReviewScore());
+        public void bind(final DocumentSnapshot snapshot, final onListingSelectedListener listener) {
+
+            Listings listing = snapshot.toObject(Listings.class);
+
+            this.listingPrice.setText("From $" + (int) listing.getMinPrice());
+            this.listingAvailability.setText(AvailabilityStatus.getAvailabilityText(listing.getAvailability()));
+            this.listingName.setText(listing.getName());
+            this.listingScore.setText(String.format("%.1f", listing.getReviewScore()));
+            this.listingNumOfReviews.setText("(" + listing.getNumberOfReviews() + ")");
+            this.listingRatingBar.setRating((float) listing.getReviewScore());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.onListingClicked(snapshot);
+                    }
+                }
+            });
         }
     }
 }

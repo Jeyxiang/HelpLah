@@ -1,5 +1,7 @@
 package com.example.helplah.models;
 
+import android.util.Log;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -9,6 +11,8 @@ import java.util.ArrayList;
  * Class to construct a query made based on filters and sort.
  */
 public class ListingsQuery {
+
+    public static final String TAG = "ListingsQuery";
 
     private final FirebaseFirestore db;
     
@@ -64,6 +68,7 @@ public class ListingsQuery {
 
     public void setAvailability(int... availability) {
         for (int i : availability) {
+            Log.d(TAG, "setAvailability: " + i);
             if (i >= 1 && i <= 5 && !this.availability.contains(i)) {
                 this.availability.add(i);
             }
