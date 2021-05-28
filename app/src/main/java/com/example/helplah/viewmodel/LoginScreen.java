@@ -1,5 +1,6 @@
 package com.example.helplah.viewmodel;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,6 +51,8 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Bring to register page
+                Intent intent = new Intent(getApplicationContext(), RegisterScreen.class);
+                startActivity(intent);
             }
         });
     }
@@ -62,6 +65,9 @@ public class LoginScreen extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "User signed in");
+                            // Got to home page of app
+                            Intent intent = new Intent(getApplicationContext(), ServicesCategoriesActivity.class);
+                            startActivity(intent);
                         } else {
                             Log.d(TAG, "Sign in failed");
                             Snackbar.make(v, "No such user found", Snackbar.LENGTH_SHORT).show();
