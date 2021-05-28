@@ -9,8 +9,7 @@
     android:layout_marginRight="12dp"
     android:layout_marginBottom="4dp"
     app:cardBackgroundColor="@color/listings_color"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="0dp"
+    app:cardElevation="6dp"
     tools:layout_editor_absoluteX="4dp"
     tools:layout_editor_absoluteY="4dp">
 
@@ -25,11 +24,12 @@
         <TextView
             android:id="@+id/listingName"
             style="@style/ListingsLeftTextBox"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="ABC"
-            android:textSize="20sp"
+            android:text="Singapore plumbing Company"
+            android:maxLines="2"
+            android:textSize="23sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
             android:text="4.7"
-            android:textSize="13dp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/availabilityText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/listingName"
@@ -99,9 +99,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:layout_marginTop="7dp"
-            android:text="(210)"
-            android:textSize="12dp"
+            android:layout_marginTop="9dp"
+            android:textColor="#000000"
+            android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@id/listingRatingBar"
             app:layout_constraintTop_toBottomOf="@id/listingName" />
 
@@ -121,9 +121,10 @@
             style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:progressTint="@color/rating_star_color"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="9dp"
+            android:progressBackgroundTint="#50101010"
+            android:progressTint="@color/rating_star_color"
             android:stepSize="0.1"
             app:layout_constraintStart_toEndOf="@id/listingScore"
             app:layout_constraintTop_toBottomOf="@id/listingName" />

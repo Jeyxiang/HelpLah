@@ -5,7 +5,6 @@
     android:id="@+id/constraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".viewmodel.MainActivity">
 
     <androidx.core.widget.NestedScrollView
@@ -20,8 +19,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/categoryConstraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:background="@drawable/blue_bg"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -30,14 +28,17 @@
                 app:layout_constraintVertical_bias="0.0">
 
                 <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="250dp"
-                    android:layout_height="101dp"
+                    android:id="@+id/welcomeTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/sf_display_bold"
                     android:text="What are you looking for?"
-                    android:textColor="#E8E2E2"
-                    android:textSize="36sp"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="10dp"
+                    android:textColor="#BD2268"
+                    android:textSize="50sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/categorySearchView" />
@@ -47,9 +48,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:elevation="7dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="15dp"
+                    android:paddingTop="5dp"
                     app:mt_searchBarColor="#90ffffff"
                     app:mt_placeholder="Search..."
                     app:mt_hint="Search for a category or business"

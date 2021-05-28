@@ -3,6 +3,7 @@ package com.example.helplah.viewmodel;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -33,6 +34,9 @@ public class ServicesCategoriesActivity extends AppCompatActivity implements Cat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services_categories);
+
+        TextView title = findViewById(R.id.welcomeTitle);
+        //Shader titleShader = new LinearGradient()
 
         this.recyclerView = findViewById(R.id.categoryRecyclerView);
         searchView = findViewById(R.id.categorySearchView);

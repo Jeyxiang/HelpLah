@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Helplah</string>
+    <string name="app_name">HelpLah</string>
     <string name="bottom_navigation_item1">Search</string>
     <string name="bottom_navigation_item2">Job Requests</string>
     <string name="bottom_navigation_item3">Chats</string>

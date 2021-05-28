@@ -8,7 +8,6 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.helplah.R;
-import com.example.helplah.models.RandomData;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
         addButton.setOnClickListener(v -> {
-            RandomData.fillDatabase(10);
+            Intent i = new Intent(this, LoginScreen.class);
+            startActivity(i);
         });
     }
 

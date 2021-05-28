@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Helplah">
-        <activity android:name=".viewmodel.ServicesCategoriesActivity" >
-        </activity>
+        <activity android:name=".viewmodel.LoginScreen"></activity>
+        <activity android:name=".viewmodel.ServicesCategoriesActivity"></activity>
         <activity android:name=".viewmodel.BusinessListings" />
         <activity android:name=".viewmodel.MainActivity">
             <intent-filter>

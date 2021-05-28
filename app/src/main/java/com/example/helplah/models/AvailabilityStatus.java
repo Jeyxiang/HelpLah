@@ -13,19 +13,19 @@ public class AvailabilityStatus {
         String message;
         switch (status) {
             case 1:
-                message = "4 hours";
+                message = "In 4 hours";
                 break;
             case 2:
-                message = "24 hours";
+                message = "In 24 hours";
                 break;
             case 3:
-                message = "48 hours";
+                message = "In 48 hours";
                 break;
             case 4:
-                message = "72 hours";
+                message = "In 72 hours";
                 break;
             case 5:
-                message = "One week";
+                message = "In One week";
                 break;
             default:
                 message = "Unavailable";

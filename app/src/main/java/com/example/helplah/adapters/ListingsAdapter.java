@@ -72,7 +72,7 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
             this.listingAvailability.setText(AvailabilityStatus.getAvailabilityText(listing.getAvailability()));
             this.listingName.setText(listing.getName());
             this.listingScore.setText(String.format("%.1f", listing.getReviewScore()));
-            this.listingNumOfReviews.setText("(" + listing.getNumberOfReviews() + ")");
+            this.listingNumOfReviews.setText(listing.getNumberOfReviews() + " reviews");
             this.listingRatingBar.setRating((float) listing.getReviewScore());
 
             itemView.setOnClickListener(new View.OnClickListener() {
