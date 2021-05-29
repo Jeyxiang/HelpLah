@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Helplah">
-        <activity android:name=".viewmodel.RegisterScreen"></activity>
+        <activity android:name=".viewmodel.RegisterScreen" />
         <activity android:name=".viewmodel.LoginScreen" />
         <activity android:name=".viewmodel.ServicesCategoriesActivity" />
         <activity android:name=".viewmodel.BusinessListings" />

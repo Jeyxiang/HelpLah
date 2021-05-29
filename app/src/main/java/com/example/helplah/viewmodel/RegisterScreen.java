@@ -1,18 +1,40 @@
 package com.example.helplah.viewmodel;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.helplah.R;
+import com.example.helplah.models.ConsumerUser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Objects;
+import java.util.function.Supplier;
 
 public class RegisterScreen extends AppCompatActivity {
 
+    private static final String TAG = "Registration screen";
+
+    private TextInputLayout passwordLayout;
+    private TextInputLayout confirmPasswordLayout;
+
     private Button regAsUser;
-    private Button backButton;
     private TextView regAsBiz;
     private EditText mEmail;
     private EditText mUsername;
@@ -20,22 +42,29 @@ public class RegisterScreen extends AppCompatActivity {
     private EditText mConfirmPassword;
     private EditText mPhoneNumber;
 
+    private FirebaseAuth mAuth;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_screen);
 
+        this.passwordLayout = findViewById(R.id.passwordLayout);
+        this.confirmPasswordLayout = findViewById(R.id.confirmPasswordLayout);
+
         this.regAsUser = findViewById(R.id.registerButton);
         this.regAsBiz = findViewById(R.id.bizRegisterButton);
-        this.backButton = findViewById(R.id.registerBackButton);
+        Button backButton = findViewById(R.id.registerBackButton);
         this.mEmail = findViewById(R.id.registerEmail);
         this.mUsername = findViewById(R.id.registerUserName);
         this.mPassword = findViewById(R.id.registerPassword);
         this.mConfirmPassword = findViewById(R.id.registerConfirmPassword);
         this.mPhoneNumber = findViewById(R.id.registerPhoneNumber);
-
-        this.backButton.setOnClickListener(x -> this.finish());
+        backButton.setOnClickListener(x -> this.finish());
         this.regAsUser.setOnClickListener(x -> userRegister());
+
+        this.mAuth = FirebaseAuth.getInstance();
+
+        setTextWatcher();
 
 //        regAsBiz.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -46,10 +75,106 @@ public class RegisterScreen extends AppCompatActivity {
     }
 
     private void userRegister() {
-        String email = this.mEmail.getText().toString();
         String username = this.mUsername.getText().toString();
         String password = this.mPassword.getText().toString();
-        String confirmPassword = this.mConfirmPassword.getText().toString();
+        if (checkFields()) {
+            Log.d(TAG, "userRegister: User created");
+            //createUser(username, password);
+        }
+    }
+
+    private TextWatcher createTextWatcher(Supplier<Boolean> x, String message, TextInputLayout layout) {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (x.get()) {
+                    layout.setError(message);
+                } else {
+                    layout.setError(null);
+                }
+            }
+        };
+    }
+
+    private void setTextWatcher() {
+        Supplier<Boolean> passwordCheck = () -> this.mPassword.length() < 8;
+        this.mPassword.addTextChangedListener(createTextWatcher(passwordCheck,
+                "Password requires at least 8 characters", this.passwordLayout));
+        Supplier<Boolean> passwordConfirm = () -> !Objects.equals(this.mPassword.getText().toString(),
+                this.mConfirmPassword.getText().toString()) || this.mConfirmPassword.length() < 8;
+        this.mConfirmPassword.addTextChangedListener(createTextWatcher(passwordConfirm,
+                "Password does not match or is invalid", this.confirmPasswordLayout));
+    }
+
+    private boolean checkFields() {
+        boolean allCorrect = true;
+        if (this.mEmail.length() == 0 || this.mUsername.length() == 0) {
+            this.mEmail.setError("This field is required");
+            allCorrect = false;
+        }
+        if (this.mPhoneNumber.length() != 8) {
+            this.mPhoneNumber.setError("Invalid phone number");
+            allCorrect = false;
+        } else {
+            try {
+                Integer.parseInt(this.mPhoneNumber.getText().toString());
+            } catch (NumberFormatException e) {
+                this.mPhoneNumber.setError("Invalid phone number");
+                allCorrect = false;
+            }
+        }
+        if (this.mPassword.length() <= 8) {
+            allCorrect = false;
+        } else {
+            if (!Objects.equals(this.mPassword.getText().toString(),
+                    this.mConfirmPassword.getText().toString())) {
+                allCorrect = false;
+            }
+        }
+        return allCorrect;
+    }
+
+    private void createUser(String username, String password) {
+        this.mAuth.createUserWithEmailAndPassword(username, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Successfully created user
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            if (user == null) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Registration Failed", Toast.LENGTH_LONG);
+                            } else {
+                                addUserToFirestore(user.getUid());
+                                Intent intent = new Intent(getApplicationContext(),
+                                        ServicesCategoriesActivity.class);
+                                startActivity(intent);
+                            }
+                        } else {
+                            // Failed to create user
+                            Toast.makeText(getApplicationContext(),
+                                    "Registration Failed", Toast.LENGTH_LONG);
+                        }
+                    }
+                });
+    }
+
+    private void addUserToFirestore(String id) {
         String phoneNumber = this.mPhoneNumber.getText().toString();
+        ConsumerUser user = new ConsumerUser(Integer.parseInt(phoneNumber));
+
+        CollectionReference mCollection = FirebaseFirestore.getInstance()
+                                                .collection(ConsumerUser.DATABASE_COLLECTION);
+
+        mCollection.document(id).set(user);
     }
 }

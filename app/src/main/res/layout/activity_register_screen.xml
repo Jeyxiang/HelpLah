@@ -38,6 +38,7 @@
         android:background="@drawable/register_background" >
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="70dp"
@@ -49,11 +50,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/registerUserName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -65,11 +69,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/registerEmail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -77,17 +84,21 @@
             android:paddingEnd="15dp"
             android:hint="Password"
             app:passwordToggleEnabled="true"
+            app:errorIconDrawable="@null"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/registerPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirmPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -95,16 +106,20 @@
             android:paddingEnd="15dp"
             android:hint="Confirm password"
             app:passwordToggleEnabled="true"
+            app:errorIconDrawable="@null"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/registerConfirmPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phoneNumberLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
@@ -116,7 +131,10 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/registerPhoneNumber"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLength="8"
+                android:inputType="number"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,13 +152,14 @@
 
         <TextView
             android:id="@+id/bizRegisterButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_height="60dp"
             android:gravity="center"
             android:text="Register as a business instead"
             android:textSize="17sp"
             android:fontFamily="@font/sf_display_bold"
-            app:layout_constraintStart_toStartOf="parent"
+            android:drawablePadding="9dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="6dp" />
 
