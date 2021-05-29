@@ -46,17 +46,34 @@
             app:layout_constraintTop_toBottomOf="@+id/listingName"
             app:layout_constraintVertical_bias="0.0" />
 
-        <TextView
-            android:id="@+id/priceText"
-            style="@style/ListingsRightTextBox"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Price:"
-            app:layout_constraintBottom_toTopOf="@id/listingPrice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/listingScore"
-            app:layout_constraintVertical_bias="0.879" />
+            android:layout_marginEnd="30dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/listingScore">
+
+            <TextView
+                android:id="@+id/priceText"
+                style="@style/ListingsRightTextBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Price:"
+                app:layout_constraintVertical_bias="0.879" />
+
+            <TextView
+                android:id="@+id/listingPrice"
+                style="@style/ListingsRightTextBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:text="$2"
+                app:layout_constraintTop_toBottomOf="@id/priceText" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/listing_availability"
@@ -81,18 +98,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/listingScore" />
 
-        <TextView
-            android:id="@+id/listingPrice"
-            style="@style/ListingsRightTextBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
-            android:text="$2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/priceText"
-            app:layout_constraintVertical_bias="0.938" />
 
         <TextView
             android:id="@+id/listingNumOfReviews"

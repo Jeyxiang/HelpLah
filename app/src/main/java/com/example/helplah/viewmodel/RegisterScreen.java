@@ -75,11 +75,10 @@ public class RegisterScreen extends AppCompatActivity {
     }
 
     private void userRegister() {
-        String username = this.mUsername.getText().toString();
-        String password = this.mPassword.getText().toString();
+        String email = this.mEmail.getText().toString().trim();
+        String password = this.mPassword.getText().toString().trim();
         if (checkFields()) {
-            Log.d(TAG, "userRegister: User created");
-            //createUser(username, password);
+            createUser(email, password);
         }
     }
 
@@ -98,7 +97,7 @@ public class RegisterScreen extends AppCompatActivity {
                 if (x.get()) {
                     layout.setError(message);
                 } else {
-                    layout.setError(null);
+                    layout.setErrorEnabled(false);
                 }
             }
         };
@@ -135,7 +134,7 @@ public class RegisterScreen extends AppCompatActivity {
                 allCorrect = false;
             }
         }
-        if (this.mPassword.length() <= 8) {
+        if (this.mPassword.length() < 8) {
             allCorrect = false;
         } else {
             if (!Objects.equals(this.mPassword.getText().toString(),
@@ -146,16 +145,17 @@ public class RegisterScreen extends AppCompatActivity {
         return allCorrect;
     }
 
-    private void createUser(String username, String password) {
-        this.mAuth.createUserWithEmailAndPassword(username, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+    private void createUser(String email, String password) {
+        this.mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(RegisterScreen.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "onComplete: Completed registration");
                         if (task.isSuccessful()) {
                             // Successfully created user
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user == null) {
-                                Toast.makeText(getApplicationContext(),
+                                Toast.makeText(RegisterScreen.this,
                                         "Registration Failed", Toast.LENGTH_LONG);
                             } else {
                                 addUserToFirestore(user.getUid());
@@ -165,7 +165,7 @@ public class RegisterScreen extends AppCompatActivity {
                             }
                         } else {
                             // Failed to create user
-                            Toast.makeText(getApplicationContext(),
+                            Toast.makeText(RegisterScreen.this,
                                     "Registration Failed", Toast.LENGTH_LONG);
                         }
                     }

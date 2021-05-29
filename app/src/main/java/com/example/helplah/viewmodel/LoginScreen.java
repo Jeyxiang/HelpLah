@@ -58,7 +58,7 @@ public class LoginScreen extends AppCompatActivity {
     }
 
     private void signIn(View v) {
-        mAuth.signInWithEmailAndPassword(this.username.getText().toString(),
+        mAuth.signInWithEmailAndPassword(this.username.getText().toString().trim(),
                 this.password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
