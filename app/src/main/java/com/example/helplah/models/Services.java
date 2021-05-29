@@ -15,9 +15,13 @@ public class Services {
     public static final String MOVERS = "Movers";
     public static final String LOCKSMITH = "Locksmith";
     public static final String PEST_CONTROL = "Pest Control";
+    public static final String PAINTERS = "Painter";
+    public static final String CAR_WASH = "Car Wash";
+    public static final String LAUNDRY = "Laundry";
 
     public static final List<String> ALLSERVICES = new ArrayList<>(Arrays.asList(ELECTRICIAN, PLUMBER,
-                                CLEANER, AIRCONDITIONING, MOVERS, LOCKSMITH, PEST_CONTROL));
+                                CLEANER, AIRCONDITIONING, MOVERS, LOCKSMITH, PEST_CONTROL, PAINTERS,
+                                CAR_WASH, LAUNDRY));
 
     // Abstracts the services provided by a business
     private ArrayList<String> servicesProvided = new ArrayList<>();

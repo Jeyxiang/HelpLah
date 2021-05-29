@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/home_background"
     tools:context=".viewmodel.BusinessListings">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -22,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:menu="@menu/search_top_app_bar"
-                android:background="@color/googleBlue"
+                android:background="@color/appPurple"
                 app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary" >
 

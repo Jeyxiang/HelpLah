@@ -116,8 +116,12 @@ public class RegisterScreen extends AppCompatActivity {
 
     private boolean checkFields() {
         boolean allCorrect = true;
-        if (this.mEmail.length() == 0 || this.mUsername.length() == 0) {
+        if (this.mEmail.length() == 0) {
             this.mEmail.setError("This field is required");
+            allCorrect = false;
+        }
+        if (this.mUsername.length() == 0) {
+            this.mUsername.setError("This field is required");
             allCorrect = false;
         }
         if (this.mPhoneNumber.length() != 8) {

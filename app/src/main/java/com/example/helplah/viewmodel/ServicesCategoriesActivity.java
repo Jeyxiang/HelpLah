@@ -26,7 +26,8 @@ public class ServicesCategoriesActivity extends AppCompatActivity implements Cat
     int[] categoriesImages = {R.drawable.ic_baseline_electrical_services_24, R.drawable.ic_baseline_plumbing_24,
             R.drawable.ic_baseline_cleaning_services_24, R.drawable.ic_baseline_home_repair_service_24,
             R.drawable.ic_baseline_airport_shuttle_24, R.drawable.ic_baseline_lock_24,
-            R.drawable.ic_baseline_pest_control_24, R.drawable.plumbing_logos};
+            R.drawable.ic_baseline_pest_control_24, R.drawable.ic_baseline_format_paint_24,
+            R.drawable.ic_baseline_local_car_wash_24, R.drawable.ic_baseline_local_laundry_service_24};
 
     String[] categories;
 
