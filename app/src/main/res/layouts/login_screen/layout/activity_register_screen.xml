@@ -8,7 +8,7 @@
     android:outlineAmbientShadowColor="#0E0C0C"
     android:outlineProvider="bounds"
     android:outlineSpotShadowColor="#191717"
-    tools:context=".viewmodel.RegisterScreen"
+    tools:context=".viewmodel.login_screen.RegisterScreen"
     android:orientation="vertical">
 
     <Button

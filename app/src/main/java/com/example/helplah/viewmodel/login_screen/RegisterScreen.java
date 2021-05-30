@@ -14,7 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.helplah.R;
-import com.example.helplah.models.ConsumerUser;
+import com.example.helplah.models.User;
+import com.example.helplah.viewmodel.consumer.ServicesCategoriesActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -174,10 +175,10 @@ public class RegisterScreen extends AppCompatActivity {
 
     private void addUserToFirestore(String id) {
         String phoneNumber = this.mPhoneNumber.getText().toString();
-        ConsumerUser user = new ConsumerUser(Integer.parseInt(phoneNumber));
+        User user = new User(Integer.parseInt(phoneNumber), false);
 
         CollectionReference mCollection = FirebaseFirestore.getInstance()
-                                                .collection(ConsumerUser.DATABASE_COLLECTION);
+                                                .collection(User.DATABASE_COLLECTION);
 
         mCollection.document(id).set(user);
     }
