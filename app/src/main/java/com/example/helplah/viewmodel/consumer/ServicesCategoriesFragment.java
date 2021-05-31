@@ -1,9 +1,8 @@
-package com.example.helplah.viewmodel;
+package com.example.helplah.viewmodel.consumer;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -13,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helplah.R;
 import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.models.Services;
+import com.example.helplah.viewmodel.login_screen.LoginScreen;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 public class ServicesCategoriesActivity extends AppCompatActivity implements CategoriesAdapter.onCategorySelected {
@@ -36,8 +38,13 @@ public class ServicesCategoriesActivity extends AppCompatActivity implements Cat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services_categories);
 
-        TextView title = findViewById(R.id.welcomeTitle);
-        //Shader titleShader = new LinearGradient()
+        FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (mUser == null) {
+            Intent goToLoginScreen = new Intent(getApplicationContext(), LoginScreen.class);
+            startActivity(goToLoginScreen);
+            finish();
+        }
 
         this.recyclerView = findViewById(R.id.categoryRecyclerView);
         searchView = findViewById(R.id.categorySearchView);

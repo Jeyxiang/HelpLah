@@ -1,4 +1,4 @@
-package com.example.helplah.viewmodel;
+package com.example.helplah.viewmodel.login_screen;
 
 import android.content.Context;
 import android.content.Intent;

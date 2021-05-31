@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/home_background"
-    tools:context=".viewmodel.consumer.BusinessListings">
+    tools:context=".viewmodel.consumer.BusinessListingsFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/listingTopLayout"
@@ -41,10 +41,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListings"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@id/listingTopLayout"
-        android:layout_above="@id/BottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,17 +52,6 @@
         android:id="@+id/listingsCoordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginBottom="10dp"
-        android:elevation="10dp"
-        android:layout_above="@id/BottomNavigation" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/BottomNavigation"
-        style="@style/AppTheme.bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_navigation_bar"
-        android:layout_alignParentBottom="true"
-        app:labelVisibilityMode="labeled"/>
+        android:elevation="10dp" />
 
 </RelativeLayout>
