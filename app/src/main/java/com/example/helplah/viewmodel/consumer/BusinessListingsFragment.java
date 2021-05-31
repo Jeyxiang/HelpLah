@@ -110,9 +110,9 @@ public class BusinessListingsFragment extends Fragment implements
     private void configureFirestore(Query q) {
         this.rvConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(10)
-                .setPageSize(5)
-                .setPrefetchDistance(5)
+                .setInitialLoadSizeHint(30)
+                .setPageSize(10)
+                .setPrefetchDistance(10)
                 .build();
 
         this.options = new FirestorePagingOptions.Builder<Listings>()
@@ -130,6 +130,7 @@ public class BusinessListingsFragment extends Fragment implements
 
     private void getQuery() {
         this.rvAdapter = new ListingsAdapter(this.options, this);
+        this.rvAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         rvListings.setAdapter(rvAdapter);
         layout = new LinearLayoutManager(getActivity());
         rvListings.setLayoutManager(layout);

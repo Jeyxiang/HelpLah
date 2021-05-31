@@ -69,6 +69,7 @@ dependencies {
     //noinspection GradleDependency
     implementation 'androidx.paging:paging-runtime:2.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation "androidx.recyclerview:recyclerview:1.2.0"
 
     // Java language implementation
     implementation "androidx.navigation:navigation-fragment:$nav_version"
