@@ -1,4 +1,4 @@
-package com.example.helplah.viewmodel;
+package com.example.helplah.viewmodel.login_screen;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.helplah.R;
-import com.example.helplah.viewmodel.consumer.ServicesCategoriesActivity;
+import com.example.helplah.viewmodel.consumer.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,7 +44,9 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Sign in
-                signIn(v);
+                if (checkFields()) {
+                    signIn(v);
+                }
             }
         });
 
@@ -58,6 +60,18 @@ public class LoginScreen extends AppCompatActivity {
         });
     }
 
+    private boolean checkFields() {
+        if (this.username.length() == 0) {
+            this.username.setError("Field cannot be empty");
+            return false;
+        }
+        if (this.password.length() < 8) {
+            this.password.setError("Password has to be at least 8 characters");
+            return false;
+        }
+        return true;
+    }
+
     private void signIn(View v) {
         mAuth.signInWithEmailAndPassword(this.username.getText().toString().trim(),
                 this.password.getText().toString())
@@ -67,7 +81,7 @@ public class LoginScreen extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "User signed in");
                             // Got to home page of app
-                            Intent intent = new Intent(getApplicationContext(), ServicesCategoriesActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                         } else {
                             Log.d(TAG, "Sign in failed");

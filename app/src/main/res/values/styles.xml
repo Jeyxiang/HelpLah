@@ -13,6 +13,11 @@
         <item name="android:textColorSecondary">@color/greySecondary</item>
     </style>
 
+    <style name="AppTheme.Background">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorPrimaryDark">@color/black</item>
+    </style>
+
     <style name="AppTheme.Title">
         <item name="android:fontFamily">@font/lato_bold</item>
         <item name="android:textSize">20sp</item>

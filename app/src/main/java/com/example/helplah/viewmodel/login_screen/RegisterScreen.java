@@ -1,10 +1,11 @@
-package com.example.helplah.viewmodel;
+package com.example.helplah.viewmodel.login_screen;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.helplah.R;
 import com.example.helplah.models.User;
-import com.example.helplah.viewmodel.consumer.ServicesCategoriesActivity;
+import com.example.helplah.viewmodel.consumer.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -67,12 +68,12 @@ public class RegisterScreen extends AppCompatActivity {
 
         setTextWatcher();
 
-//        regAsBiz.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(),bizRegActivity.class));
-//            }
-//        });
+        regAsBiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), BizRegActivity.class));
+            }
+        });
     }
 
     private void userRegister() {
@@ -161,7 +162,7 @@ public class RegisterScreen extends AppCompatActivity {
                             } else {
                                 addUserToFirestore(user.getUid());
                                 Intent intent = new Intent(getApplicationContext(),
-                                        ServicesCategoriesActivity.class);
+                                        MainActivity.class);
                                 startActivity(intent);
                             }
                         } else {

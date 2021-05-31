@@ -5,4 +5,5 @@ public class Review {
     private String reviewText;
     private int score;
     private String reviewer;
+    private String business;
 }

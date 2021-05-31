@@ -1,7 +1,5 @@
 package com.example.helplah.models;
 
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,10 +72,6 @@ public class Listings {
         this.website = website;
         this.servicesList = servicesList;
         this.language = language;
-    }
-
-    public static void uploadListingToDatabase(Listings listing) {
-        FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION).add(listing);
     }
 
     public Services getServicesList() {

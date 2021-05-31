@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/consumer_navigation">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/consumer_navigation"
+    app:startDestination="@id/servicesCategoriesFragment">
 
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.helplah.viewmodel.consumer.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/jobRequestsFragment"
+        android:name="com.example.helplah.viewmodel.consumer.JobRequestsFragment"
+        android:label="fragment_job_requests"
+        tools:layout="@layout/fragment_job_requests" />
+    <fragment
+        android:id="@+id/servicesCategoriesFragment"
+        android:name="com.example.helplah.viewmodel.consumer.ServicesCategoriesFragment"
+        android:label="ServicesCategoriesFragment" >
+        <action
+            android:id="@+id/goToListingsAction"
+            app:destination="@id/businessListingsFragment"
+            app:restoreState="true"
+            app:popUpToSaveState="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.helplah.viewmodel.consumer.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/businessListingsFragment"
+        android:name="com.example.helplah.viewmodel.consumer.BusinessListingsFragment"
+        android:label="activity_business_listings"
+        tools:layout="@layout/business_listings_fragment" >
+        <argument
+            android:name="service"
+            app:argType="string" />
+        <action
+            android:id="@+id/goToListingsDescription"
+            app:destination="@id/listingDescription"
+            app:restoreState="true"
+            app:popUpToSaveState="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listingDescription"
+        android:name="com.example.helplah.viewmodel.consumer.ListingDescription"
+        android:label="fragment_listing_description"
+        tools:layout="@layout/fragment_listing_description" />
 </navigation>

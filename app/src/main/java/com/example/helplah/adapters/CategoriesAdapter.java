@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
@@ -16,7 +17,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
 
     public interface onCategorySelected {
 
-        void onCategoryClicked(String category);
+        void onCategoryClicked(String category, View v);
 
     }
 
@@ -26,9 +27,9 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
     int[] categoriesImages;
     Context context;
 
-    public CategoriesAdapter(Context context, String[] categories, int[] img) {
+    public CategoriesAdapter(Context context, String[] categories, int[] img, Fragment fragment) {
         this.categories = categories;
-        this.mListener = (onCategorySelected) context;
+        this.mListener = (onCategorySelected) fragment;
         this.context = context;
         this.categoriesImages = img;
     }
@@ -69,7 +70,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onCategoryClicked(category);
+                        listener.onCategoryClicked(category, v);
                     }
                 }
             });

@@ -2,22 +2,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigationSearch"
+        android:id="@+id/servicesCategoriesFragment"
         android:title="@string/bottom_navigation_item1"
         android:icon="@drawable/ic_baseline_search_24"/>
 
     <item
-        android:id="@+id/navigationRequests"
+        android:id="@+id/jobRequestsFragment"
         android:title="@string/bottom_navigation_item2"
         android:icon="@drawable/ic_baseline_library_books_24"/>
 
     <item
-        android:id="@+id/navigationChats"
+        android:id="@+id/chatFragment"
         android:title="@string/bottom_navigation_item3"
         android:icon="@drawable/ic_baseline_chat_24"/>
 
     <item
-        android:id="@+id/navigationAccount"
+        android:id="@+id/accountFragment"
         android:title="@string/bottom_navigation_item4"
         android:icon="@drawable/ic_baseline_person_24"/>
 </menu>

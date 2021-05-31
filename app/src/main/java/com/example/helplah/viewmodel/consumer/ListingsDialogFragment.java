@@ -1,6 +1,5 @@
-package com.example.helplah.viewmodel;
+package com.example.helplah.viewmodel.consumer;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 
 import com.example.helplah.R;
 import com.example.helplah.models.AvailabilityStatus;
@@ -40,6 +40,12 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
     private CheckBox available2Days;
     private CheckBox available3Days;
     private CheckBox available1Week;
+
+    public ListingsDialogFragment(Fragment fragment) {
+        if (fragment instanceof FilterListener) {
+            this.filterListener = (FilterListener) fragment;
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,15 +86,6 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
             case R.id.button_cancel:
                 this.onCancelClicked();
                 break;
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof FilterListener) {
-            this.filterListener = (FilterListener) context;
         }
     }
 

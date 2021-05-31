@@ -20,7 +20,7 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
 
     public interface onListingSelectedListener {
 
-        void onListingClicked(DocumentSnapshot listing);
+        void onListingClicked(DocumentSnapshot listing, View v);
 
     }
 
@@ -79,7 +79,7 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onListingClicked(snapshot);
+                        listener.onListingClicked(snapshot, v);
                     }
                 }
             });

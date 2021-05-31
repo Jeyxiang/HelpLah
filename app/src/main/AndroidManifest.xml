@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Helplah">
-        <activity android:name=".viewmodel.RegisterScreen" />
-        <activity android:name=".viewmodel.LoginScreen" />
-        <activity android:name=".viewmodel.ServicesCategoriesActivity" />
-        <activity android:name=".viewmodel.BusinessListings" />
-        <activity android:name=".viewmodel.MainActivity">
+        <activity android:name=".viewmodel.login_screen.SecBizRegActivity"></activity>
+        <activity android:name=".viewmodel.login_screen.BizRegActivity" />
+        <activity android:name=".viewmodel.login_screen.RegisterScreen" />
+        <activity android:name=".viewmodel.login_screen.LoginScreen" />
+        <activity android:name=".viewmodel.consumer.ServicesCategoriesFragment" />
+        <activity android:name=".viewmodel.consumer.BusinessListingsFragment" />
+        <activity android:name=".viewmodel.consumer.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
