@@ -79,8 +79,9 @@ public class RegisterScreen extends AppCompatActivity {
     private void userRegister() {
         String email = this.mEmail.getText().toString().trim();
         String password = this.mPassword.getText().toString().trim();
+        String username = this.mUsername.getText().toString().trim();
         if (checkFields()) {
-            createUser(email, password);
+            createUser(email, password, username);
         }
     }
 
@@ -147,7 +148,7 @@ public class RegisterScreen extends AppCompatActivity {
         return allCorrect;
     }
 
-    private void createUser(String email, String password) {
+    private void createUser(String email, String password, String username) {
         this.mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(RegisterScreen.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -160,7 +161,7 @@ public class RegisterScreen extends AppCompatActivity {
                                 Toast.makeText(RegisterScreen.this,
                                         "Registration Failed", Toast.LENGTH_LONG);
                             } else {
-                                addUserToFirestore(user.getUid());
+                                addUserToFirestore(user.getUid(), email, username);
                                 Intent intent = new Intent(getApplicationContext(),
                                         MainActivity.class);
                                 startActivity(intent);
@@ -174,9 +175,9 @@ public class RegisterScreen extends AppCompatActivity {
                 });
     }
 
-    private void addUserToFirestore(String id) {
+    private void addUserToFirestore(String id, String email, String username) {
         String phoneNumber = this.mPhoneNumber.getText().toString();
-        User user = new User(Integer.parseInt(phoneNumber), false);
+        User user = new User(username, email, Integer.parseInt(phoneNumber), false);
 
         CollectionReference mCollection = FirebaseFirestore.getInstance()
                                                 .collection(User.DATABASE_COLLECTION);

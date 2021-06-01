@@ -8,6 +8,8 @@ public class User {
     public static final String FIELD_ADDRESS = "address";
 
     private String address;
+    private String username;
+    private String email;
     boolean isBusiness = false;
     private int postalCode;
     private int phoneNumber;
@@ -16,7 +18,9 @@ public class User {
 
     public User(int phoneNumber) { this.phoneNumber = phoneNumber; }
 
-    public User(int phoneNumber, boolean isBusiness) {
+    public User(String username, String email, int phoneNumber, boolean isBusiness) {
+        this.username = username;
+        this.email = email;
         this.phoneNumber = phoneNumber;
         this.isBusiness = isBusiness;
     }
@@ -52,6 +56,22 @@ public class User {
 
     public void setBusiness(boolean business) {
         isBusiness = business;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
 

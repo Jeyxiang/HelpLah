@@ -182,6 +182,10 @@ public class BusinessListingsFragment extends Fragment implements
     @Override
     public void onListingClicked(DocumentSnapshot listing, View v) {
         // Go to listing description
-        Navigation.findNavController(v).navigate(R.id.goToListingsDescription);
+        Log.d(TAG, "onListingClicked: " + listing.getId());
+
+        Bundle bundle = new Bundle();
+        bundle.putString("id", listing.getId());
+        Navigation.findNavController(v).navigate(R.id.goToListingsDescription, bundle);
     }
 }

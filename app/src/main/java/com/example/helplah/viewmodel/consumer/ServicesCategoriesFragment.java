@@ -66,7 +66,6 @@ public class ServicesCategoriesFragment extends Fragment implements CategoriesAd
     public void onCategoryClicked(String category, View v) {
         Log.d(TAG, "onCategoryClicked: " + category);
 
-        Fragment listingsFragment = new BusinessListingsFragment();
         Bundle bundle = new Bundle();
         bundle.putString(Services.SERVICE, category);
         Navigation.findNavController(v).navigate(R.id.goToListingsAction, bundle);
