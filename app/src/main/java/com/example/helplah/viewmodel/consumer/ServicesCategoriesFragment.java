@@ -37,9 +37,14 @@ public class ServicesCategoriesFragment extends Fragment implements CategoriesAd
     String[] categories;
 
     @Override
+    public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: called");
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.rootview = inflater.inflate(R.layout.services_categories_fragment, container, false);
-
 
         MainActivity activity = (MainActivity) getActivity();
         this.recyclerView = this.rootview.findViewById(R.id.categoryRecyclerView);

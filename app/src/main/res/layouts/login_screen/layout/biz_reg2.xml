@@ -102,7 +102,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Description (Optional)"
+            android:hint="Give a description of your business for the user"
             android:paddingStart="15dp"
             android:paddingTop="10dp"
             android:paddingEnd="15dp">

@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,35 +28,39 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import org.jetbrains.annotations.NotNull;
-
 public class BusinessListingsFragment extends Fragment implements
         ListingsDialogFragment.FilterListener,
         ListingsAdapter.onListingSelectedListener {
 
     private static final String TAG = "Business Listings Activity";
 
+    public static class ListingViewModel extends ViewModel {
+
+        private Query query;
+
+        public void setQuery(Query query) {
+            this.query = query;
+        }
+
+        public Query getQuery() {
+            return this.query;
+        }
+    }
+
+    private ListingViewModel mViewModel;
     private View rootview;
     private RecyclerView rvListings;
     private Toolbar listingsToolBar;
     private ListingsAdapter rvAdapter;
     private PagedList.Config rvConfig;
     private String title;
-    private RecyclerView.LayoutManager layout;
 
-    private Query query;
     FirestorePagingOptions<Listings> options;
     private ListingsDialogFragment filterDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            Log.d(TAG, "onCreate: Saved instance state is not null");
-        } else {
-            Log.d(TAG, "onCreate: Saved instance state is null");
-        }
 
         String category = this.getArguments().getString(Services.SERVICE);
 
@@ -67,15 +73,21 @@ public class BusinessListingsFragment extends Fragment implements
             throw new IllegalArgumentException("Must pass a: " + Services.SERVICE);
         }
 
+        this.mViewModel = new ViewModelProvider(this).get(ListingViewModel.class);
+
+        if (this.mViewModel.getQuery() != null) {
+            Log.d(TAG, "onCreate: saved query found " + this.mViewModel.getQuery());
+            configureFirestore(this.mViewModel.getQuery());
+            return;
+        }
+
         q.setSortBy(Listings.FIELD_REVIEW_SCORE, false);
-        this.query = q.createQuery();
-        configureFirestore(this.query);
+        this.mViewModel.setQuery(q.createQuery());
+        configureFirestore(this.mViewModel.getQuery());
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        Log.d(TAG, "onCreateView: " + "creating view");
 
         this.rootview = inflater.inflate(R.layout.business_listings_fragment, container, false);
 
@@ -87,7 +99,6 @@ public class BusinessListingsFragment extends Fragment implements
         this.rvListings = this.rootview.findViewById(R.id.rvListings);
 
         // Create filter dialog
-        //setFinishOnTouchOutside(false);
         this.filterDialog = new ListingsDialogFragment(this);
 
         getQuery();
@@ -95,22 +106,10 @@ public class BusinessListingsFragment extends Fragment implements
         return this.rootview;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: called");
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        Log.d(TAG, "onViewStateRestored: called");
-    }
-
     private void configureFirestore(Query q) {
         this.rvConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(30)
+                .setInitialLoadSizeHint(20)
                 .setPageSize(10)
                 .setPrefetchDistance(10)
                 .build();
@@ -121,24 +120,18 @@ public class BusinessListingsFragment extends Fragment implements
                 .build();
     }
 
-    @Override
-    public void onSaveInstanceState(@NonNull @NotNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelable("state_key", this.layout.onSaveInstanceState());
-    }
-
 
     private void getQuery() {
         this.rvAdapter = new ListingsAdapter(this.options, this);
         this.rvAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         rvListings.setAdapter(rvAdapter);
-        layout = new LinearLayoutManager(getActivity());
-        rvListings.setLayoutManager(layout);
+
+        rvListings.setLayoutManager(new LinearLayoutManager(getActivity()));
         //checkIfEmptyQuery();
     }
 
     private void changeQuery(Query newQuery) {
-        this.query = newQuery;
+        this.mViewModel.setQuery(newQuery);
         Log.d(TAG, "changeQuery: " + newQuery);
 
         this.options = new FirestorePagingOptions.Builder<Listings>()
@@ -189,7 +182,6 @@ public class BusinessListingsFragment extends Fragment implements
     @Override
     public void onListingClicked(DocumentSnapshot listing, View v) {
         // Go to listing description
-        Log.d(TAG, "onListingClicked: " + listing.get(Listings.FIELD_NAME));
         Navigation.findNavController(v).navigate(R.id.goToListingsDescription);
     }
 }

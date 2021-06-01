@@ -11,18 +11,18 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.helplah.R;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.helplah.models.Listings;
 
 public class SecBizRegActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+    private Listings listing;
+
     private Button backButton;
     private Button nextPage;
     private String emailAdd;
     private String passWord;
-    private String contactNo;
-    private EditText bizName;
     private EditText bizAddress;
+    private EditText bizName;
     private EditText webAddress;
     private EditText descrp;
     private TextView errorMessage;
@@ -32,18 +32,16 @@ public class SecBizRegActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.biz_reg2);
 
-
-        mAuth = FirebaseAuth.getInstance();
         this.emailAdd = getIntent().getExtras().getString("emailAdd");
         this.passWord =  getIntent().getExtras().getString("passWord");
-        this.contactNo = getIntent().getExtras().getString("contactNo");
-        this.bizName = (EditText) findViewById(R.id.registerBizName);
-        this.bizAddress = (EditText) findViewById(R.id.registerAddress);
-        this.webAddress = (EditText) findViewById(R.id.registerWebsite);
-        this.descrp = (EditText) findViewById(R.id.registerDescrp);
-        this.errorMessage = (TextView) findViewById(R.id.errorMsg);
-        this.backButton = (Button) findViewById(R.id.registerBackButton);
-        this.nextPage = (Button) findViewById(R.id.nextPageButton);
+        this.listing = getIntent().getExtras().getParcelable("listing");
+        this.bizName = findViewById(R.id.registerBizName);
+        this.bizAddress = findViewById(R.id.registerAddress);
+        this.webAddress =  findViewById(R.id.registerWebsite);
+        this.descrp = findViewById(R.id.registerDescrp);
+        this.errorMessage = findViewById(R.id.errorMsg);
+        this.backButton = findViewById(R.id.registerBackButton);
+        this.nextPage = findViewById(R.id.nextPageButton);
 
         this.backButton.setOnClickListener(x -> this.finish());
         this.nextPage.setOnClickListener(x -> this.checkIfValid());
@@ -52,23 +50,20 @@ public class SecBizRegActivity extends AppCompatActivity {
 
     //other than description and website, the other fields cannot be empty
     private boolean noEmptyField() {
-        if (TextUtils.isEmpty(bizName.getText().toString()) ||
-                TextUtils.isEmpty(bizAddress.getText().toString())) {
-            return false;
-        } else {
-            return true;
-        }
+        return !TextUtils.isEmpty(bizName.getText().toString()) &&
+                !TextUtils.isEmpty(bizAddress.getText().toString()) &&
+                !TextUtils.isEmpty(descrp.getText().toString());
     }
     private void sendIntent () {
-//        Intent startThirdPage = new Intent(getApplicationContext(), thirdbizRegActivity.class);
-//        startThirdPage.putExtra("emailAdd",this.emailAdd);
-//        startThirdPage.putExtra("passWord",this.passWord);
-//        startThirdPage.putExtra("contactNo",this.contactNo);
-//        startThirdPage.putExtra("bizName",this.bizName.toString().trim());
-//        startThirdPage.putExtra("bizAdd",this.bizAddress.toString().trim());
-//        startThirdPage.putExtra("webAdd",this.webAddress.toString().trim());
-//        startThirdPage.putExtra("description",this.descrp.toString());
-//        startActivity(startThirdPage);
+        Intent startThirdPage = new Intent(getApplicationContext(), ThirdBizRegActivity.class);
+        startThirdPage.putExtra("emailAdd", this.emailAdd);
+        startThirdPage.putExtra("passWord", this.passWord);
+        startThirdPage.putExtra("bizAdd", this.bizAddress.getText().toString());
+        this.listing.setName(this.bizName.getText().toString().trim());
+        this.listing.setWebsite(this.webAddress.getText().toString().trim());
+        this.listing.setDescription(this.descrp.getText().toString());
+        startThirdPage.putExtra("listing", this.listing);
+        startActivity(startThirdPage);
     }
 
     private boolean workableLink() {

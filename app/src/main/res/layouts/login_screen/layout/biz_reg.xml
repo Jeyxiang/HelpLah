@@ -67,12 +67,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
             android:hint="Password"
+            app:errorIconDrawable="@null"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
@@ -80,17 +82,20 @@
                 android:id="@+id/registerPassword"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/confirmPasswordLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
+            app:errorIconDrawable="@null"
             android:hint="Confirm password"
             app:passwordToggleEnabled="true"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
@@ -99,7 +104,8 @@
                 android:id="@+id/registerConfirmPassword"
                 android:inputType="textPassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

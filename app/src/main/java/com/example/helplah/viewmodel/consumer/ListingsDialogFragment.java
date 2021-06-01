@@ -1,6 +1,7 @@
 package com.example.helplah.viewmodel.consumer;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Spinner;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.helplah.R;
 import com.example.helplah.models.AvailabilityStatus;
@@ -19,6 +22,8 @@ import com.example.helplah.models.Listings;
 import com.example.helplah.models.ListingsQuery;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 public class ListingsDialogFragment extends DialogFragment implements View.OnClickListener {
 
@@ -30,8 +35,27 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
 
     }
 
+    public static class FilterViewModel extends ViewModel {
+
+        private int spinnerPosition = 0;
+        private boolean fourHours = false;
+        private boolean oneDay = false;
+        private boolean twoDays = false;
+        private boolean threeDays = false;
+        private boolean oneWeek = false;
+
+        public void setSpinnerPosition(int spinnerPosition) {
+            this.spinnerPosition = spinnerPosition;
+        }
+
+        public int getSpinnerPosition() {
+            return this.spinnerPosition;
+        }
+    }
+
     private FilterListener filterListener;
     private View rootView;
+    private FilterViewModel mViewModel;
 
     private Spinner sortSpinner;
     private RadioGroup languageRadioGroup;
@@ -45,6 +69,7 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
         if (fragment instanceof FilterListener) {
             this.filterListener = (FilterListener) fragment;
         }
+        this.mViewModel = new ViewModelProvider(fragment).get(FilterViewModel.class);
     }
 
     @Override
@@ -60,10 +85,23 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
         this.available3Days = this.rootView.findViewById(R.id.availability_3_days);
         this.available1Week = this.rootView.findViewById(R.id.availability_1_week);
 
+        restorePastSettings();
+
         this.rootView.findViewById(R.id.button_cancel).setOnClickListener(this);
         this.rootView.findViewById(R.id.button_apply).setOnClickListener(this);
 
+        Objects.requireNonNull(getDialog()).setCanceledOnTouchOutside(true);
+
         return this.rootView;
+    }
+
+    private void restorePastSettings() {
+        this.sortSpinner.setSelection(this.mViewModel.getSpinnerPosition());
+        this.available4Hours.setChecked(this.mViewModel.fourHours);
+        this.available1Day.setChecked(this.mViewModel.oneDay);
+        this.available2Days.setChecked(this.mViewModel.twoDays);
+        this.available3Days.setChecked(this.mViewModel.threeDays);
+        this.available1Week.setChecked(this.mViewModel.oneWeek);
     }
 
     @Override
@@ -114,6 +152,8 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
         } else if (getString(R.string.sort_by_number_of_reviews).equals(selected)) {
             query.setSortBy(Listings.FIELD_NUMBER_OF_REVIEWS, false);
         }
+        Log.d(TAG, "getSortBy: Selected position: " + this.sortSpinner.getSelectedItemPosition());
+        this.mViewModel.setSpinnerPosition(this.sortSpinner.getSelectedItemPosition());
     }
 
     private int[] getAvailability() {
@@ -140,6 +180,12 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
             optionsSelected[i] = AvailabilityStatus.oneWeek;
             i++;
         }
+
+        this.mViewModel.fourHours = this.available4Hours.isChecked();
+        this.mViewModel.oneDay = this.available1Day.isChecked();
+        this.mViewModel.twoDays = this.available2Days.isChecked();
+        this.mViewModel.threeDays = this.available3Days.isChecked();
+        this.mViewModel.oneWeek = this.available1Week.isChecked();
 
         return optionsSelected;
     }

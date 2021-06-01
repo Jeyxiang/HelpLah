@@ -1,5 +1,8 @@
 package com.example.helplah.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,7 +10,7 @@ import java.util.HashMap;
 /**
  * Abstracts a business listing in the app.
  */
-public class Listings {
+public class Listings implements Parcelable {
 
     // Name of the collection in firebase that stores the business listings
     public static final String DATABASE_COLLECTION = "Businesses";
@@ -42,14 +45,14 @@ public class Listings {
     private String description;
     private String pricingNote;
     private String language;
-    private double minPrice;
+    private double minPrice = -1;
     private boolean isCompany;
-    private double reviewScore;
-    private int numberOfReviews;
+    private double reviewScore = 0;
+    private int numberOfReviews = 0;
     private int availability;
     private String profilePic;
     private int phoneNumber;
-    private String website;
+    private String website = "";
     private Services servicesList;
     private HashMap<String, Boolean> languagesSpoken;  // TODO
 
@@ -72,6 +75,54 @@ public class Listings {
         this.website = website;
         this.servicesList = servicesList;
         this.language = language;
+    }
+
+    protected Listings(Parcel in) {
+        name = in.readString();
+        description = in.readString();
+        pricingNote = in.readString();
+        language = in.readString();
+        minPrice = in.readDouble();
+        isCompany = in.readByte() != 0;
+        reviewScore = in.readDouble();
+        numberOfReviews = in.readInt();
+        availability = in.readInt();
+        profilePic = in.readString();
+        phoneNumber = in.readInt();
+        website = in.readString();
+    }
+
+    public static final Creator<Listings> CREATOR = new Creator<Listings>() {
+        @Override
+        public Listings createFromParcel(Parcel in) {
+            return new Listings(in);
+        }
+
+        @Override
+        public Listings[] newArray(int size) {
+            return new Listings[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(pricingNote);
+        dest.writeString(language);
+        dest.writeDouble(minPrice);
+        dest.writeByte((byte) (isCompany ? 1 : 0));
+        dest.writeDouble(reviewScore);
+        dest.writeInt(numberOfReviews);
+        dest.writeInt(availability);
+        dest.writeString(profilePic);
+        dest.writeInt(phoneNumber);
+        dest.writeString(website);
     }
 
     public Services getServicesList() {
@@ -166,6 +217,22 @@ public class Listings {
 
     public int getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public void setReviewScore(double reviewScore) {
+        this.reviewScore = reviewScore;
+    }
+
+    public void setNumberOfReviews(int numberOfReviews) {
+        this.numberOfReviews = numberOfReviews;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
     }
 
     public String getWebsite() {

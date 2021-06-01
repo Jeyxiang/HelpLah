@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_gradient"
+    android:theme="@style/Theme.MaterialComponents.Light"
+    android:outlineAmbientShadowColor="#0E0C0C"
+    android:outlineProvider="bounds"
+    android:outlineSpotShadowColor="#191717"
+    tools:context=".viewmodel.login_screen.ThirdBizRegActivity"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/registerBackButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/black"
+        android:background="@drawable/ic_baseline_arrow_back_24" />
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bariol_regular"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="#333"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/register_background" >
+
+        <TextView
+            android:id="@+id/pageHeading3"
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="@font/sf_display_bold"
+            android:text="3. Final steps"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/languageView"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sf_display_bold"
+            android:text="  Please Select your language"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/langBoxes"
+            android:overScrollMode="never"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="180dp" />
+
+        <TextView
+            android:id="@+id/serviceView"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/sf_display_bold"
+            android:text="  Please Select the Services provided"
+            android:textStyle="bold"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/servBoxes"
+            android:overScrollMode="never"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="195dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/regButton"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="match_parent"
+                android:layout_height="59dp"
+                android:backgroundTint="@color/black"
+                android:elevation="10dp"
+                android:text="Register"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="28dp"
+                android:background="#E6D9ED"
+                android:progress="100"
+                android:progressTint="#AA00FF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/regButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/regButton"
+                app:layout_constraintTop_toBottomOf="@+id/regButton"
+                app:layout_constraintVertical_bias="0.855" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

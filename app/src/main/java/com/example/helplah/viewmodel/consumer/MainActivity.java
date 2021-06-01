@@ -2,7 +2,9 @@ package com.example.helplah.viewmodel.consumer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -37,6 +39,22 @@ public class MainActivity extends AppCompatActivity {
             Intent goToLoginScreen = new Intent(getApplicationContext(), LoginScreen.class);
             startActivity(goToLoginScreen);
         }
+
+        this.navigationBar.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.servicesCategoriesFragment:
+                        navController.popBackStack(R.id.servicesCategoriesFragment, false);
+                    case R.id.jobRequestsFragment:
+                        navController.popBackStack(R.id.jobRequestsFragment, false);
+                    case R.id.chatFragment:
+                        navController.popBackStack(R.id.chatFragment, false);
+                    case R.id.accountFragment:
+                        navController.popBackStack(R.id.accountFragment, false);
+                }
+            }
+        });
 
     }
 }
