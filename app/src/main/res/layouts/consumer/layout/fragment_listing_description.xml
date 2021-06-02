@@ -1,35 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/descriptionCoordinatorLayout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/home_background"
+    android:background="@color/black"
     tools:context=".viewmodel.consumer.ListingDescription">
     
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/descriptionAppBar"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="230dp"
+        android:background="@drawable/description"
         android:fitsSystemWindows="true" >
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/descriptionToolBarLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:title="Singapore Plumber" >
+            app:collapsedTitleTextAppearance="@style/ToolbarTitle"
+            app:expandedTitleTextAppearance="@style/ToolbarTitle"
+            app:maxLines="2"
+            app:title="Singapore Plumbing company"
+            app:expandedTitleGravity="top|end" >
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:src="@drawable/plumber_business_photo"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax" />
+            <RelativeLayout
+                android:id="@+id/profileRelativeLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/descriptionProfilePicture"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="120dp"
+                    android:layout_gravity="left"
+                    android:elevation="8dp"
+                    app:layout_collapseParallaxMultiplier="0"
+                    android:src="@drawable/plumbing_logos"
+                    app:layout_collapseMode="parallax" />
+
+                <TextView
+                    android:id="@+id/descriptionScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="155dp"
+                    android:layout_marginStart="135dp"
+                    android:text="4.7"
+                    app:layout_collapseMode="none"
+                    android:textSize="20sp"
+                    android:textColor="#fcfcfc" />
+
+                <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                    android:id="@+id/descriptionRatingBar"
+                    style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="170dp"
+                    android:layout_marginTop="160dp"
+                    android:progressBackgroundTint="#fcfcfc"
+                    android:progressTint="@color/rating_star_color"
+                    android:stepSize="0.1" />
+
+                <TextView
+                    android:id="@+id/descriptionNumOfReviews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="260dp"
+                    android:layout_marginTop="160dp"
+                    android:text="21 reviews"
+                    android:textColor="#fcfcfc"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="97dp"
                 app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -37,14 +89,131 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/descriptionScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.titleTag"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:textSize="22sp"
+                android:text="About" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/businessDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.normalText"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:text="This is a business"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.titleTag"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:text="Pricing" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/descriptionMinPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.normalText"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:text="Starting from $10" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/descriptionPricingNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.normalText"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:text="Our prices start from $10 an hour" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.titleTag"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:text="Availability" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/descriptionAvailability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.normalText"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:text="From 4 hours" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.titleTag"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:text="Services provided" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/descriptionServicesRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.titleTag"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:text="Languages spoken" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/descriptionLanguages"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.normalText"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:text="English, Chinese" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.titleTag"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="15dp"
+                android:text="Website" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/descriptionWebsite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.normalText"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:text="www.google.com" />
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/descriptionCall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:baselineAlignBottom="false"
@@ -53,9 +222,11 @@
         android:src="@drawable/ic_baseline_call_24"
         app:layout_anchor="@id/descriptionAppBar"
         app:layout_anchorGravity="bottom|end"
+        android:backgroundTint="@color/googleRed"
         android:layout_marginEnd="100dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/descriptionChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:baselineAlignBottom="false"
@@ -64,6 +235,22 @@
         android:src="@drawable/ic_baseline_chat_24"
         app:layout_anchor="@id/descriptionAppBar"
         app:layout_anchorGravity="bottom|end"
+        android:backgroundTint="@color/googleRed"
         android:layout_marginEnd="30dp" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/descriptionJobRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/descriptionScroll"
+        app:layout_anchorGravity="bottom|center"
+        android:backgroundTint="@color/googleRed"
+        android:text="Send a job request"
+        android:textSize="15sp"
+        android:fontFamily="@font/sf_display_bold"
+        android:clickable="true"
+        android:paddingEnd="50dp"
+        android:paddingStart="50dp"
+        android:layout_marginBottom="20dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

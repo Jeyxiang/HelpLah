@@ -185,7 +185,8 @@ public class BusinessListingsFragment extends Fragment implements
         Log.d(TAG, "onListingClicked: " + listing.getId());
 
         Bundle bundle = new Bundle();
-        bundle.putString("id", listing.getId());
+        Listings selectedListing = listing.toObject(Listings.class);
+        bundle.putParcelable("listing", selectedListing);
         Navigation.findNavController(v).navigate(R.id.goToListingsDescription, bundle);
     }
 }

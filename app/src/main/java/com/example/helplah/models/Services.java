@@ -1,10 +1,13 @@
 package com.example.helplah.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Services {
+public class Services implements Parcelable {
 
     public static final String SERVICE = "Service";
 
@@ -34,6 +37,32 @@ public class Services {
                 this.servicesProvided.add(service);
             }
         }
+    }
+
+    protected Services(Parcel in) {
+        servicesProvided = in.createStringArrayList();
+    }
+
+    public static final Creator<Services> CREATOR = new Creator<Services>() {
+        @Override
+        public Services createFromParcel(Parcel in) {
+            return new Services(in);
+        }
+
+        @Override
+        public Services[] newArray(int size) {
+            return new Services[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringList(servicesProvided);
     }
 
     public ArrayList<String> getServicesProvided() {

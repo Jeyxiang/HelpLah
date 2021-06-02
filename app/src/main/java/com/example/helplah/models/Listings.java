@@ -78,6 +78,7 @@ public class Listings implements Parcelable {
     }
 
     protected Listings(Parcel in) {
+        servicesList = in.readParcelable(Services.class.getClassLoader());
         name = in.readString();
         description = in.readString();
         pricingNote = in.readString();
@@ -91,6 +92,7 @@ public class Listings implements Parcelable {
         phoneNumber = in.readInt();
         website = in.readString();
     }
+
 
     public static final Creator<Listings> CREATOR = new Creator<Listings>() {
         @Override
@@ -111,6 +113,7 @@ public class Listings implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(servicesList, flags);
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(pricingNote);
@@ -238,4 +241,5 @@ public class Listings implements Parcelable {
     public String getWebsite() {
         return website;
     }
+
 }

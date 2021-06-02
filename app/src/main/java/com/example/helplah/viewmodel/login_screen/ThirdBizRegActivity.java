@@ -43,8 +43,8 @@ public class ThirdBizRegActivity extends AppCompatActivity {
     private String[] services;
     private RecyclerView langBox;
     private RecyclerView serviceBox;
-    private CheckboxAdapter LAdapter;
-    private CheckboxAdapter SAdapter;
+    private CheckboxAdapter languageAdapter;
+    private CheckboxAdapter serviceAdapter;
 
 
     @Override
@@ -68,14 +68,14 @@ public class ThirdBizRegActivity extends AppCompatActivity {
         this.serviceBox = findViewById(R.id.servBoxes);
 
         //handling the grid views
-        this.LAdapter = new CheckboxAdapter(this, languages);
-        this.SAdapter = new CheckboxAdapter(this,services);
+        this.languageAdapter = new CheckboxAdapter(this, languages);
+        this.serviceAdapter = new CheckboxAdapter(this,services);
         GridLayoutManager gridLayoutManager1 = new GridLayoutManager(this, 2,
                 GridLayoutManager.VERTICAL, false);
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(this, 2,
                 GridLayoutManager.VERTICAL, false);
-        langBox.setAdapter(LAdapter);
-        serviceBox.setAdapter(SAdapter);
+        langBox.setAdapter(languageAdapter);
+        serviceBox.setAdapter(serviceAdapter);
         langBox.setLayoutManager(gridLayoutManager1);
         serviceBox.setLayoutManager(gridLayoutManager2);
 
@@ -115,12 +115,12 @@ public class ThirdBizRegActivity extends AppCompatActivity {
 
     private void addBizUserToFirestore(String id) {
 
-        ArrayList<String> languageList = (ArrayList<String>) this.LAdapter.listofSelected();
-        ArrayList<String> serviceList = (ArrayList<String>) this.SAdapter.listofSelected();
+        ArrayList<String> languageList = (ArrayList<String>) this.languageAdapter.listofSelected();
+        ArrayList<String> serviceList = (ArrayList<String>) this.serviceAdapter.listofSelected();
         Services availServices = new Services(serviceList);
         this.listing.setServicesList(availServices);
         this.listing.setCompany(true);
-        String langx = ""; //TODO
+        String language = ""; //TODO
 
         CollectionReference businessCollection = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
         CollectionReference userCollection = FirebaseFirestore.getInstance().collection(User.DATABASE_COLLECTION);

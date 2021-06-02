@@ -43,7 +43,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoriesAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         String category = this.categories[position];
         holder.serView.setText(category);
         holder.myImage.setImageResource(this.categoriesImages[position]);

@@ -1,7 +1,6 @@
 package com.example.helplah.viewmodel.login_screen;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -67,19 +66,20 @@ public class SecBizRegActivity extends AppCompatActivity {
     }
 
     private boolean workableLink() {
-        if (TextUtils.isEmpty(webAddress.getText().toString())) {
-            //no check required
-            return true;
-        } else {
-            Uri webLink = Uri.parse(webAddress.getText().toString());
-            Intent gotoAddress = new Intent(Intent.ACTION_VIEW,webLink);
-            if (gotoAddress.resolveActivity(getPackageManager()) != null) {
-                return true;
-            } else {
-                return false;
-            }
-
-        }
+        return true;
+//        if (TextUtils.isEmpty(webAddress.getText().toString())) {
+//            //no check required
+//            return true;
+//        } else {
+//            Uri webLink = Uri.parse(webAddress.getText().toString());
+//            Intent gotoAddress = new Intent(Intent.ACTION_VIEW,webLink);
+//            if (gotoAddress.resolveActivity(getPackageManager()) != null) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//
+//        }
     }
 
     private void checkIfValid() {

@@ -1,5 +1,6 @@
 package com.example.helplah.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,7 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
             this.listingRatingBar = itemView.findViewById(R.id.listingRatingBar);
         }
 
+        @SuppressLint({"SetTextI18n", "DefaultLocale"})
         public void bind(final DocumentSnapshot snapshot, final onListingSelectedListener listener) {
 
             Listings listing = snapshot.toObject(Listings.class);
