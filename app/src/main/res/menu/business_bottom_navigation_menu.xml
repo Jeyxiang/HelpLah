@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/businessJobsRequestsFragment"
+        android:title="@string/bottom_navigation_item2"
+        android:icon="@drawable/ic_baseline_library_books_24"/>
+
+    <item
+        android:id="@+id/businessChatFragment"
+        android:title="@string/bottom_navigation_item3"
+        android:icon="@drawable/ic_baseline_chat_24"/>
+
+    <item
+        android:id="@+id/businessAccountFragment"
+        android:title="@string/bottom_navigation_item4"
+        android:icon="@drawable/ic_baseline_person_24"/>
+</menu>

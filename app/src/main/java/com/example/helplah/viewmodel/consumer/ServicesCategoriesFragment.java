@@ -46,7 +46,6 @@ public class ServicesCategoriesFragment extends Fragment implements CategoriesAd
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         this.rootview = inflater.inflate(R.layout.services_categories_fragment, container, false);
 
-        MainActivity activity = (MainActivity) getActivity();
         this.recyclerView = this.rootview.findViewById(R.id.categoryRecyclerView);
         this.searchView = this.rootview.findViewById(R.id.categorySearchView);
         this.categories = Services.ALLSERVICES.toArray(new String[0]);

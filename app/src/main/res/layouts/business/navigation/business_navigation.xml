@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/business_navigation"
+    app:startDestination="@id/businessJobsRequestsFragment">
+
+    <fragment
+        android:id="@+id/businessAccountFragment"
+        android:name="com.example.helplah.viewmodel.business.BusinessAccountFragment"
+        android:label="fragment_business_account"
+        tools:layout="@layout/fragment_business_account" />
+    <fragment
+        android:id="@+id/businessJobsRequestsFragment"
+        android:name="com.example.helplah.viewmodel.business.BusinessJobsRequestsFragment"
+        android:label="fragment_business_jobs_requests"
+        tools:layout="@layout/fragment_business_jobs_requests" />
+    <fragment
+        android:id="@+id/businessChatFragment"
+        android:name="com.example.helplah.viewmodel.business.BusinessChatFragment"
+        android:label="fragment_business_chat"
+        tools:layout="@layout/fragment_business_chat" />
+</navigation>
