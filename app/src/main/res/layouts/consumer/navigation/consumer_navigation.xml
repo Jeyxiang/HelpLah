@@ -49,5 +49,14 @@
         android:id="@+id/listingDescription"
         android:name="com.example.helplah.viewmodel.consumer.ListingDescription"
         android:label="fragment_listing_description"
-        tools:layout="@layout/fragment_listing_description" />
+        tools:layout="@layout/fragment_listing_description" >
+        <action
+            android:id="@+id/sendJobRequestAction"
+            app:destination="@id/sendJobRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/sendJobRequestFragment"
+        android:name="com.example.helplah.viewmodel.consumer.SendJobRequestFragment"
+        android:label="fragment_send_job_request"
+        tools:layout="@layout/fragment_send_job_request" />
 </navigation>

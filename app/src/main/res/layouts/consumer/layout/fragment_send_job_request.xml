@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sendRequestLayout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/black"
+    tools:context=".viewmodel.consumer.SendJobRequestFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="horizontal"
+        android:elevation="8dp" >
+
+        <ImageView
+            android:id="@+id/requestBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bigger_back_button"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send a Job Request"
+            android:textColor="@color/white"
+            android:fontFamily="@font/sf_display_bold"
+            android:textSize="22sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="20dp"/>
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/sendRequestScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="120sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="10dp" >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/appPurple">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/businessImage"
+                        android:layout_width="85dp"
+                        android:layout_height="85dp"
+                        android:layout_marginStart="14dp"
+                        android:elevation="8dp"
+                        android:src="@drawable/plumbing_logos"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/businessName"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/sf_display_bold"
+                        android:maxLines="2"
+                        android:singleLine="false"
+                        android:text="Singapore plumbing company"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toEndOf="@id/businessImage"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="10dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#333333">
+
+                    <TextView
+                        android:id="@+id/jobDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edit_text_dark"
+                        android:text="Choose a date"
+                        android:textColor="@color/white"
+                        android:gravity="center_vertical"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/bariol_regular"
+                        android:paddingStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/jobDateNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="@drawable/edit_text_dark"
+                        android:hint="Available times in the day"
+                        android:clickable="false"
+                        android:fontFamily="@font/bariol_regular"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:gravity="top"
+                        android:textColorHint="@color/white"
+                        android:paddingTop="8dp"
+                        android:paddingStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/jobDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:background="@drawable/edit_text_dark"
+                        android:hint="Enter a job description"
+                        android:fontFamily="@font/bariol_regular"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:textColorHint="@color/white"
+                        android:gravity="top|left"
+                        android:paddingStart="10dp"
+                        android:paddingTop="8dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:cardCornerRadius="10dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="#333333">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/jobPhoneNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/edit_text_dark"
+                        android:hint="Contact number"
+                        android:fontFamily="@font/bariol_regular"
+                        android:inputType="number"
+                        android:textColorHint="@color/white"
+                        android:gravity="center_vertical"
+                        android:maxLength="8"
+                        android:paddingStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/jobAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:background="@drawable/edit_text_dark"
+                        android:hint="Full address"
+                        android:clickable="false"
+                        android:fontFamily="@font/bariol_regular"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:gravity="top"
+                        android:textColorHint="@color/white"
+                        android:paddingTop="8dp"
+                        android:paddingStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/jobSendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:backgroundTint="@color/appRed"
+                android:text="Send Job Request"
+                android:textSize="15sp"
+                android:fontFamily="@font/sf_display_bold"
+                android:clickable="true"
+                android:paddingEnd="50dp"
+                android:paddingStart="50dp"
+                android:layout_marginBottom="20dp"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

@@ -56,6 +56,7 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
     private FilterListener filterListener;
     private View rootView;
     private FilterViewModel mViewModel;
+    private String category;
 
     private Spinner sortSpinner;
     private RadioGroup languageRadioGroup;
@@ -65,11 +66,12 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
     private CheckBox available3Days;
     private CheckBox available1Week;
 
-    public ListingsDialogFragment(Fragment fragment) {
+    public ListingsDialogFragment(Fragment fragment, String category) {
         if (fragment instanceof FilterListener) {
             this.filterListener = (FilterListener) fragment;
         }
         this.mViewModel = new ViewModelProvider(fragment).get(FilterViewModel.class);
+        this.category = category;
     }
 
     @Override
@@ -204,6 +206,7 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
 
     public ListingsQuery getFilters() {
         ListingsQuery query = new ListingsQuery(FirebaseFirestore.getInstance());
+        query.setService(category);
 
         if (this.rootView != null) {
             getSortBy(query);

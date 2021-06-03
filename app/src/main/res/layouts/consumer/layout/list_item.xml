@@ -9,7 +9,7 @@
     android:layout_marginTop="8dp"
     android:layout_marginRight="12dp"
     android:layout_marginBottom="8dp"
-    app:cardBackgroundColor="@color/listings_color"
+    app:cardBackgroundColor="#333333"
     app:cardElevation="6dp"
     tools:layout_editor_absoluteX="4dp"
     tools:layout_editor_absoluteY="4dp">
@@ -31,6 +31,7 @@
             android:layout_marginTop="8dp"
             android:maxLines="2"
             android:text="Singapore plumbing Company"
+            android:fontFamily="@font/sf_display_bold"
             android:textSize="23sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
+            android:fontFamily="@font/sf_display_bold"
             android:text="4.7"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@+id/availabilityText"
@@ -51,7 +53,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
+            android:layout_marginEnd="50dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/listingScore">
@@ -107,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:layout_marginTop="9dp"
-            android:textColor="#000000"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@id/listingRatingBar"
             app:layout_constraintTop_toBottomOf="@id/listingName" />
@@ -130,7 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="9dp"
-            android:progressBackgroundTint="#50101010"
+            android:progressBackgroundTint="#909090"
             android:progressTint="@color/rating_star_color"
             android:stepSize="0.1"
             app:layout_constraintStart_toEndOf="@id/listingScore"

@@ -26,6 +26,8 @@
     <string name="sort_by_price_ascending">Sort by Price (Ascending)</string>
     <string name="sort_by_price_descending">Sort by Price (Descending)</string>
 
+    <string name="send_job_request_confirmation">Send job request?</string>
+
     <!-- Services provided by the app -->
     <string-array name="service_providers">
         <item>Plumbing</item>

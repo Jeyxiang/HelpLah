@@ -54,6 +54,7 @@ public class BusinessListingsFragment extends Fragment implements
     private ListingsAdapter rvAdapter;
     private PagedList.Config rvConfig;
     private String title;
+    private String category;
 
     FirestorePagingOptions<Listings> options;
     private ListingsDialogFragment filterDialog;
@@ -62,13 +63,13 @@ public class BusinessListingsFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String category = this.getArguments().getString(Services.SERVICE);
+        this.category = this.getArguments().getString(Services.SERVICE);
 
         ListingsQuery q = new ListingsQuery(FirebaseFirestore.getInstance());
 
-        if (category != null) {
+        if (this.category != null) {
             q.setService(category);
-            this.title = "Results for " + category + "s";
+            this.title = "Results for " + this.category + "s";
         } else {
             throw new IllegalArgumentException("Must pass a: " + Services.SERVICE);
         }
@@ -99,7 +100,7 @@ public class BusinessListingsFragment extends Fragment implements
         this.rvListings = this.rootview.findViewById(R.id.rvListings);
 
         // Create filter dialog
-        this.filterDialog = new ListingsDialogFragment(this);
+        this.filterDialog = new ListingsDialogFragment(this, this.category);
 
         getQuery();
 
@@ -187,6 +188,8 @@ public class BusinessListingsFragment extends Fragment implements
         Bundle bundle = new Bundle();
         Listings selectedListing = listing.toObject(Listings.class);
         bundle.putParcelable("listing", selectedListing);
+        bundle.putString("id", listing.getId());
+        bundle.putString("category", this.category);
         Navigation.findNavController(v).navigate(R.id.goToListingsDescription, bundle);
     }
 }

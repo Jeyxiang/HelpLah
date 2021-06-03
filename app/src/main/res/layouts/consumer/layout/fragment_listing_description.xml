@@ -26,6 +26,7 @@
             app:expandedTitleTextAppearance="@style/ToolbarTitle"
             app:maxLines="2"
             app:title="Singapore Plumbing company"
+            app:expandedTitleMarginTop="40dp"
             app:expandedTitleGravity="top|end" >
 
             <RelativeLayout
@@ -49,12 +50,12 @@
                     android:id="@+id/descriptionScore"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="155dp"
+                    android:layout_marginTop="151dp"
                     android:layout_marginStart="135dp"
                     android:text="4.7"
                     app:layout_collapseMode="none"
-                    android:textSize="20sp"
-                    android:textColor="#fcfcfc" />
+                    android:textSize="22sp"
+                    android:textColor="@color/white" />
 
                 <me.zhanghai.android.materialratingbar.MaterialRatingBar
                     android:id="@+id/descriptionRatingBar"
@@ -80,9 +81,12 @@
             </RelativeLayout>
 
             <androidx.appcompat.widget.Toolbar
+                android:id="@+id/descriptionToolBar"
                 android:layout_width="match_parent"
-                android:layout_height="97dp"
-                app:layout_collapseMode="pin" />
+                android:layout_height="80dp"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/bigger_back_button"
+                android:gravity="center" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -222,7 +226,7 @@
         android:src="@drawable/ic_baseline_call_24"
         app:layout_anchor="@id/descriptionAppBar"
         app:layout_anchorGravity="bottom|end"
-        android:backgroundTint="@color/googleRed"
+        android:backgroundTint="@color/appRed"
         android:layout_marginEnd="100dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -235,7 +239,7 @@
         android:src="@drawable/ic_baseline_chat_24"
         app:layout_anchor="@id/descriptionAppBar"
         app:layout_anchorGravity="bottom|end"
-        android:backgroundTint="@color/googleRed"
+        android:backgroundTint="@color/appRed"
         android:layout_marginEnd="30dp" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -244,7 +248,7 @@
         android:layout_height="wrap_content"
         app:layout_anchor="@id/descriptionScroll"
         app:layout_anchorGravity="bottom|center"
-        android:backgroundTint="@color/googleRed"
+        android:backgroundTint="#bd2268"
         android:text="Send a job request"
         android:textSize="15sp"
         android:fontFamily="@font/sf_display_bold"

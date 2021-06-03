@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,6 +40,7 @@ public class ListingDescription extends Fragment {
     private Listings listing;
 
     private View rootView;
+    private Bundle bundle;
     private RecyclerView rvServices;
     private TextView reviewScore;
     private TextView numberOfReviews;
@@ -51,8 +54,9 @@ public class ListingDescription extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Log.d(TAG, "onCreate: called");
+
+        this.bundle = this.getArguments();
         this.listing = this.getArguments().getParcelable("listing");
 
         if (this.listing == null) {
@@ -107,6 +111,9 @@ public class ListingDescription extends Fragment {
 
     private void configureAppBarScroll(AppBarLayout appBarLayout) {
 
+        Toolbar backBar = this.rootView.findViewById(R.id.descriptionToolBar);
+        backBar.setNavigationOnClickListener(x -> requireActivity().onBackPressed());
+
         RelativeLayout relativeLayout = this.rootView.findViewById(R.id.profileRelativeLayout);
         CollapsingToolbarLayout toolbar = this.rootView.findViewById(R.id.descriptionToolBarLayout);
         toolbar.setTitle(this.listing.getName());
@@ -131,5 +138,11 @@ public class ListingDescription extends Fragment {
         FloatingActionButton chatButton = this.rootView.findViewById(R.id.descriptionChat);
 
         ExtendedFloatingActionButton sendJobButton = this.rootView.findViewById(R.id.descriptionJobRequest);
+        sendJobButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(v).navigate(R.id.sendJobRequestAction, bundle);
+            }
+        });
     }
 }
