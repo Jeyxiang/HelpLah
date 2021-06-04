@@ -2,6 +2,7 @@ package com.example.helplah.viewmodel.consumer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -22,6 +23,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String TAG = "Main activity";
+
     private BottomNavigationView navigationBar;
     private NavController navController;
 
@@ -31,10 +34,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d(TAG, "onCreate: " + mUser);
 
         if (mUser == null) {
             Intent goToLoginScreen = new Intent(getApplicationContext(), LoginScreen.class);
             startActivity(goToLoginScreen);
+            return;
         }
 
         String id = mUser.getUid();
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user.isBusiness()) {
                     Intent goToBiz = new Intent(getApplicationContext(), BusinessMainActivity.class);
                     startActivity(goToBiz);
+                    return;
                 } else{
                     goToConsumer();
                 }

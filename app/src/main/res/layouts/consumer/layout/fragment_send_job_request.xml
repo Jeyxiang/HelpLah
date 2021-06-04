@@ -160,6 +160,7 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:paddingStart="10dp"
                         android:paddingTop="8dp"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white" />
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -176,6 +177,7 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:paddingStart="10dp"
                         android:paddingTop="8dp"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white" />
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -192,6 +194,7 @@
                         android:inputType="number"
                         android:maxLength="8"
                         android:paddingStart="10dp"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white" />
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -210,6 +213,7 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:paddingStart="10dp"
                         android:paddingTop="8dp"
+                        android:textColor="@color/white"
                         android:textColorHint="@color/white" />
 
 
