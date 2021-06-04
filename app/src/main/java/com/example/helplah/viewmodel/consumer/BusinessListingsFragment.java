@@ -48,7 +48,7 @@ public class BusinessListingsFragment extends Fragment implements
     }
 
     private ListingViewModel mViewModel;
-    private View rootview;
+    private View rootView;
     private RecyclerView rvListings;
     private Toolbar listingsToolBar;
     private ListingsAdapter rvAdapter;
@@ -90,21 +90,21 @@ public class BusinessListingsFragment extends Fragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        this.rootview = inflater.inflate(R.layout.business_listings_fragment, container, false);
+        this.rootView = inflater.inflate(R.layout.business_listings_fragment, container, false);
 
-        this.listingsToolBar = this.rootview.findViewById(R.id.searchTopAppBar);
+        this.listingsToolBar = this.rootView.findViewById(R.id.searchTopAppBar);
         this.listingsToolBar.setTitle(this.title);
 
         setToolBarListener(this.listingsToolBar);
         this.listingsToolBar.setNavigationOnClickListener(x -> requireActivity().onBackPressed());
-        this.rvListings = this.rootview.findViewById(R.id.rvListings);
+        this.rvListings = this.rootView.findViewById(R.id.rvListings);
 
         // Create filter dialog
         this.filterDialog = new ListingsDialogFragment(this, this.category);
 
         getQuery();
 
-        return this.rootview;
+        return this.rootView;
     }
 
     private void configureFirestore(Query q) {
@@ -147,7 +147,7 @@ public class BusinessListingsFragment extends Fragment implements
     private void checkIfEmptyQuery() {
         if (this.rvAdapter != null && this.rvAdapter.getItemCount() == 0) {
             Log.d(TAG, "checkIfEmptyQuery: No results");
-            Snackbar.make(this.rootview.findViewById(R.id.listingsCoordinatorLayout), "No results found", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(this.rootView.findViewById(R.id.listingsCoordinatorLayout), "No results found", Snackbar.LENGTH_SHORT).show();
         }
     }
 

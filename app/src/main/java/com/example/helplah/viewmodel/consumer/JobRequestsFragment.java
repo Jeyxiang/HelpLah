@@ -1,65 +1,123 @@
 package com.example.helplah.viewmodel.consumer;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
+import com.example.helplah.adapters.JobRequestsAdapter;
+import com.example.helplah.models.JobRequestQuery;
+import com.example.helplah.models.JobRequests;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link JobRequestsFragment#newInstance} factory method to
+ * Use the {@link JobRequestsFragment} factory method to
  * create an instance of this fragment.
  */
-public class JobRequestsFragment extends Fragment {
+public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.RequestClickedListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static final String TAG = "Job Request Fragment";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static class JobRequestsViewModel extends ViewModel {
 
-    public JobRequestsFragment() {
-        // Required empty public constructor
+        private Query query;
+
+        public void setQuery(Query query) {
+            this.query = query;
+        }
+
+        public Query getQuery() {
+            return this.query;
+        }
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment JobRequestsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static JobRequestsFragment newInstance(String param1, String param2) {
-        JobRequestsFragment fragment = new JobRequestsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private JobRequestsViewModel viewModel;
+    private FirestoreRecyclerOptions<JobRequests> options;
+    private View rootView;
+    private RecyclerView rvJobRequests;
+    private JobRequestsAdapter rvAdapter;
+    private String userId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId);
+        this.viewModel = new ViewModelProvider(this).get(JobRequestsViewModel.class);
+
+        requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
+        this.viewModel.setQuery(requestQuery.createQuery());
+
+        configureFirestore(this.viewModel.getQuery());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_job_requests, container, false);
+        this.rootView = inflater.inflate(R.layout.fragment_job_requests, container, false);
+
+        this.rvJobRequests = this.rootView.findViewById(R.id.jobRequestsRv);
+        this.rvJobRequests.setHasFixedSize(true);
+        getQuery();
+
+        return this.rootView;
+    }
+
+    private void configureFirestore(Query query) {
+
+        this.options = new FirestoreRecyclerOptions.Builder<JobRequests>()
+                .setQuery(query, JobRequests.class)
+                .build();
+    }
+
+    private void getQuery() {
+        Log.d(TAG, "getQuery: Getting query");
+
+        this.rvAdapter = new JobRequestsAdapter(this.options, this, false);
+        this.rvAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
+        this.rvJobRequests.setAdapter(this.rvAdapter);
+
+        this.rvJobRequests.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        this.rvAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        this.rvAdapter.stopListening();
+    }
+
+    @Override
+    public void onRequestClicked(JobRequests request) {
+        Log.d(TAG, "onRequestClicked: request clicked");
+    }
+
+    @Override
+    public boolean onRequestLongClicked(JobRequests requests) {
+        Log.d(TAG, "onRequestLongClicked: Long clicked");
+        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(Vibrator.VIBRATION_EFFECT_SUPPORT_YES);
+        return false;
     }
 }

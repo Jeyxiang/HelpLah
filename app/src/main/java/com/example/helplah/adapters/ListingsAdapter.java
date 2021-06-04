@@ -52,6 +52,7 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
         private final TextView listingName;
         private final TextView listingScore;
         private final TextView listingNumOfReviews;
+        private final TextView listingDescription;
         private final RatingBar listingRatingBar;
 
 
@@ -63,6 +64,7 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
             this.listingScore = itemView.findViewById(R.id.listingScore);
             this.listingNumOfReviews = itemView.findViewById(R.id.listingNumOfReviews);
             this.listingRatingBar = itemView.findViewById(R.id.listingRatingBar);
+            this.listingDescription = itemView.findViewById(R.id.listingDescription);
         }
 
         @SuppressLint({"SetTextI18n", "DefaultLocale"})
@@ -76,15 +78,15 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
             this.listingScore.setText(String.format("%.1f", listing.getReviewScore()));
             this.listingNumOfReviews.setText(listing.getNumberOfReviews() + " reviews");
             this.listingRatingBar.setRating((float) listing.getReviewScore());
+            this.listingDescription.setText(listing.getDescription());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        listener.onListingClicked(snapshot, v);
-                    }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onListingClicked(snapshot, v);
                 }
             });
+
+            this.listingDescription.setOnClickListener(v -> itemView.performClick());
         }
     }
 }

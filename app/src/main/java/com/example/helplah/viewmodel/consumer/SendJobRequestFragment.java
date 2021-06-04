@@ -52,6 +52,8 @@ public class SendJobRequestFragment extends Fragment {
     private EditText jobAddress;
     private EditText jobNumber;
     private TextView businessName;
+    private TextView businessScore;
+    private TextView businessPopularity;
 
     private String businessId;
     private String userId;
@@ -88,6 +90,8 @@ public class SendJobRequestFragment extends Fragment {
         this.businessName = this.rootView.findViewById(R.id.businessName);
         this.jobAddress = this.rootView.findViewById(R.id.jobAddress);
         this.jobNumber = this.rootView.findViewById(R.id.jobPhoneNumber);
+        this.businessScore = this.rootView.findViewById(R.id.businessScore);
+        this.businessPopularity = this.rootView.findViewById(R.id.businessPopularity);
 
         getUserInformation();
         bind();
@@ -95,6 +99,7 @@ public class SendJobRequestFragment extends Fragment {
         return this.rootView;
     }
 
+    @SuppressLint("DefaultLocale")
     private void bind() {
         ImageView backButton = this.rootView.findViewById(R.id.requestBackButton);
         ExtendedFloatingActionButton sendButton = this.rootView.findViewById(R.id.jobSendButton);
@@ -114,6 +119,8 @@ public class SendJobRequestFragment extends Fragment {
         sendButton.setOnClickListener(x -> sendRequest());
         this.jobDate.setOnClickListener(x -> setDate());
         this.businessName.setText(this.listing.getName());
+        this.businessScore.setText(String.format("%.1f", listing.getReviewScore()));
+        this.businessPopularity.setText("(" + this.listing.getNumberOfReviews() + " reviews)");
     }
 
     @SuppressLint("SetTextI18n")

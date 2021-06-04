@@ -9,15 +9,15 @@
     android:layout_marginTop="8dp"
     android:layout_marginRight="12dp"
     android:layout_marginBottom="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardCornerRadius="20dp"
     app:cardBackgroundColor="#333333"
-    app:cardElevation="6dp"
-    tools:layout_editor_absoluteX="4dp"
-    tools:layout_editor_absoluteY="4dp">
+    app:cardElevation="6dp" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/listingRvLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:layout_marginStart="20dp"
         android:paddingTop="10dp"
@@ -85,9 +85,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="68dp"
             android:text="Today"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/availabilityText" />
 
@@ -119,9 +118,9 @@
             android:layout_width="85dp"
             android:layout_height="85dp"
             android:layout_marginStart="14dp"
+            android:layout_marginTop="25dp"
             android:elevation="8dp"
             android:src="@drawable/plumbing_logos"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -137,5 +136,36 @@
             android:stepSize="0.1"
             app:layout_constraintStart_toEndOf="@id/listingScore"
             app:layout_constraintTop_toBottomOf="@id/listingName" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/descriptionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="@style/ListingsLeftTextBox"
+            android:fontFamily="@font/lato_bold"
+            android:text="About this business:"
+            app:layout_constraintTop_toBottomOf="@id/listing_availability"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/listingDescription"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            style="@style/ListingsLeftTextBox"
+            android:fontFamily="@font/bariol_regular"
+            android:textSize="14dp"
+            android:text="This business"
+            android:clickable="false"
+            app:layout_constraintTop_toBottomOf="@id/descriptionTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.card.MaterialCardView>

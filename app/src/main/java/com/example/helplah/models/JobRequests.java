@@ -1,8 +1,11 @@
 package com.example.helplah.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
-public class JobRequests {
+public class JobRequests implements Parcelable {
 
     public static final String DATABASE_COLLECTION = "Job requests";
 
@@ -43,6 +46,50 @@ public class JobRequests {
         this.service = service;
         this.status = STATUS_PENDING;
         this.dateCreated = new Date(System.currentTimeMillis());
+    }
+
+    protected JobRequests(Parcel in) {
+        customerId = in.readString();
+        businessId = in.readString();
+        customerName = in.readString();
+        businessName = in.readString();
+        service = in.readString();
+        jobDescription = in.readString();
+        address = in.readString();
+        status = in.readInt();
+        phoneNumber = in.readInt();
+        timingNote = in.readString();
+    }
+
+    public static final Creator<JobRequests> CREATOR = new Creator<JobRequests>() {
+        @Override
+        public JobRequests createFromParcel(Parcel in) {
+            return new JobRequests(in);
+        }
+
+        @Override
+        public JobRequests[] newArray(int size) {
+            return new JobRequests[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(customerId);
+        dest.writeString(businessId);
+        dest.writeString(customerName);
+        dest.writeString(businessName);
+        dest.writeString(service);
+        dest.writeString(jobDescription);
+        dest.writeString(address);
+        dest.writeInt(status);
+        dest.writeInt(phoneNumber);
+        dest.writeString(timingNote);
     }
 
     public String getCustomerId() {
