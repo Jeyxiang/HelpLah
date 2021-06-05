@@ -18,6 +18,7 @@ import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -132,8 +133,28 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             this.requestTime.setText("To be confirmed");
             this.requestTimingNote.setText(request.getTimingNote());
 
-            this.editButton.setOnClickListener(v -> mListener.onEditClicked(v, request, documentId));
-            this.cancelButton.setOnClickListener(x -> cancelClicked(request, documentId));
+            this.editButton.setOnClickListener(v -> {
+                if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
+                    Toast.makeText(context, "Unable to edit as request has been cancelled",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                mListener.onEditClicked(v, request, documentId);
+            });
+
+            this.cancelButton.setOnClickListener(x -> {
+                if (request.getStatus() != JobRequests.STATUS_CANCELLED) {
+                    new MaterialAlertDialogBuilder(context)
+                            .setTitle(context.getString(R.string.cancel_Request_dialog_title))
+                            .setPositiveButton("Cancel request",
+                                    (dialog, which) -> cancelClicked(request, documentId))
+                            .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                            .show();
+                } else {
+                    Log.d(TAG, "cancelClicked: cancelled already");
+                    Toast.makeText(context, "Request has already been cancelled", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         private int getColor(JobRequests request) {
@@ -147,19 +168,14 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         }
 
         private void cancelClicked(JobRequests request, String documentId) {
-
-            if (request.getStatus() != JobRequests.STATUS_CANCELLED) {
-                request.setStatus(JobRequests.STATUS_CANCELLED);
-                notifyItemChanged(getBindingAdapterPosition());
-                CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
-                Map<String, Object> status = new HashMap<>();
-                status.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
-                db.document(documentId).update(status);
-                Log.d(TAG, "cancelClicked: " + documentId + " status updated");
-            } else {
-                Log.d(TAG, "cancelClicked: cancelled already");
-                Toast.makeText(context, "Item has already been cancelled", Toast.LENGTH_SHORT).show();
-            }
+            request.setStatus(JobRequests.STATUS_CANCELLED);
+            notifyItemChanged(getBindingAdapterPosition());
+            CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
+            Map<String, Object> status = new HashMap<>();
+            status.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
+            db.document(documentId).update(status);
+            Toast.makeText(context, "Request has been cancelled", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "cancelClicked: " + documentId + " status updated");
         }
 
     }

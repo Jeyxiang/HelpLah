@@ -28,6 +28,7 @@
 
     <string name="send_job_request_confirmation">Send job request?</string>
     <string name="edit_job_request_confirmation">Edit job request?</string>
+    <string name="cancel_Request_dialog_title">Are you sure you want to cancel the request?</string>
 
     <!-- Services provided by the app -->
     <string-array name="service_providers">
