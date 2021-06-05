@@ -37,8 +37,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         void onEditClicked(View v, JobRequests requests, String requestId);
     }
 
-    private RequestClickedListener mListener;
-    private RecyclerView rv;
+    private final RequestClickedListener mListener;
+    private final RecyclerView rv;
     private int mExpandedPosition = RecyclerView.NO_POSITION;
     private Context context;
     private boolean isBusiness;
@@ -69,7 +69,6 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         holder.itemView.setOnClickListener(v -> {
             mExpandedPosition = isExpanded ? -1 : position;
             notifyItemChanged(position);
-            this.rv.smoothScrollToPosition(position);
         });
 
         String documentId = getSnapshots().getSnapshot(position).getId();
