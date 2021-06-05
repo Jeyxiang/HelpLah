@@ -69,6 +69,9 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         holder.itemView.setOnClickListener(v -> {
             mExpandedPosition = isExpanded ? -1 : position;
             notifyItemChanged(position);
+            if (position + 1 == getItemCount()) {
+                this.rv.smoothScrollToPosition(position);
+            }
         });
 
         String documentId = getSnapshots().getSnapshot(position).getId();
