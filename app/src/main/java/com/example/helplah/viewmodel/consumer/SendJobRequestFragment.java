@@ -54,6 +54,9 @@ public class SendJobRequestFragment extends Fragment {
     private TextView businessName;
     private TextView businessScore;
     private TextView businessPopularity;
+    private ExtendedFloatingActionButton sendButton;
+    private JobRequests previousRequest;
+    private String previousRequestId;
 
     private String businessId;
     private String userId;
@@ -69,11 +72,12 @@ public class SendJobRequestFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "onCreate: called");
-        this.listing = this.getArguments().getParcelable("listing");
-        this.businessId = this.getArguments().getString("id");
-        this.category = this.getArguments().getString("category");
 
-        if (this.listing == null || this.businessId == null || this.category == null) {
+        try {
+            this.listing = this.getArguments().getParcelable("listing");
+            this.businessId = this.getArguments().getString("id");
+            this.category = this.getArguments().getString("category");
+        } catch (Exception e) {
             Toast.makeText(getActivity(), "An unexpected error occurred", Toast.LENGTH_SHORT).show();
         }
     }
@@ -92,35 +96,53 @@ public class SendJobRequestFragment extends Fragment {
         this.jobNumber = this.rootView.findViewById(R.id.jobPhoneNumber);
         this.businessScore = this.rootView.findViewById(R.id.businessScore);
         this.businessPopularity = this.rootView.findViewById(R.id.businessPopularity);
+        this.sendButton = this.rootView.findViewById(R.id.jobSendButton);
 
         getUserInformation();
         bind();
+
+        JobRequests request = this.getArguments().getParcelable("request");
+
+        if (request != null) {
+            this.previousRequest = request;
+            this.previousRequestId = this.getArguments().getString("requestId");
+            setEditMode();
+        }
 
         return this.rootView;
     }
 
     @SuppressLint("DefaultLocale")
     private void bind() {
+
         ImageView backButton = this.rootView.findViewById(R.id.requestBackButton);
-        ExtendedFloatingActionButton sendButton = this.rootView.findViewById(R.id.jobSendButton);
 
         CalendarConstraints.DateValidator validator = DateValidatorPointForward.from(System.currentTimeMillis() - 80000000);
         CalendarConstraints.Builder constraint = new CalendarConstraints.Builder();
         constraint.setValidator(validator);
 
-        this.datePicker = MaterialDatePicker.Builder
-                .datePicker()
-                .setTitleText("Select date for job")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .setCalendarConstraints(constraint.build())
-                .build();
+        this.datePicker = buildDatePicker(false);
 
         backButton.setOnClickListener(x -> requireActivity().onBackPressed());
-        sendButton.setOnClickListener(x -> sendRequest());
+        this.sendButton.setOnClickListener(x -> sendRequest());
         this.jobDate.setOnClickListener(x -> setDate());
         this.businessName.setText(this.listing.getName());
         this.businessScore.setText(String.format("%.1f", listing.getReviewScore()));
         this.businessPopularity.setText("(" + this.listing.getNumberOfReviews() + " reviews)");
+    }
+
+    private MaterialDatePicker buildDatePicker(boolean hasDateInfo) {
+
+        CalendarConstraints.DateValidator validator = DateValidatorPointForward.from(System.currentTimeMillis() - 80000000);
+        CalendarConstraints.Builder constraint = new CalendarConstraints.Builder();
+        constraint.setValidator(validator);
+
+        return MaterialDatePicker.Builder
+                .datePicker()
+                .setTitleText("Select date for job")
+                .setSelection(hasDateInfo ? this.previousRequest.getDateOfJob().getTime() : System.currentTimeMillis())
+                .setCalendarConstraints(constraint.build())
+                .build();
     }
 
     @SuppressLint("SetTextI18n")
@@ -160,6 +182,20 @@ public class SendJobRequestFragment extends Fragment {
         return allCorrect;
     }
 
+    private void setEditMode() {
+
+        this.jobDescription.setText(this.previousRequest.getJobDescription());
+        this.jobDateNote.setText(this.previousRequest.getTimingNote());
+        this.date = this.previousRequest.getDateOfJob();
+        TextView title = this.rootView.findViewById(R.id.jobRequestTitle);
+        title.setText("Edit Job Request");
+        this.sendButton.setText("Edit Job Request");
+        this.datePicker = buildDatePicker(true);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+        this.jobDate.setText(formatter.format(this.previousRequest.getDateOfJob()));
+
+    }
+
     private void sendRequest() {
         if (checkFields() && queryDone) {
             // send request
@@ -175,9 +211,11 @@ public class SendJobRequestFragment extends Fragment {
             DateFormat formatter = new SimpleDateFormat("E, dd MMM");
 
             new MaterialAlertDialogBuilder(getActivity())
-                    .setTitle(getString(R.string.send_job_request_confirmation))
+                    .setTitle(this.previousRequest == null ? getString(R.string.send_job_request_confirmation) :
+                            getString(R.string.edit_job_request_confirmation))
                     .setMessage("Job request scheduled for " + formatter.format(this.date))
-                    .setPositiveButton("Send request", (dialog, which) -> addToDataBase(requests))
+                    .setPositiveButton(this.previousRequest == null ? "Send request" : "Edit request"
+                            , (dialog, which) -> addToDataBase(requests))
                     .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                     .show();
         }
@@ -185,6 +223,17 @@ public class SendJobRequestFragment extends Fragment {
 
     private void addToDataBase(JobRequests requests) {
         CollectionReference dbRequests = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
+        if (this.previousRequest != null) {
+            dbRequests.document(this.previousRequestId).set(requests)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(getActivity(), "Request edited", Toast.LENGTH_SHORT).show();
+                        requireActivity().onBackPressed();})
+                    .addOnFailureListener(e ->
+                            Toast.makeText(getActivity(),
+                                    "Failed to edit request", Toast.LENGTH_SHORT).show());
+            return;
+        }
+
         dbRequests.add(requests)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(getActivity(), "Request sent", Toast.LENGTH_SHORT).show();

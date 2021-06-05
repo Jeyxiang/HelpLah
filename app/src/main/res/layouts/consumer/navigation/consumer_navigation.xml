@@ -14,7 +14,11 @@
         android:id="@+id/jobRequestsFragment"
         android:name="com.example.helplah.viewmodel.consumer.JobRequestsFragment"
         android:label="fragment_job_requests"
-        tools:layout="@layout/fragment_job_requests" />
+        tools:layout="@layout/fragment_job_requests" >
+        <action
+            android:id="@+id/editJobRequestAction"
+            app:destination="@id/sendJobRequestFragment" />
+    </fragment>
     <fragment
         android:id="@+id/servicesCategoriesFragment"
         android:name="com.example.helplah.viewmodel.consumer.ServicesCategoriesFragment"

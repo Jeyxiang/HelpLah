@@ -16,6 +16,7 @@ public class JobRequests implements Parcelable {
     public static final String FIELD_SERVICE = "service";
     public static final String FIELD_JOB_DESCRIPTION = "jobDescription";
     public static final String FIELD_ADDRESS = "address";
+    public static final String FIELD_STATUS = "status";
     public static final String FIELD_PHONE_NUMBER = "phoneNumber";
     public static final String FIELD_DATE_CREATED = "dateCreated";
     public static final String FIELD_DATE_TIMING_NOTE = "timingNote";

@@ -1,8 +1,6 @@
 package com.example.helplah.viewmodel.consumer;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,8 +17,12 @@ import com.example.helplah.R;
 import com.example.helplah.adapters.JobRequestsAdapter;
 import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
+import com.example.helplah.models.Listings;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -89,7 +92,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     private void getQuery() {
         Log.d(TAG, "getQuery: Getting query");
 
-        this.rvAdapter = new JobRequestsAdapter(this.options, this, false);
+        this.rvAdapter = new JobRequestsAdapter(this.options, this, false, this.rvJobRequests);
         this.rvAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         this.rvJobRequests.setAdapter(this.rvAdapter);
 
@@ -109,15 +112,21 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     }
 
     @Override
-    public void onRequestClicked(JobRequests request) {
-        Log.d(TAG, "onRequestClicked: request clicked");
-    }
+    public void onEditClicked(View v, JobRequests requests, String requestId) {
 
-    @Override
-    public boolean onRequestLongClicked(JobRequests requests) {
-        Log.d(TAG, "onRequestLongClicked: Long clicked");
-        Vibrator vibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        vibrator.vibrate(Vibrator.VIBRATION_EFFECT_SUPPORT_YES);
-        return false;
+        CollectionReference listingsReference = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
+
+        listingsReference.whereEqualTo(FieldPath.documentId(), requests.getBusinessId()).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("listing", snapshot.toObject(Listings.class));
+                        bundle.putParcelable("request", requests);
+                        bundle.putString("id", requests.getBusinessId());
+                        bundle.putString("requestId", requestId);
+                        bundle.putString("category", requests.getService());
+                        Navigation.findNavController(v).navigate(R.id.editJobRequestAction, bundle);
+                    }
+                });
     }
 }

@@ -5,7 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -16,10 +18,15 @@ import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, JobRequestsAdapter.RequestsViewHolder> {
 
@@ -27,12 +34,12 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
     public interface RequestClickedListener {
 
-        void onRequestClicked(JobRequests requests);
-
-        boolean onRequestLongClicked(JobRequests requests);
+        void onEditClicked(View v, JobRequests requests, String requestId);
     }
 
     private RequestClickedListener mListener;
+    private RecyclerView rv;
+    private int mExpandedPosition = RecyclerView.NO_POSITION;
     private Context context;
     private boolean isBusiness;
 
@@ -43,15 +50,30 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
      * @param options
      */
     public JobRequestsAdapter(@NonNull FirestoreRecyclerOptions<JobRequests> options,
-                              RequestClickedListener listener, boolean isBusiness) {
+                              RequestClickedListener listener, boolean isBusiness, RecyclerView rv) {
         super(options);
         this.mListener = listener;
         this.isBusiness = isBusiness;
+        this.rv = rv;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull RequestsViewHolder holder, int position, @NonNull JobRequests model) {
-        holder.bind(model, this.mListener);
+
+        LinearLayout layout = holder.itemView.findViewById(R.id.expandedLayout);
+        boolean isExpanded = position == mExpandedPosition;
+        layout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+        layout.setActivated(isExpanded);
+        holder.itemView.setActivated(isExpanded);
+
+        holder.itemView.setOnClickListener(v -> {
+            mExpandedPosition = isExpanded ? -1 : position;
+            notifyItemChanged(position);
+            this.rv.smoothScrollToPosition(position);
+        });
+
+        String documentId = getSnapshots().getSnapshot(position).getId();
+        holder.bind(model, this.mListener, documentId);
     }
 
     @NonNull
@@ -69,30 +91,30 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         private final TextView requestDate;
         private final TextView requestTime;
         private final TextView requestDescription;
+        private final TextView requestTimingNote;
+        private final ExtendedFloatingActionButton cancelButton;
+        private final ExtendedFloatingActionButton editButton;
+        private final ExtendedFloatingActionButton chatButton;
 
         public RequestsViewHolder(@NonNull View itemView) {
+
             super(itemView);
             this.requestCardView = itemView.findViewById(R.id.requestCardView);
             this.requestName = itemView.findViewById(R.id.requestName);
             this.requestDate = itemView.findViewById(R.id.requestDate);
             this.requestTime = itemView.findViewById(R.id.requestTiming);
             this.requestDescription = itemView.findViewById(R.id.requestDescription);
+            this.requestTimingNote = itemView.findViewById(R.id.requestTimingNote);
+            this.cancelButton = itemView.findViewById(R.id.requestCancelButton);
+            this.editButton = itemView.findViewById(R.id.requestEditButton);
+            this.chatButton = itemView.findViewById(R.id.requestCancelButton);
         }
 
-        public void bind(final JobRequests request, final RequestClickedListener listener) {
+        public void bind(final JobRequests request, final RequestClickedListener listener,
+                         final String documentId) {
 
-            Log.d(TAG, "bind: " + request.getStatus());
             // set color of cardView based on status of job request
-            if (request.getStatus() == JobRequests.STATUS_PENDING) {
-                this.requestCardView.setCardBackgroundColor(
-                        ContextCompat.getColor(context, R.color.jobRequestPending));
-            } else if (request.getStatus() == JobRequests.STATUS_CONFIRMED) {
-                this.requestCardView.setCardBackgroundColor(
-                        ContextCompat.getColor(context, R.color.jobRequestAccepted));
-            } else {
-                this.requestCardView.setCardBackgroundColor(
-                        ContextCompat.getColor(context, R.color.jobRequestCancelled));
-            }
+            this.requestCardView.setCardBackgroundColor(getColor(request));
 
             if (isBusiness) {
                 this.requestName.setText(request.getCustomerName());
@@ -106,9 +128,37 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             DateFormat formatter = new SimpleDateFormat("E, dd MMM");
             this.requestDate.setText(formatter.format(date));
             this.requestTime.setText("To be confirmed");
+            this.requestTimingNote.setText(request.getTimingNote());
 
-            itemView.setOnClickListener(x -> listener.onRequestClicked(request));
-            itemView.setOnLongClickListener(x -> listener.onRequestLongClicked(request));
+            this.editButton.setOnClickListener(v -> mListener.onEditClicked(v, request, documentId));
+            this.cancelButton.setOnClickListener(x -> cancelClicked(request, documentId));
         }
+
+        private int getColor(JobRequests request) {
+            if (request.getStatus() == JobRequests.STATUS_PENDING) {
+                return ContextCompat.getColor(context, R.color.jobRequestPending);
+            } else if (request.getStatus() == JobRequests.STATUS_CONFIRMED) {
+                return ContextCompat.getColor(context, R.color.jobRequestAccepted);
+            } else {
+                return ContextCompat.getColor(context, R.color.jobRequestCancelled);
+            }
+        }
+
+        private void cancelClicked(JobRequests request, String documentId) {
+
+            if (request.getStatus() != JobRequests.STATUS_CANCELLED) {
+                request.setStatus(JobRequests.STATUS_CANCELLED);
+                notifyItemChanged(getBindingAdapterPosition());
+                CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
+                Map<String, Object> status = new HashMap<>();
+                status.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
+                db.document(documentId).update(status);
+                Log.d(TAG, "cancelClicked: " + documentId + " status updated");
+            } else {
+                Log.d(TAG, "cancelClicked: cancelled already");
+                Toast.makeText(context, "Item has already been cancelled", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 }

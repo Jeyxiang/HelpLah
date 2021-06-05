@@ -8,7 +8,6 @@
     android:background="@drawable/home_background"
     tools:context=".viewmodel.consumer.JobRequestsFragment">
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/jobRequestsRv"
         android:layout_width="match_parent"
