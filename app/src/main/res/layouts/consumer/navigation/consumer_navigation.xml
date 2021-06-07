@@ -18,6 +18,9 @@
         <action
             android:id="@+id/editJobRequestAction"
             app:destination="@id/sendJobRequestFragment" />
+        <action
+            android:id="@+id/action_jobRequests_to_listingDescription"
+            app:destination="@id/listingDescription" />
     </fragment>
     <fragment
         android:id="@+id/servicesCategoriesFragment"

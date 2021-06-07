@@ -1,6 +1,7 @@
 package com.example.helplah.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +13,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
+import com.example.helplah.models.Listings;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
@@ -28,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, JobRequestsAdapter.RequestsViewHolder> {
 
@@ -95,6 +102,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         private final TextView requestTime;
         private final TextView requestDescription;
         private final TextView requestTimingNote;
+        private final CircleImageView image;
         private final ExtendedFloatingActionButton cancelButton;
         private final ExtendedFloatingActionButton editButton;
         private final ExtendedFloatingActionButton chatButton;
@@ -110,7 +118,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             this.requestTimingNote = itemView.findViewById(R.id.requestTimingNote);
             this.cancelButton = itemView.findViewById(R.id.requestCancelButton);
             this.editButton = itemView.findViewById(R.id.requestEditButton);
-            this.chatButton = itemView.findViewById(R.id.requestCancelButton);
+            this.chatButton = itemView.findViewById(R.id.requestChatButton);
+            this.image = itemView.findViewById(R.id.requestImage);
         }
 
         public void bind(final JobRequests request, final RequestClickedListener listener,
@@ -126,6 +135,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             }
 
             this.requestDescription.setText(request.getJobDescription());
+            this.image.setOnClickListener(x -> goToListing(request));
 
             Date date = request.getDateOfJob();
             DateFormat formatter = new SimpleDateFormat("E, dd MMM");
@@ -176,6 +186,22 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             db.document(documentId).update(status);
             Toast.makeText(context, "Request has been cancelled", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "cancelClicked: " + documentId + " status updated");
+        }
+
+        private void goToListing(JobRequests request) {
+            String businessId = request.getBusinessId();
+            CollectionReference listingsDb = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
+            Bundle bundle = new Bundle();
+
+            listingsDb.whereEqualTo(FieldPath.documentId(), businessId).get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            Listings listing = snapshot.toObject(Listings.class);
+                            bundle.putParcelable("listing", listing);
+                            Navigation.findNavController(itemView)
+                                    .navigate(R.id.action_jobRequests_to_listingDescription, bundle);
+                        }
+                    });
         }
 
     }

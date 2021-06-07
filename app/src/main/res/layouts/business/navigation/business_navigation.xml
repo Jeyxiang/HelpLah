@@ -9,7 +9,11 @@
         android:id="@+id/businessAccountFragment"
         android:name="com.example.helplah.viewmodel.business.BusinessAccountFragment"
         android:label="fragment_business_account"
-        tools:layout="@layout/fragment_business_account" />
+        tools:layout="@layout/fragment_business_account" >
+        <action
+            android:id="@+id/action_edit_listing"
+            app:destination="@id/editListingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/businessJobsRequestsFragment"
         android:name="com.example.helplah.viewmodel.business.BusinessJobsRequestsFragment"
@@ -20,4 +24,9 @@
         android:name="com.example.helplah.viewmodel.business.BusinessChatFragment"
         android:label="fragment_business_chat"
         tools:layout="@layout/fragment_business_chat" />
+    <fragment
+        android:id="@+id/editListingFragment"
+        android:name="com.example.helplah.viewmodel.business.EditListingFragment"
+        android:label="edit_listings_fragment"
+        tools:layout="@layout/edit_listings_fragment" />
 </navigation>

@@ -49,4 +49,20 @@
         <item>@string/sort_by_price_ascending</item>
         <item>@string/sort_by_price_descending</item>
     </string-array>
+
+    <string-array name="business_availability">
+        <item>Four Hours</item>
+        <item>One Day</item>
+        <item>Two Days</item>
+        <item>Three Days</item>
+        <item>One Week</item>
+        <item>Unavailable</item>
+    </string-array>
+
+    <string-array name="language_available">
+        <item>English</item>
+        <item>Chinese</item>
+        <item>Malay</item>
+        <item>Tamil</item>
+    </string-array>
 </resources>

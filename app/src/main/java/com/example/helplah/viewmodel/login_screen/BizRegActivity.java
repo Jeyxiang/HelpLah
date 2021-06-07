@@ -10,16 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.helplah.R;
 import com.example.helplah.models.Listings;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.SignInMethodQueryResult;
 
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -126,6 +122,16 @@ public class BizRegActivity extends AppCompatActivity {
         return allCorrect;
     }
 
+    //Check email format
+    private boolean isEmailValid(CharSequence email) {
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return true;
+        } else {
+            this.emailAdd.setError("Enter a valid email");
+            return false;
+        }
+    }
+
     //bring forward the attributes to the subsequent pages
     //start the new Activity
     private void sendIntent () {
@@ -139,19 +145,17 @@ public class BizRegActivity extends AppCompatActivity {
     }
 
     private void checkIfValid() {
-        if (checkFields()) {
+        String email = this.emailAdd.getText().toString().trim();
+        if (checkFields() && isEmailValid(email)) {
             //check if email already in use
-            mAuth.fetchSignInMethodsForEmail(emailAdd.getText().toString()).addOnCompleteListener(
-                    new  OnCompleteListener<SignInMethodQueryResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-                            boolean notInUse = task.getResult().getSignInMethods().isEmpty();
-                            if (!notInUse) {
-                                Toast.makeText(getApplicationContext(), "Email already in use",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                sendIntent();
-                            }
+            mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(
+                    task -> {
+                        boolean notInUse = task.getResult().getSignInMethods().isEmpty();
+                        if (!notInUse) {
+                            Toast.makeText(getApplicationContext(), "Email already in use",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            sendIntent();
                         }
                     }).addOnFailureListener(e -> Toast.makeText(getApplicationContext(), "Invalid email", Toast.LENGTH_SHORT).show());
         }

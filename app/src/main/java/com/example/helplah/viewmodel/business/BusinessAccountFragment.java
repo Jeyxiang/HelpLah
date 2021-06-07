@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.helplah.R;
 import com.example.helplah.viewmodel.login_screen.LoginScreen;
@@ -71,6 +72,11 @@ public class BusinessAccountFragment extends Fragment {
                 Intent i = new Intent(getActivity(), LoginScreen.class);
                 startActivity(i);
             }
+        });
+
+        Button editButton = v.findViewById(R.id.editListingButton);
+        editButton.setOnClickListener(x -> {
+            Navigation.findNavController(v).navigate(R.id.action_edit_listing);
         });
         return v;
     }

@@ -80,7 +80,7 @@ public class RegisterScreen extends AppCompatActivity {
         String email = this.mEmail.getText().toString().trim();
         String password = this.mPassword.getText().toString().trim();
         String username = this.mUsername.getText().toString().trim();
-        if (checkFields()) {
+        if (checkFields() && isEmailValid(email)) {
             createUser(email, password, username);
         }
     }
@@ -114,6 +114,16 @@ public class RegisterScreen extends AppCompatActivity {
                 this.mConfirmPassword.getText().toString()) || this.mConfirmPassword.length() < 8;
         this.mConfirmPassword.addTextChangedListener(createTextWatcher(passwordConfirm,
                 "Password does not match or is invalid", this.confirmPasswordLayout));
+    }
+
+    //Check email format
+    private boolean isEmailValid(CharSequence email) {
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            return true;
+        } else {
+            this.mEmail.setError("Enter a valid email");
+            return false;
+        }
     }
 
     private boolean checkFields() {

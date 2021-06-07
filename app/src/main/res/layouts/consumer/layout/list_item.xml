@@ -1,171 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listingCardView"
+    android:id="@+id/listingRvLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="12dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginRight="12dp"
-    android:layout_marginBottom="8dp"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="20dp"
-    app:cardBackgroundColor="#333333"
-    app:cardElevation="6dp" >
+    android:background="#1e2121">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/listingRvLayout"
+    <TextView
+        android:id="@+id/listingName"
+        style="@style/ListingsLeftTextBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:layout_marginStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:layout_marginTop="18dp"
+        android:maxLines="2"
+        android:text="Singapore plumbing Company"
+        android:fontFamily="@font/sf_display_bold"
+        android:textSize="23sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/listingScore"
+        style="@style/ListingsLeftTextBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:fontFamily="@font/sf_display_bold"
+        android:text="4.7"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/availabilityText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listingName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="50dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listingScore">
 
         <TextView
-            android:id="@+id/listingName"
-            style="@style/ListingsLeftTextBox"
-            android:layout_width="match_parent"
+            android:id="@+id/priceText"
+            style="@style/ListingsRightTextBox"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:maxLines="2"
-            android:text="Singapore plumbing Company"
-            android:fontFamily="@font/sf_display_bold"
-            android:textSize="23sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="Price:"
+            app:layout_constraintVertical_bias="0.879" />
 
         <TextView
-            android:id="@+id/listingScore"
-            style="@style/ListingsLeftTextBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:fontFamily="@font/sf_display_bold"
-            android:text="4.7"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/availabilityText"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listingName"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/listingScore">
-
-            <TextView
-                android:id="@+id/priceText"
-                style="@style/ListingsRightTextBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Price:"
-                app:layout_constraintVertical_bias="0.879" />
-
-            <TextView
-                android:id="@+id/listingPrice"
-                style="@style/ListingsRightTextBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="8dp"
-                android:text="$2"
-                app:layout_constraintTop_toBottomOf="@id/priceText" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/listing_availability"
-            style="@style/ListingsLeftTextBox"
+            android:id="@+id/listingPrice"
+            style="@style/ListingsRightTextBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="68dp"
-            android:text="Today"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/availabilityText" />
+            android:layout_marginBottom="8dp"
+            android:text="$2"
+            app:layout_constraintTop_toBottomOf="@id/priceText" />
 
-        <TextView
-            android:id="@+id/availabilityText"
-            style="@style/ListingsLeftTextBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Availability:"
-            app:layout_constraintBottom_toTopOf="@id/listing_availability"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/listingScore" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/listing_availability"
+        style="@style/ListingsLeftTextBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="68dp"
+        android:text="Today"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/availabilityText" />
+
+    <TextView
+        android:id="@+id/availabilityText"
+        style="@style/ListingsLeftTextBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Availability:"
+        app:layout_constraintBottom_toTopOf="@id/listing_availability"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listingScore" />
 
 
-        <TextView
-            android:id="@+id/listingNumOfReviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="9dp"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@id/listingRatingBar"
-            app:layout_constraintTop_toBottomOf="@id/listingName" />
+    <TextView
+        android:id="@+id/listingNumOfReviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="9dp"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/listingRatingBar"
+        app:layout_constraintTop_toBottomOf="@id/listingName" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/listingImage"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="25dp"
-            android:elevation="8dp"
-            android:src="@drawable/plumbing_logos"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/listingImage"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="35dp"
+        android:elevation="8dp"
+        android:src="@drawable/plumbing_logos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <me.zhanghai.android.materialratingbar.MaterialRatingBar
-            android:id="@+id/listingRatingBar"
-            style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="9dp"
-            android:progressBackgroundTint="#909090"
-            android:progressTint="@color/rating_star_color"
-            android:stepSize="0.1"
-            app:layout_constraintStart_toEndOf="@id/listingScore"
-            app:layout_constraintTop_toBottomOf="@id/listingName" />
+    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+        android:id="@+id/listingRatingBar"
+        style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="9dp"
+        android:progressBackgroundTint="#909090"
+        android:progressTint="@color/appRed"
+        android:stepSize="0.1"
+        app:layout_constraintStart_toEndOf="@id/listingScore"
+        app:layout_constraintTop_toBottomOf="@id/listingName" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/descriptionTitle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            style="@style/ListingsLeftTextBox"
-            android:fontFamily="@font/lato_bold"
-            android:text="About this business:"
-            app:layout_constraintTop_toBottomOf="@id/listing_availability"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/listing_availability"
+        android:layout_marginTop="25dp"
+        android:background="@android:color/darker_gray"/>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/listingDescription"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            style="@style/ListingsLeftTextBox"
-            android:fontFamily="@font/bariol_regular"
-            android:textSize="14dp"
-            android:text="This business"
-            android:clickable="false"
-            app:layout_constraintTop_toBottomOf="@id/descriptionTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:inputType="textMultiLine"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
