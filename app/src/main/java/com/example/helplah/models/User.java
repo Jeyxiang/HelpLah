@@ -1,11 +1,17 @@
 package com.example.helplah.models;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class User {
 
     // The users will be stored in a document named after their userID in firebase authentication
     // in order to reference between the 2 of them.
     public static final String DATABASE_COLLECTION = "Users";
+
     public static final String FIELD_ADDRESS = "address";
+    public static final String FIELD_USERNAME = "username";
+    public static final String FIELD_PHONE_NUMBER = "phoneNumber";
 
     private String address;
     private String username;
@@ -25,6 +31,17 @@ public class User {
         this.isBusiness = isBusiness;
     }
 
+    public static void updateUsername(String id, String newName) {
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION)
+                .document(id);
+        docRef.update(FIELD_USERNAME, newName);
+    }
+
+    public static void updatePhoneNumber(String id, int newNumber) {
+        DocumentReference docRef = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION)
+                .document(id);
+        docRef.update(FIELD_ADDRESS, newNumber);
+    }
 
     public String getAddress() {
         return address;

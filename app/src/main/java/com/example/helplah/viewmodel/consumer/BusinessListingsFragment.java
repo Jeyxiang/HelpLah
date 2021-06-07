@@ -23,7 +23,6 @@ import com.example.helplah.models.Listings;
 import com.example.helplah.models.ListingsQuery;
 import com.example.helplah.models.Services;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -144,12 +143,12 @@ public class BusinessListingsFragment extends Fragment implements
         //checkIfEmptyQuery();
     }
 
-    private void checkIfEmptyQuery() {
-        if (this.rvAdapter != null && this.rvAdapter.getItemCount() == 0) {
-            Log.d(TAG, "checkIfEmptyQuery: No results");
-            Snackbar.make(this.rootView.findViewById(R.id.listingsCoordinatorLayout), "No results found", Snackbar.LENGTH_SHORT).show();
-        }
-    }
+//    private void checkIfEmptyQuery() {
+//        if (this.rvAdapter != null && this.rvAdapter.getItemCount() == 0) {
+//            Log.d(TAG, "checkIfEmptyQuery: No results");
+//            Snackbar.make(this.rootView.findViewById(R.id.listingsCoordinatorLayout), "No results found", Snackbar.LENGTH_SHORT).show();
+//        }
+//    }
 
     @Override
     public void onFilter(Query query) {
@@ -157,12 +156,8 @@ public class BusinessListingsFragment extends Fragment implements
     }
 
     public void setToolBarListener(Toolbar toolbar) {
-        toolbar.setOnMenuItemClickListener( menuItem -> {
+        toolbar.setOnMenuItemClickListener(menuItem -> {
             switch (menuItem.getItemId()) {
-                case R.id.topBarSearch:
-                    Log.i(BusinessListingsFragment.TAG, "searching clicked");
-                    onSearchOptionClicked();
-                    return true;
                 case R.id.topBarFilter:
                     onFilterOptionClicked();
                     return true;

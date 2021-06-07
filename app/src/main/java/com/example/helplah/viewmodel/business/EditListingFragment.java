@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import com.example.helplah.R;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.Services;
+import com.example.helplah.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -168,6 +169,11 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
             this.updatedListing.setPricingNote(newNote);
             this.updatedListing.setAvailability(newAvailability);
 
+            // Update the user database
+            String id = this.mAuth.getCurrentUser().getUid();
+            User.updateUsername(id, newName);
+            User.updatePhoneNumber(id, newNumber);
+
             //Check the checkboxes
             Services servLst = checkServBoxes();
             this.updatedListing.setServicesList(servLst);
@@ -178,7 +184,6 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
 
             //update server with updated list;
             CollectionReference businessCollection = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
-            String id = this.mAuth.getCurrentUser().getUid();
             businessCollection.document(id).set(updatedListing);
             Toast.makeText(getActivity(),"Update Successful",Toast.LENGTH_LONG).show();
             getActivity().onBackPressed();

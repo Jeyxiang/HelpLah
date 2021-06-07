@@ -19,6 +19,8 @@ import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -38,6 +40,15 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     public static class JobRequestsViewModel extends ViewModel {
 
         private Query query;
+        private int toolbarSelectedPosition = 0;
+
+        public int getToolbarSelectedPosition() {
+            return toolbarSelectedPosition;
+        }
+
+        public void setToolbarSelectedPosition(int toolbarSelectedPosition) {
+            this.toolbarSelectedPosition = toolbarSelectedPosition;
+        }
 
         public void setQuery(Query query) {
             this.query = query;
@@ -53,6 +64,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     private View rootView;
     private RecyclerView rvJobRequests;
     private JobRequestsAdapter rvAdapter;
+    private MaterialToolbar toolbar;
     private String userId;
 
     @Override
@@ -60,9 +72,15 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         super.onCreate(savedInstanceState);
 
         this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId);
         this.viewModel = new ViewModelProvider(this).get(JobRequestsViewModel.class);
 
+        if (this.viewModel.getQuery() != null) {
+            Log.d(TAG, "onCreate: Old query found " + this.viewModel.getQuery());
+            configureFirestore(this.viewModel.getQuery());
+            return;
+        }
+
+        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId);
         requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
         this.viewModel.setQuery(requestQuery.createQuery());
 
@@ -75,8 +93,11 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         // Inflate the layout for this fragment
         this.rootView = inflater.inflate(R.layout.fragment_job_requests, container, false);
 
+        this.toolbar = this.rootView.findViewById(R.id.requestToolbar);
         this.rvJobRequests = this.rootView.findViewById(R.id.jobRequestsRv);
         this.rvJobRequests.setHasFixedSize(true);
+
+        setToolbar();
         getQuery();
 
         return this.rootView;
@@ -97,6 +118,52 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         this.rvJobRequests.setAdapter(this.rvAdapter);
 
         this.rvJobRequests.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void setToolbar() {
+        this.toolbar.setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.topBarSort) {
+                sortOptionClicked();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void sortOptionClicked() {
+
+        String[] sortOptions = {"Date of Job", "Date created"};
+
+        new MaterialAlertDialogBuilder(requireActivity())
+                .setTitle("Sort by?")
+                .setSingleChoiceItems(sortOptions, this.viewModel.getToolbarSelectedPosition(),
+                        ((dialog, which) -> {
+                            if (which == 0) { // Sort by date of job
+                                changeQuery(true);
+                                this.viewModel.setToolbarSelectedPosition(0);
+                                dialog.dismiss();
+                            } else { // sort by date created
+                                changeQuery(false);
+                                this.viewModel.setToolbarSelectedPosition(1);
+                                dialog.dismiss();
+                            }
+                        })).show();
+    }
+
+    private void changeQuery(boolean sortByDateOfJob) {
+
+        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId);
+        if (sortByDateOfJob) {
+            requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
+        } else {
+            requestQuery.setSortBy(JobRequests.FIELD_DATE_CREATED);
+        }
+
+        this.viewModel.setQuery(requestQuery.createQuery());
+        Log.d(TAG, "changeQuery: Query changed");
+        configureFirestore(requestQuery.createQuery());
+
+        this.rvAdapter.updateOptions(this.options);
     }
 
     @Override
