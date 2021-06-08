@@ -3,6 +3,8 @@ package com.example.helplah.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class JobRequests implements Parcelable {
@@ -17,9 +19,12 @@ public class JobRequests implements Parcelable {
     public static final String FIELD_JOB_DESCRIPTION = "jobDescription";
     public static final String FIELD_ADDRESS = "address";
     public static final String FIELD_STATUS = "status";
+    public static final String FIELD_CONFIRMED_TIMING = "confirmedTiming";
+    public static final String FIELD_DECLINE_MESSAGE = "declineMessage";
     public static final String FIELD_PHONE_NUMBER = "phoneNumber";
     public static final String FIELD_DATE_CREATED = "dateCreated";
     public static final String FIELD_DATE_TIMING_NOTE = "timingNote";
+
     public static final String FIELD_DATE_OF_JOB = "dateOfJob";
 
     public static final int STATUS_CONFIRMED = 1;
@@ -33,6 +38,8 @@ public class JobRequests implements Parcelable {
     private String service;
     private String jobDescription;
     private String address;
+    private String confirmedTiming;
+    private String declineMessage;
     private int status;
     private int phoneNumber;
     private Date dateCreated;
@@ -91,6 +98,11 @@ public class JobRequests implements Parcelable {
         dest.writeInt(status);
         dest.writeInt(phoneNumber);
         dest.writeString(timingNote);
+    }
+
+    public static String dateToString(Date date) {
+        DateFormat formatter = new SimpleDateFormat("E, dd MMM");
+        return formatter.format(date);
     }
 
     public String getCustomerId() {
@@ -187,5 +199,21 @@ public class JobRequests implements Parcelable {
 
     public void setDateOfJob(Date dateOfJob) {
         this.dateOfJob = dateOfJob;
+    }
+
+    public String getConfirmedTiming() {
+        return confirmedTiming;
+    }
+
+    public void setConfirmedTiming(String confirmedTiming) {
+        this.confirmedTiming = confirmedTiming;
+    }
+
+    public String getDeclineMessage() {
+        return declineMessage;
+    }
+
+    public void setDeclineMessage(String declineMessage) {
+        this.declineMessage = declineMessage;
     }
 }

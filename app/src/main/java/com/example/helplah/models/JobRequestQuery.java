@@ -19,10 +19,12 @@ public class JobRequestQuery {
 
     private String sortBy = null;
     private String id;
+    private boolean isBusiness;
 
-    public JobRequestQuery(FirebaseFirestore db, String id) {
+    public JobRequestQuery(FirebaseFirestore db, String id, boolean isBusiness) {
         this.db = db;
         this.id = id;
+        this.isBusiness = isBusiness;
     }
 
     public Query createQuery() {
@@ -30,7 +32,12 @@ public class JobRequestQuery {
         Log.d(TAG, "createQuery: " + this.id + " " + this.sortBy);
 
         Query query = this.db.collection(JobRequests.DATABASE_COLLECTION);
-        query = query.whereEqualTo(JobRequests.FIELD_CUSTOMER_ID, id);
+
+        if (isBusiness) {
+            query = query.whereEqualTo(JobRequests.FIELD_BUSINESS_ID, id);
+        } else {
+            query = query.whereEqualTo(JobRequests.FIELD_CUSTOMER_ID, id);
+        }
 
         if (this.hasSortBy()) {
             query = query.orderBy(this.sortBy, Query.Direction.DESCENDING);

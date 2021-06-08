@@ -17,7 +17,6 @@ import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.User;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -249,7 +248,7 @@ public class SendJobRequestFragment extends Fragment {
 
         CollectionReference db = FirebaseFirestore.getInstance().collection(User.DATABASE_COLLECTION);
 
-        Task a = db.whereEqualTo(FieldPath.documentId(), this.userId).get().addOnSuccessListener(queryDocumentSnapshots -> {
+        db.whereEqualTo(FieldPath.documentId(), this.userId).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                 User user = snapshot.toObject(User.class);
                 username = user.getUsername();

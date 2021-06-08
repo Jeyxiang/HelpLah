@@ -459,7 +459,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="40dp"
                             android:checked="false"
-                            android:text="Paint"
+                            android:text="Painting"
                             android:textColor="#F8F2F2"
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -477,6 +477,33 @@
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/checkBoxLockSmith" />
+
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkBoxCarWash"
+                            style="@style/AppTheme.FilterCheckBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="200dp"
+                            android:checked="false"
+                            android:text="Car Washing"
+                            android:textColor="#F8F2F2"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/checkBoxPest" />
+
+
+                        <com.google.android.material.checkbox.MaterialCheckBox
+                            android:id="@+id/checkBoxLaundry"
+                            style="@style/AppTheme.FilterCheckBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="40dp"
+                            android:checked="false"
+                            android:text="Laundry"
+                            android:textColor="#F8F2F2"
+                            android:textSize="14sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/checkBoxPest" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

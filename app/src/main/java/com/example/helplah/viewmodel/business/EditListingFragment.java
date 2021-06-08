@@ -50,6 +50,8 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
     private CheckBox checkboxLockSmith;
     private CheckBox checkboxPaint;
     private CheckBox checkBoxPest;
+    private CheckBox checkBoxCarWash;
+    private CheckBox checkBoxLaundry;
     private Listings updatedListing;
 
 
@@ -84,6 +86,8 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
         this.checkboxLockSmith = v.findViewById(R.id.checkBoxLockSmith);
         this.checkboxPaint = v.findViewById(R.id.checkBoxPaint);
         this.checkBoxPest = v.findViewById(R.id.checkBoxPest);
+        this.checkBoxCarWash = v.findViewById(R.id.checkBoxCarWash);
+        this.checkBoxLaundry = v.findViewById(R.id.checkBoxLaundry);
 
         this.editAvailability = v.findViewById(R.id.availability);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),R.array.business_availability,
@@ -131,6 +135,10 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
                         checkboxPaint.setChecked(true);
                     } else if (s.equals(Services.PEST_CONTROL)) {
                         checkBoxPest.setChecked(true);
+                    } else if (s.equals(Services.CAR_WASH)) {
+                        checkBoxCarWash.setChecked(true);
+                    } else if (s.equals(Services.LAUNDRY)) {
+                        checkBoxLaundry.setChecked(true);
                     }
                 }
             }
@@ -245,6 +253,12 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
         }
         if (checkboxClean.isChecked()) {
             serv.addService(Services.CLEANER);
+        }
+        if (checkBoxCarWash.isChecked()) {
+            serv.addService(Services.CAR_WASH);
+        }
+        if (checkBoxLaundry.isChecked()) {
+            serv.addService(Services.LAUNDRY);
         }
         if (serv.getServicesProvided().size() == 0) {
             Toast.makeText(getActivity(),"Please select at least one service",Toast.LENGTH_LONG).show();

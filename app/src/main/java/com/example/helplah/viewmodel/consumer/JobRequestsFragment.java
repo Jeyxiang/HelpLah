@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
@@ -28,6 +29,9 @@ import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link JobRequestsFragment} factory method to
@@ -35,7 +39,7 @@ import com.google.firebase.firestore.Query;
  */
 public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.RequestClickedListener {
 
-    public static final String TAG = "Job Request Fragment";
+    private static final String TAG = "Job Request Fragment";
 
     public static class JobRequestsViewModel extends ViewModel {
 
@@ -80,7 +84,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
             return;
         }
 
-        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId);
+        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId, false);
         requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
         this.viewModel.setQuery(requestQuery.createQuery());
 
@@ -152,7 +156,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
 
     private void changeQuery(boolean sortByDateOfJob) {
 
-        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId);
+        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId, false);
         if (sortByDateOfJob) {
             requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
         } else {
@@ -178,8 +182,9 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         this.rvAdapter.stopListening();
     }
 
+    // Edits the request
     @Override
-    public void onEditClicked(View v, JobRequests requests, String requestId) {
+    public void actionTwoClicked(View v, JobRequests requests, String requestId) {
 
         CollectionReference listingsReference = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
 
@@ -195,5 +200,23 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
                         Navigation.findNavController(v).navigate(R.id.editJobRequestAction, bundle);
                     }
                 });
+    }
+
+
+    // Cancels the request
+    @Override
+    public void actionOneClicked(JobRequests request, String documentId) {
+        request.setStatus(JobRequests.STATUS_CANCELLED);
+        CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
+        Map<String, Object> status = new HashMap<>();
+        status.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
+        db.document(documentId).update(status);
+        Toast.makeText(getActivity(), "Request has been cancelled", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "cancelClicked: " + documentId + " status updated");
+    }
+
+    @Override
+    public void onChatClicked() {
+
     }
 }

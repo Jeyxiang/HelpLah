@@ -40,7 +40,7 @@ public class User {
     public static void updatePhoneNumber(String id, int newNumber) {
         DocumentReference docRef = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION)
                 .document(id);
-        docRef.update(FIELD_ADDRESS, newNumber);
+        docRef.update(FIELD_PHONE_NUMBER, newNumber);
     }
 
     public String getAddress() {

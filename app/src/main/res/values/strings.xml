@@ -40,6 +40,8 @@
         <item>LockSmith</item>
         <item>Painting</item>
         <item>Pest Control</item>
+        <item>Car wash</item>
+        <item>Laundry</item>
     </string-array>
 
     <!-- Ways to sort business listings -->

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 if (user.isBusiness()) {
                     Intent goToBiz = new Intent(getApplicationContext(), BusinessMainActivity.class);
                     startActivity(goToBiz);
+                    this.finish();
                     return;
                 } else{
                     goToConsumer();
