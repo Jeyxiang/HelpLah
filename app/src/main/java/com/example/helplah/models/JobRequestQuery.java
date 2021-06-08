@@ -2,11 +2,14 @@ package com.example.helplah.models;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class JobRequestQuery {
 
@@ -19,7 +22,12 @@ public class JobRequestQuery {
 
     private String sortBy = null;
     private String id;
+    private ArrayList<Integer> statusList = new ArrayList<>();
+    private Date start;
+    private Date end;
     private boolean isBusiness;
+    private boolean ascending = false;
+    private boolean isEmpty = true;
 
     public JobRequestQuery(FirebaseFirestore db, String id, boolean isBusiness) {
         this.db = db;
@@ -34,25 +42,63 @@ public class JobRequestQuery {
         Query query = this.db.collection(JobRequests.DATABASE_COLLECTION);
 
         if (isBusiness) {
-            query = query.whereEqualTo(JobRequests.FIELD_BUSINESS_ID, id);
+            query = query.whereEqualTo(JobRequests.FIELD_BUSINESS_ID, this.id);
         } else {
-            query = query.whereEqualTo(JobRequests.FIELD_CUSTOMER_ID, id);
+            query = query.whereEqualTo(JobRequests.FIELD_CUSTOMER_ID, this.id);
         }
 
+        if (this.hasStatus()) {
+            Log.d(TAG, "createQuery: " +statusList.toString());
+            query = query.whereIn(JobRequests.FIELD_STATUS, this.statusList);
+        }
+
+        if (this.hasDate() && this.sortBy == JobRequests.FIELD_DATE_OF_JOB) {
+            query = query.whereGreaterThanOrEqualTo(JobRequests.FIELD_DATE_OF_JOB, this.start);
+            query = query.whereLessThanOrEqualTo(JobRequests.FIELD_DATE_OF_JOB, this.end);
+        }
         if (this.hasSortBy()) {
-            query = query.orderBy(this.sortBy, Query.Direction.DESCENDING);
+            if (this.ascending) {
+                query = query.orderBy(this.sortBy, Query.Direction.ASCENDING);
+            } else {
+                query = query.orderBy(this.sortBy, Query.Direction.DESCENDING);
+            }
         }
 
         return query.limit(LIMIT);
     }
 
-    public void setSortBy(String field) {
+    public void setSortBy(String field, boolean ascending) {
         if (sortable.contains(field)) {
             this.sortBy = field;
+            this.ascending = ascending;
         }
+        this.isEmpty = false;
+    }
+
+    public void setStatus(ArrayList<Integer> status) {
+        this.statusList = status;
+        this.isEmpty = false;
+    }
+
+    public void setDateFilter(@NonNull Date start, @NonNull Date end) {
+        this.start = start;
+        this.end = end;
+        this.isEmpty = false;
     }
 
     public boolean hasSortBy() {
         return this.sortBy != null;
+    }
+
+    public boolean hasStatus() {
+        return !this.statusList.isEmpty();
+    }
+
+    public boolean hasDate() {
+        return this.start != null && this.end != null;
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
     }
 }

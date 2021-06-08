@@ -209,7 +209,7 @@ public class SendJobRequestFragment extends Fragment {
 
             DateFormat formatter = new SimpleDateFormat("E, dd MMM");
 
-            new MaterialAlertDialogBuilder(getActivity())
+            new MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(this.previousRequest == null ? getString(R.string.send_job_request_confirmation) :
                             getString(R.string.edit_job_request_confirmation))
                     .setMessage("Job request scheduled for " + formatter.format(this.date))

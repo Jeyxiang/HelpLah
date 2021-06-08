@@ -85,7 +85,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         }
 
         JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId, false);
-        requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
+        requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB, false);
         this.viewModel.setQuery(requestQuery.createQuery());
 
         configureFirestore(this.viewModel.getQuery());
@@ -158,9 +158,9 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
 
         JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId, false);
         if (sortByDateOfJob) {
-            requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
+            requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB, false);
         } else {
-            requestQuery.setSortBy(JobRequests.FIELD_DATE_CREATED);
+            requestQuery.setSortBy(JobRequests.FIELD_DATE_CREATED, false);
         }
 
         this.viewModel.setQuery(requestQuery.createQuery());

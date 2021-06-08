@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".viewmodel.business.JobRequestFilterDialog">
+
+    <!-- Sort by -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp" >
+
+        <ImageView
+            android:id="@+id/icon_sort"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            app:tint="@color/greySecondary"
+            app:srcCompat="@drawable/ic_baseline_sort_24" />
+
+        <Spinner
+            android:id="@+id/sort_date_of_jobs"
+            style="@style/AppTheme.FilterSpinner"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/icon_sort"
+            android:entries="@array/sort_date_of_job" />
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/filterDateTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            style="@style/AppTheme.Title"
+            android:textSize="20sp"
+            android:fontFamily="@font/lato_regular"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:text="Show only:"/>
+
+        <RadioGroup
+            android:id="@+id/dateRadioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/filterDateTitle">
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/date_today_only"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date_today" />
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/date_next_3_Days"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date_next_3_days"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/date_next_week"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date_next_week"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/date_past_week"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date_past_week"/>
+
+            <com.google.android.material.radiobutton.MaterialRadioButton
+                android:id="@+id/date_all"
+                style="@style/AppTheme.RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/date_all"/>
+
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/statusTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.Title"
+            android:textSize="20sp"
+            android:fontFamily="@font/lato_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Status: " />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/status_confirmed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="?attr/colorPrimary"
+            style="@style/AppTheme.FilterCheckBox"
+            app:layout_constraintTop_toBottomOf="@id/statusTitle"
+            android:layout_marginStart="40dp"
+            android:text="@string/status_confirmed"/>
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/status_pending"
+            style="@style/AppTheme.FilterCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="?attr/colorPrimary"
+            android:text="@string/status_pending"
+            android:layout_marginStart="200dp"
+            app:layout_constraintTop_toBottomOf="@id/statusTitle" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/status_cancelled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/AppTheme.FilterCheckBox"
+            android:buttonTint="?attr/colorPrimary"
+            android:layout_marginStart="40dp"
+            app:layout_constraintTop_toBottomOf="@id/status_confirmed"
+            android:text="@string/status_cancelled"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Cancel and apply buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_cancel"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"
+            android:textColor="@color/black"
+            android:theme="@style/ThemeOverlay.FilterButton" />
+
+
+        <Button
+            android:id="@+id/button_apply"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Apply"
+            android:backgroundTint="@color/colorPrimary" />
+
+    </LinearLayout>
+
+</LinearLayout>

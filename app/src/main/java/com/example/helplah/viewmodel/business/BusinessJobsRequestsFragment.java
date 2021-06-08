@@ -36,7 +36,9 @@ import java.util.Map;
  * Use the {@link BusinessJobsRequestsFragment} factory method to
  * create an instance of this fragment.
  */
-public class BusinessJobsRequestsFragment extends Fragment implements JobRequestsAdapter.RequestClickedListener{
+public class BusinessJobsRequestsFragment extends Fragment implements 
+        JobRequestsAdapter.RequestClickedListener,
+        JobRequestFilterDialog.RequestFilterListener {
 
     private static final String TAG = "Business job request fragment";
 
@@ -55,6 +57,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements JobRequest
 
     private BusinessJobRequestViewModel viewModel;
     private FirestoreRecyclerOptions<JobRequests> options;
+    private JobRequestFilterDialog filterDialog;
     private View rootView;
     private RecyclerView rvJobRequests;
     private JobRequestsAdapter rvAdapter;
@@ -76,7 +79,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements JobRequest
 
         JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(),
                 this.userId, true);
-        requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
+        requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB, false);
         this.viewModel.setQuery(requestQuery.createQuery());
 
         configureFirestore(this.viewModel.getQuery());
@@ -91,6 +94,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements JobRequest
         this.toolbar = this.rootView.findViewById(R.id.businessRequestToolbar);
         this.rvJobRequests = this.rootView.findViewById(R.id.businessJobRequestsRv);
         this.rvJobRequests.setHasFixedSize(true);
+        this.filterDialog = new JobRequestFilterDialog(this);
 
         setToolbar();
         getQuery();
@@ -126,26 +130,23 @@ public class BusinessJobsRequestsFragment extends Fragment implements JobRequest
     }
 
     private void sortOptionClicked() {
-
-        String[] sortOptions = {"Date of Job", "Date created"};
+        this.filterDialog.show(requireActivity().getSupportFragmentManager(), TAG);
     }
 
-    private void changeQuery(boolean sortByDateOfJob) {
-
-        JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId, true);
-        if (sortByDateOfJob) {
-            requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB);
-        } else {
-            requestQuery.setSortBy(JobRequests.FIELD_DATE_CREATED);
-        }
-
-        this.viewModel.setQuery(requestQuery.createQuery());
+    private void changeQuery(Query query) {
+        
+        this.viewModel.setQuery(query);
         Log.d(TAG, "changeQuery: Query changed");
-        configureFirestore(requestQuery.createQuery());
+        configureFirestore(query);
 
         this.rvAdapter.updateOptions(this.options);
     }
 
+    @Override
+    public void onFilter(Query query) {
+        changeQuery(query);
+    }
+    
     @Override
     public void onStart() {
         super.onStart();

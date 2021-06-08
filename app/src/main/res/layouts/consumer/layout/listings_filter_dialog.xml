@@ -8,15 +8,6 @@
     android:orientation="vertical"
     tools:context=".viewmodel.consumer.ListingsDialogFragment">
 
-    <TextView
-        style="@style/AppTheme.Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="15dp"
-        android:text="Filter" />
-
     <!-- Sort by -->
     <RelativeLayout
         android:layout_width="match_parent"
@@ -51,6 +42,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"
+            android:textSize="20sp"
             app:layout_constraintTop_toTopOf="parent"
             android:text="Availability: " />
 
@@ -117,6 +109,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/AppTheme.Title"
+            android:textSize="20sp"
             android:fontFamily="@font/lato_regular"
             android:layout_marginStart="15dp"
             android:layout_marginTop="10dp"

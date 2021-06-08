@@ -1,7 +1,5 @@
 package com.example.helplah.models;
 
-import android.util.Log;
-
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -68,13 +66,8 @@ public class ListingsQuery {
     }
 
     // Set the query to search based on certain availability
-    public void setAvailability(int... availability) {
-        for (int i : availability) {
-            Log.d(TAG, "setAvailability: " + i);
-            if (i >= 1 && i <= 5 && !this.availability.contains(i)) {
-                this.availability.add(i);
-            }
-        }
+    public void setAvailability(ArrayList<Integer> availability) {
+        this.availability = availability;
         this.isEmpty = false;
     }
 

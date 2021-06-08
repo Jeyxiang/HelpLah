@@ -23,6 +23,7 @@ import com.example.helplah.models.ListingsQuery;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class ListingsDialogFragment extends DialogFragment implements View.OnClickListener {
@@ -158,29 +159,23 @@ public class ListingsDialogFragment extends DialogFragment implements View.OnCli
         this.mViewModel.setSpinnerPosition(this.sortSpinner.getSelectedItemPosition());
     }
 
-    private int[] getAvailability() {
-        int[] optionsSelected = new int[6];
-        int i = 0;
+    private ArrayList<Integer> getAvailability() {
+        ArrayList<Integer> optionsSelected = new ArrayList<>();
 
         if (this.available4Hours.isChecked()) {
-            optionsSelected[i] = AvailabilityStatus.fourHours;
-            i++;
+            optionsSelected.add(AvailabilityStatus.fourHours);
         }
         if (this.available1Day.isChecked()) {
-            optionsSelected[i] = AvailabilityStatus.oneDay;
-            i++;
+            optionsSelected.add(AvailabilityStatus.oneDay);
         }
         if (this.available2Days.isChecked()) {
-            optionsSelected[i] = AvailabilityStatus.twoDays;
-            i++;
+            optionsSelected.add(AvailabilityStatus.twoDays);
         }
         if (this.available3Days.isChecked()) {
-            optionsSelected[i] = AvailabilityStatus.threeDays;
-            i++;
+            optionsSelected.add(AvailabilityStatus.threeDays);
         }
         if (this.available1Week.isChecked()) {
-            optionsSelected[i] = AvailabilityStatus.oneWeek;
-            i++;
+            optionsSelected.add(AvailabilityStatus.oneWeek);
         }
 
         this.mViewModel.fourHours = this.available4Hours.isChecked();

@@ -14,17 +14,30 @@
     <string name="availability_3_day">3 Days</string>
     <string name="availability_1_week">1 Week</string>
 
+    <string name="status_confirmed">Confirmed</string>
+    <string name="status_pending">Pending</string>
+    <string name="status_cancelled">Cancelled</string>
+
+
     <string name="language_english">English</string>
     <string name="language_mandarin">Mandarin</string>
     <string name="language_malay">Malay</string>
     <string name="language_tamil">Tamil</string>
     <string name="language_no_preference">No Preference</string>
 
-
     <string name="sort_by_score">Sort by Score</string>
     <string name="sort_by_number_of_reviews">Sort by Popularity</string>
     <string name="sort_by_price_ascending">Sort by Price (Ascending)</string>
     <string name="sort_by_price_descending">Sort by Price (Descending)</string>
+
+    <string name="date_today">Next 24 Hours</string>
+    <string name="date_next_3_days">Next 3 Days</string>
+    <string name="date_next_week">Next Week</string>
+    <string name="date_past_week">Past Week</string>
+    <string name="date_all">All</string>
+
+    <string name="sort_ascending">Oldest first </string>
+    <string name="sort_descending">Newest first</string>
 
     <string name="send_job_request_confirmation">Send job request?</string>
     <string name="edit_job_request_confirmation">Edit job request?</string>
@@ -67,4 +80,11 @@
         <item>Malay</item>
         <item>Tamil</item>
     </string-array>
+
+    <!-- Ways to sort job requests -->
+    <string-array name="sort_date_of_job">
+        <item>@string/sort_descending</item>
+        <item>@string/sort_ascending</item>
+    </string-array>
+
 </resources>
