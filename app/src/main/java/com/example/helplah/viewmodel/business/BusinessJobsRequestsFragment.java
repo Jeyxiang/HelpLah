@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,9 +27,14 @@ import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.WriteBatch;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +48,8 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         JobRequestFilterDialog.RequestFilterListener {
 
     private static final String TAG = "Business job request fragment";
+
+    private static final String deletedTag = "removed";
 
     public static class BusinessJobRequestViewModel extends ViewModel {
 
@@ -58,6 +67,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
     private BusinessJobRequestViewModel viewModel;
     private FirestoreRecyclerOptions<JobRequests> options;
     private JobRequestFilterDialog filterDialog;
+    private ActionMode mode;
     private View rootView;
     private RecyclerView rvJobRequests;
     private JobRequestsAdapter rvAdapter;
@@ -121,12 +131,113 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     private void setToolbar() {
         this.toolbar.setOnMenuItemClickListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.topBarSort) {
+            if (menuItem.getItemId() == R.id.topBarFilter) {
                 sortOptionClicked();
+                return true;
+            } else if (menuItem.getItemId() == R.id.topBarSearch) {
+                return true;
+            } else if (menuItem.getItemId() == R.id.topBarGetNew) {
+                changeSort();
+                return true;
+            } else if (menuItem.getItemId() == R.id.topBarDefault) {
+                resetFilter();
+                return true;
+            } else if (menuItem.getItemId() == R.id.topBarRemoveCancelledRequest) {
+                new MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.confirm_remove_cancelled_request)
+                        .setMessage(R.string.irreversible_warning)
+                        .setPositiveButton("Confirm", (dialog, which) -> removeAllCancelledRequest())
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
+                return true;
+            } else if (menuItem.getItemId() == R.id.topBarRemoveOldRequests) {
+                new MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.confirm_remove_old_request)
+                        .setMessage(R.string.irreversible_warning)
+                        .setPositiveButton("Confirm", (dialog, which) -> removeOldRequests())
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
                 return true;
             }
             return false;
         });
+    }
+
+    // Deletes all cancelled requests (Does not actually delete the request, only prevents it from
+    // being shown. Only the customer who made the original request can delete it from the database)
+    private void removeAllCancelledRequest() {
+        String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
+        WriteBatch batch = db.batch();
+
+        jobsCollection.whereEqualTo(JobRequests.FIELD_BUSINESS_ID, businessId)
+                .whereEqualTo(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED)
+                .limit(500)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        DocumentReference doc = snapshot.getReference();
+                        batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+                    }
+                    batch.commit()
+                            .addOnSuccessListener(unused -> {
+                                Log.d(TAG, "removeAllCancelledRequest: Cancelled requests removed");
+                                Toast.makeText(requireActivity(), "Cancelled requests removed",
+                                        Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.d(TAG, "onFailure: Unable to remove cancelled requests");
+                                Toast.makeText(requireActivity(), "Unable to remove cancelled requests",
+                                        Toast.LENGTH_SHORT).show();
+                    });
+                });
+    }
+
+    // Remove requests older than a week (Does not actually delete the request, only prevents it from
+    // being shown. Only the customer who made the original request can delete it from the database)
+    private void removeOldRequests() {
+        String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        long currentTime = System.currentTimeMillis();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
+        WriteBatch batch = db.batch();
+
+        jobsCollection.whereEqualTo(JobRequests.FIELD_BUSINESS_ID, businessId)
+                .whereLessThanOrEqualTo(JobRequests.FIELD_DATE_OF_JOB,
+                        new Date(currentTime - 7 * JobRequestFilterDialog.milliseconds))
+                .limit(500)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        DocumentReference doc = snapshot.getReference();
+                        batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+                    }
+                    batch.commit()
+                            .addOnSuccessListener(unused -> {
+                                Log.d(TAG, "removeOldRequests: Removed old requests");
+                                Toast.makeText(requireActivity(), "Old requests removed",
+                                        Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.d(TAG, "onFailure: Unable to remove old requests");
+                                Toast.makeText(requireActivity(), "Unable to remove cancelled requests",
+                                        Toast.LENGTH_SHORT).show();
+                            });
+                });
+    }
+
+    private void changeSort() {
+        JobRequestFilterDialog.RequestFilterViewModel viewModel = this.filterDialog.getViewModel();
+        viewModel.setSpinnerPosition(2);
+        viewModel.allUnchecked();
+        JobRequestQuery query = new JobRequestQuery(FirebaseFirestore.getInstance(), this.userId, true);
+        query.setSortBy(JobRequests.FIELD_DATE_CREATED, false);
+        changeQuery(query.createQuery());
+    }
+
+    private void resetFilter() {
+        changeQuery(this.filterDialog.reset(this.userId));
     }
 
     private void sortOptionClicked() {
@@ -134,7 +245,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
     }
 
     private void changeQuery(Query query) {
-        
         this.viewModel.setQuery(query);
         Log.d(TAG, "changeQuery: Query changed");
         configureFirestore(query);
@@ -160,10 +270,47 @@ public class BusinessJobsRequestsFragment extends Fragment implements
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        if (this.mode != null) {
+            this.mode.finish();
+        }
+    }
+
+    @Override
     public void onChatClicked() {
         // TODO
     }
 
+    @Override
+    public void configureSupportAction(ActionMode.Callback callback) {
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        this.mode = activity.startSupportActionMode(callback);
+    }
+
+    @Override
+    public void deleteSelection(ArrayList<String> arrayList) {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
+        WriteBatch batch = db.batch();
+        for (String id : arrayList) {
+            DocumentReference doc = jobsCollection.document(id);
+            batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+        }
+
+        batch.commit()
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "deleteSelection: Selected requests removed");
+                    Toast.makeText(requireActivity(), "Cancelled requests removed",
+                            Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "onFailure: Unable to remove selected requests");
+                    Toast.makeText(requireActivity(), "Unable to remove selected requests",
+                            Toast.LENGTH_SHORT).show();
+                });
+    }
 
     // Confirms the request and confirms a time
     @Override

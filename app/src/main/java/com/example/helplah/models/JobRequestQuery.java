@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -54,7 +55,7 @@ public class JobRequestQuery {
 
         if (this.hasDate() && this.sortBy == JobRequests.FIELD_DATE_OF_JOB) {
             query = query.whereGreaterThanOrEqualTo(JobRequests.FIELD_DATE_OF_JOB, this.start);
-            query = query.whereLessThanOrEqualTo(JobRequests.FIELD_DATE_OF_JOB, this.end);
+            query = query.whereLessThan(JobRequests.FIELD_DATE_OF_JOB, this.end);
         }
         if (this.hasSortBy()) {
             if (this.ascending) {
@@ -81,8 +82,8 @@ public class JobRequestQuery {
     }
 
     public void setDateFilter(@NonNull Date start, @NonNull Date end) {
-        this.start = start;
-        this.end = end;
+        this.start = Date.from(start.toInstant().truncatedTo(ChronoUnit.DAYS));
+        this.end = Date.from(end.toInstant().truncatedTo(ChronoUnit.DAYS));
         this.isEmpty = false;
     }
 

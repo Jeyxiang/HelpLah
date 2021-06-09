@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -31,12 +32,13 @@ import java.util.Objects;
  * Use the {@link JobRequestFilterDialog} factory method to
  * create an instance of this fragment.
  */
-public class JobRequestFilterDialog extends DialogFragment implements View.OnClickListener {
+public class JobRequestFilterDialog extends DialogFragment implements
+        View.OnClickListener,
+        AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "Job request filter dialog";
 
-    private static final long milliseconds = 86400000;
-
+    public static final long milliseconds = 86400000;
 
     public interface RequestFilterListener {
 
@@ -46,7 +48,7 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
     public static class RequestFilterViewModel extends ViewModel {
 
         private int spinnerPosition;
-        private int radioGroupPosition;
+        private int radioGroupPosition = -1;
         private boolean statusConfirmed = true;
         private boolean statusPending = true;
         private boolean statusCancelled = true;
@@ -65,6 +67,12 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
 
         public void setRadioGroupPosition(int radioGroupPosition) {
             this.radioGroupPosition = radioGroupPosition;
+        }
+
+        public void allUnchecked() {
+            this.statusConfirmed = false;
+            this.statusPending = false;
+            this.statusCancelled = false;
         }
     }
 
@@ -97,10 +105,9 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
         this.checkPending = this.rootView.findViewById(R.id.status_pending);
         this.checkCancelled = this.rootView.findViewById(R.id.status_cancelled);
 
-        restorePastSettings();
-
         this.rootView.findViewById(R.id.button_cancel).setOnClickListener(this);
         this.rootView.findViewById(R.id.button_apply).setOnClickListener(this);
+        this.sortSpinner.setOnItemSelectedListener(this);
         Objects.requireNonNull(getDialog()).setCanceledOnTouchOutside(true);
 
         return this.rootView;
@@ -109,11 +116,18 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
     @Override
     public void onResume() {
         super.onResume();
+        restorePastSettings();
         Window window = getDialog().getWindow();
         if (window != null) {
             window.setLayout(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
+        }
+
+        if (this.mViewModel.getSpinnerPosition() == 2) {
+            lockRadioGroup(true);
+        } else {
+            lockRadioGroup(false);
         }
     }
 
@@ -131,6 +145,11 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
         this.checkConfirmed.setChecked(this.mViewModel.statusConfirmed);
         this.checkPending.setChecked(this.mViewModel.statusPending);
         this.checkCancelled.setChecked(this.mViewModel.statusCancelled);
+        if (this.mViewModel.getRadioGroupPosition() > -1) {
+            this.dateRadioGroup.check(this.mViewModel.getRadioGroupPosition());
+        } else {
+            this.dateRadioGroup.clearCheck();
+        }
     }
 
     private void onApplyClicked() {
@@ -157,10 +176,12 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
     private void getSortBy(JobRequestQuery query) {
         String selected = (String) this.sortSpinner.getSelectedItem();
 
-        if (getString(R.string.sort_descending).equals(selected)) {
+        if (getString(R.string.sort_date_of_job_descending).equals(selected)) {
             query.setSortBy(JobRequests.FIELD_DATE_OF_JOB, false);
-        } else if (getString(R.string.sort_ascending).equals(selected)) {
+        } else if (getString(R.string.sort_date_of_job_ascending).equals(selected)) {
             query.setSortBy(JobRequests.FIELD_DATE_OF_JOB, true);
+        } else if (getString(R.string.sort_date_created).equals(selected)) {
+            query.setSortBy(JobRequests.FIELD_DATE_CREATED, false);
         }
         this.mViewModel.setSpinnerPosition(this.sortSpinner.getSelectedItemPosition());
 
@@ -193,6 +214,7 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
             return;
         }
         RadioButton radioButton = this.rootView.findViewById(selectedDateFilter);
+        this.mViewModel.setRadioGroupPosition(selectedDateFilter);
         String selected = radioButton.getText().toString();
         long current_milliseconds = System.currentTimeMillis();
         Date now = new Date();
@@ -205,7 +227,41 @@ public class JobRequestFilterDialog extends DialogFragment implements View.OnCli
         } else if (selected.equals(getString(R.string.date_next_week))) {
             query.setDateFilter(now, new Date(current_milliseconds + 7 * milliseconds));
         } else if (selected.equals(getString(R.string.date_past_week))) {
-            query.setDateFilter(new Date(current_milliseconds + 7 * milliseconds), now);
+            query.setDateFilter(new Date(current_milliseconds - 7 * milliseconds), now);
+        }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (position == 2) {
+            lockRadioGroup(true);
+        } else {
+            lockRadioGroup(false);
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    public RequestFilterViewModel getViewModel() {
+        return mViewModel;
+    }
+
+    public Query reset(String id) {
+        this.mViewModel.allUnchecked();
+        this.mViewModel.setSpinnerPosition(0);
+        this.mViewModel.setRadioGroupPosition(-1);
+        JobRequestQuery query = new JobRequestQuery(FirebaseFirestore.getInstance(), id, true);
+        query.setSortBy(JobRequests.FIELD_DATE_OF_JOB, false);
+        return query.createQuery();
+    }
+
+    public void lockRadioGroup(boolean lock) {
+        for (int i = 0; i < this.dateRadioGroup.getChildCount(); i++) {
+            RadioButton button = (RadioButton) this.dateRadioGroup.getChildAt(i);
+            button.setEnabled(!lock);
         }
     }
 }

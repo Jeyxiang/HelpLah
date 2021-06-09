@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/topBarSort"
+        android:id="@+id/topBarFilter"
         android:title="Sort by"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_baseline_sort_24"
+        android:icon="@drawable/ic_baseline_filter_list_24"
         android:contentDescription="@string/content_description_filter" />
 
     <item
@@ -17,15 +17,28 @@
         android:contentDescription="@string/content_description_search" />
 
     <item
-        android:id="@+id/topBarDeleteCancelledRequest"
-        android:title="Delete cancelled requests"
+        android:id="@+id/topBarGetNew"
+        android:title="Show new requests"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_sort_24"
+        android:contentDescription="@string/content_description_show_new" />
+
+    <item
+        android:id="@+id/topBarDefault"
+        android:title="Reset Filters"
+        app:showAsAction="never"
+        android:contentDescription="@string/content_description_default" />
+
+    <item
+        android:id="@+id/topBarRemoveCancelledRequest"
+        android:title="Remove cancelled requests"
         app:showAsAction="never"
         android:contentDescription="@string/content_description_remove_cancelled"
         android:icon="@drawable/ic_baseline_sort_24" />
 
     <item
-        android:id="@+id/topBarDeleteOldRequests"
-        android:title="Delete old requests"
+        android:id="@+id/topBarRemoveOldRequests"
+        android:title="Remove old requests"
         app:showAsAction="never"
         android:contentDescription="@string/content_description_remove_old"
         android:icon="@drawable/ic_baseline_sort_24" />

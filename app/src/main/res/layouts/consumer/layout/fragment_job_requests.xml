@@ -20,15 +20,10 @@
             app:menu="@menu/consumer_job_request_toolbar"
             android:background="@color/almostBlack"
             app:layout_scrollFlags="scroll|enterAlways"
+            style="@style/AppTheme.Title"
+            app:title="Job Requests"
             app:titleTextColor="@color/white" >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                style="@style/AppTheme.Title"
-                android:text="Job Requests" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 

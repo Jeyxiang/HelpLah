@@ -7,6 +7,10 @@
 
     <string name="content_description_search">Searching</string>
     <string name="content_description_filter">Filtering</string>
+    <string name="content_description_show_new">Show recently sent Job Requests</string>
+    <string name="content_description_remove_cancelled">Remove cancelled Job Requests</string>
+    <string name="content_description_remove_old">Remove Job Requests older than a week</string>
+    <string name="content_description_default">Restore default filters</string>
 
     <string name="availability_4_hours">4 Hours</string>
     <string name="availability_1_day">1 Day</string>
@@ -17,7 +21,6 @@
     <string name="status_confirmed">Confirmed</string>
     <string name="status_pending">Pending</string>
     <string name="status_cancelled">Cancelled</string>
-
 
     <string name="language_english">English</string>
     <string name="language_mandarin">Mandarin</string>
@@ -38,10 +41,17 @@
 
     <string name="sort_ascending">Oldest first </string>
     <string name="sort_descending">Newest first</string>
+    <string name="sort_date_of_job_ascending">Date of Job (Ascending)</string>
+    <string name="sort_date_of_job_descending">Date of Job (Descending)</string>
+    <string name="sort_date_created">Show Recent Requests</string>
 
     <string name="send_job_request_confirmation">Send job request?</string>
     <string name="edit_job_request_confirmation">Edit job request?</string>
     <string name="cancel_Request_dialog_title">Are you sure you want to cancel the request?</string>
+
+    <string name="confirm_remove_cancelled_request">All cancelled requests will be removed</string>
+    <string name="confirm_remove_old_request">All requests older than a week will be removed</string>
+    <string name="irreversible_warning">This action is irreversible</string>
 
     <!-- Services provided by the app -->
     <string-array name="service_providers">
@@ -83,8 +93,9 @@
 
     <!-- Ways to sort job requests -->
     <string-array name="sort_date_of_job">
-        <item>@string/sort_descending</item>
-        <item>@string/sort_ascending</item>
+        <item>@string/sort_date_of_job_descending</item>
+        <item>@string/sort_date_of_job_ascending</item>
+        <item>@string/sort_date_created</item>
     </string-array>
 
 </resources>

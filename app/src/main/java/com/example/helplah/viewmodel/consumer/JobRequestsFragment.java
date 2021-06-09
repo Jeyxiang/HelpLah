@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,16 +21,21 @@ import com.example.helplah.adapters.JobRequestsAdapter;
 import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
+import com.example.helplah.viewmodel.business.JobRequestFilterDialog;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.WriteBatch;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,6 +71,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     }
 
     private JobRequestsViewModel viewModel;
+    private ActionMode mode;
     private FirestoreRecyclerOptions<JobRequests> options;
     private View rootView;
     private RecyclerView rvJobRequests;
@@ -129,6 +137,24 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
             if (menuItem.getItemId() == R.id.topBarSort) {
                 sortOptionClicked();
                 return true;
+            } else if (menuItem.getItemId() == R.id.topBarSearch) {
+                return true;
+            } else if (menuItem.getItemId() == R.id.topBarDeleteCancelledRequest) {
+                new MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.confirm_remove_cancelled_request)
+                        .setMessage(R.string.irreversible_warning)
+                        .setPositiveButton("Confirm", (dialog, which) -> deleteCancelledRequests())
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
+                return true;
+            } else if (menuItem.getItemId() == R.id.topBarDeleteOldRequests) {
+                new MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.confirm_remove_old_request)
+                        .setMessage(R.string.irreversible_warning)
+                        .setPositiveButton("Confirm", (dialog, which) -> deleteOldRequests())
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
+                return true;
             }
             return false;
         });
@@ -170,6 +196,66 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         this.rvAdapter.updateOptions(this.options);
     }
 
+    private void deleteCancelledRequests() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
+        WriteBatch batch = db.batch();
+
+        jobsCollection.whereEqualTo(JobRequests.FIELD_CUSTOMER_ID, userId)
+                .whereEqualTo(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED)
+                .limit(500)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        DocumentReference doc = snapshot.getReference();
+                        batch.delete(doc);
+                    }
+                    batch.commit()
+                            .addOnSuccessListener(unused -> {
+                                Log.d(TAG, "deleteCancelledRequests: Deleted cancelled requests");
+                                Toast.makeText(requireActivity(), "Cancelled requests deleted",
+                                    Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.d(TAG, "onFailure: Unable to delete cancelled requests");
+                                Toast.makeText(requireActivity(), "Unable to delete cancelled requests",
+                                        Toast.LENGTH_SHORT).show();
+                            });
+                });
+    }
+
+    private void deleteOldRequests() {
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        long currentTime = System.currentTimeMillis();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
+        WriteBatch batch = db.batch();
+
+        jobsCollection.whereEqualTo(JobRequests.FIELD_CUSTOMER_ID, userId)
+                .whereLessThanOrEqualTo(JobRequests.FIELD_DATE_OF_JOB,
+                        new Date(currentTime - 7 * JobRequestFilterDialog.milliseconds))
+                .limit(500)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        DocumentReference doc = snapshot.getReference();
+                        batch.delete(doc);
+                    }
+                    batch.commit()
+                            .addOnSuccessListener(unused -> {
+                                Log.d(TAG, "deleteOldRequests: Deleted old requests");
+                                Toast.makeText(requireActivity(), "Old requests deleted",
+                                        Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.d(TAG, "onFailure: Unable to delete old requests");
+                                Toast.makeText(requireActivity(), "Unable to delete old requests",
+                                        Toast.LENGTH_SHORT).show();
+                            });
+                });
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -180,6 +266,14 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     public void onStop() {
         super.onStop();
         this.rvAdapter.stopListening();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (this.mode != null) {
+            this.mode.finish();
+        }
     }
 
     // Edits the request
@@ -218,5 +312,35 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     @Override
     public void onChatClicked() {
 
+    }
+
+    @Override
+    public void configureSupportAction(androidx.appcompat.view.ActionMode.Callback callback) {
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        this.mode = activity.startSupportActionMode(callback);
+    }
+
+    @Override
+    public void deleteSelection(ArrayList<String> arrayList) {
+        Log.d(TAG, "deleteSelection: " + arrayList.toString());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
+        WriteBatch batch = db.batch();
+        for (String id : arrayList) {
+            DocumentReference doc = jobsCollection.document(id);
+            batch.delete(doc);
+        }
+
+        batch.commit()
+                .addOnSuccessListener(unused -> {
+                    Log.d(TAG, "deleteSelection: Selected requests deleted");
+                    Toast.makeText(requireActivity(), "Selected requests deleted",
+                            Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Log.d(TAG, "onFailure: Unable to delete selected requests");
+                    Toast.makeText(requireActivity(), "Unable to delete selected requests",
+                            Toast.LENGTH_SHORT).show();
+                });
     }
 }
