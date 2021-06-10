@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/full_screen_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#222222"
+    android:orientation="vertical"
+    tools:context=".viewmodel.business.BusinessSettingsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/ic_baseline_arrow_back_24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="SETTINGS"
+            android:textColor="@color/white"
+            android:fontFamily="@font/lato_bold"
+            android:textSize="30sp"
+            android:layout_marginTop="12dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#222222"
+                app:strokeColor="#BFBBBB"
+                app:cardCornerRadius="5dp"
+                app:strokeWidth="1dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/firstSubheading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="10sp"
+                        android:paddingVertical="10sp"
+                        android:fontFamily="@font/roboto_bold_italic"
+                        android:text="Account"
+                        android:textColor="#EFEAEA"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/accountSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:paddingHorizontal="15sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:paddingVertical="15sp"
+                        android:text="Edit Account Details"
+                        android:textColor="#EFEAEA"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#BFBBBB"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"/>
+
+                    <TextView
+                        android:id="@+id/signoutButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:paddingHorizontal="15sp"
+                        android:paddingVertical="15sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:text="Sign Out"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:textColor="#EFEAEA"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#222222"
+                android:layout_marginTop="20dp"
+                app:strokeColor="#BFBBBB"
+                app:cardCornerRadius="5dp"
+                app:strokeWidth="1dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/secondSubheading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="10sp"
+                        android:paddingVertical="10sp"
+                        android:fontFamily="@font/roboto_bold_italic"
+                        android:text="Support"
+                        android:textColor="#EFEAEA"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/contactSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:paddingHorizontal="15sp"
+                        android:paddingVertical="15sp"
+                        android:text="Contact us"
+                        android:fontFamily="@font/roboto_regular"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:textColor="#EFEAEA"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="#BFBBBB" />
+
+                    <TextView
+                        android:id="@+id/helpSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:paddingHorizontal="15sp"
+                        android:paddingVertical="15sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:text="Help Centre"
+                        android:textColor="#EFEAEA"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="#BFBBBB" />
+
+                    <TextView
+                        android:id="@+id/complainSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:paddingHorizontal="15sp"
+                        android:paddingVertical="15sp"
+                        android:text="Write Complain or Feedback"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:textColor="#EFEAEA"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#222222"
+                android:layout_marginTop="20dp"
+                app:strokeColor="#BFBBBB"
+                app:cardCornerRadius="5dp"
+                app:strokeWidth="1dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/privacyHeading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="10sp"
+                        android:paddingVertical="10sp"
+                        android:fontFamily="@font/roboto_bold_italic"
+                        android:text="Privacy and security"
+                        android:textColor="#EFEAEA"
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/passwordSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:paddingHorizontal="15sp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:paddingVertical="15sp"
+                        android:text="Change Password"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:textColor="#EFEAEA"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="#BFBBBB" />
+
+                    <TextView
+                        android:id="@+id/notificationSetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:paddingHorizontal="15sp"
+                        android:paddingVertical="15sp"
+                        android:text="Notification settings"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:textColor="#EFEAEA"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="#BFBBBB" />
+
+                    <TextView
+                        android:id="@+id/recoverySetting"
+                        android:layout_width="match_parent"
+                        android:layout_height="55dp"
+                        android:fontFamily="@font/roboto_regular"
+                        android:paddingHorizontal="15sp"
+                        android:paddingVertical="15sp"
+                        android:text="Recovery Methods"
+                        android:foreground="?attr/selectableItemBackgroundBorderless"
+                        android:textColor="#EFEAEA"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

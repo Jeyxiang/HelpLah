@@ -131,6 +131,9 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     private void setToolbar() {
         this.toolbar.setOnMenuItemClickListener(menuItem -> {
+            if (this.mode != null) {
+                this.mode.finish();
+            }
             if (menuItem.getItemId() == R.id.topBarFilter) {
                 sortOptionClicked();
                 return true;
@@ -150,6 +153,13 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                         .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                         .show();
                 return true;
+            } else if (menuItem.getItemId() == R.id.topBarRemoveFinishedRequests) {
+                new MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.confirm_remove_finished_request)
+                        .setMessage(R.string.irreversible_warning)
+                        .setPositiveButton("Confirm", (dialog, which) -> removeFinishedRequests())
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
             } else if (menuItem.getItemId() == R.id.topBarRemoveOldRequests) {
                 new MaterialAlertDialogBuilder(requireActivity())
                         .setTitle(R.string.confirm_remove_old_request)
@@ -191,6 +201,35 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                                 Toast.makeText(requireActivity(), "Unable to remove cancelled requests",
                                         Toast.LENGTH_SHORT).show();
                     });
+                });
+    }
+
+    private void removeFinishedRequests() {
+        String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
+        WriteBatch batch = db.batch();
+
+        jobsCollection.whereEqualTo(JobRequests.FIELD_BUSINESS_ID, businessId)
+                .whereEqualTo(JobRequests.FIELD_STATUS, JobRequests.STATUS_FINISHED)
+                .limit(500)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        DocumentReference doc = snapshot.getReference();
+                        batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+                    }
+                    batch.commit()
+                            .addOnSuccessListener(unused -> {
+                                Log.d(TAG, "removeFinishedRequests: Finished requests removed");
+                                Toast.makeText(requireActivity(), "Finished requests removed",
+                                        Toast.LENGTH_SHORT).show();
+                            })
+                            .addOnFailureListener(e -> {
+                                Log.d(TAG, "onFailure: Unable to remove finished requests");
+                                Toast.makeText(requireActivity(), "Unable to remove finished requests",
+                                        Toast.LENGTH_SHORT).show();
+                            });
                 });
     }
 
@@ -316,34 +355,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
     @Override
     public void actionTwoClicked(View v, JobRequests requests, String requestId) {
 
-        if (requests.getStatus() == JobRequests.STATUS_CONFIRMED) {
-            Toast.makeText(getActivity(), "Job request has already been confirmed", Toast.LENGTH_SHORT).show();
-            return;
+        if (requests.getStatus() == JobRequests.STATUS_PENDING) {
+            confirmJob(requestId);
+        } else if (requests.getStatus() == JobRequests.STATUS_CONFIRMED) {
+            markJobAsFinished(requestId);
         }
-        MaterialTimePicker timePicker =
-                new MaterialTimePicker.Builder()
-                .setTimeFormat(TimeFormat.CLOCK_24H)
-                .setHour(12)
-                .setMinute(0)
-                .setTitleText("Select job time")
-                .build();
-
-        timePicker.show(getParentFragmentManager(), TAG);
-
-        timePicker.addOnPositiveButtonClickListener(view -> {
-            Log.d(TAG, "actionTwoClicked: clicked");
-            @SuppressLint("DefaultLocale")
-            String time = String.format("%02d", timePicker.getHour()) + ":" +
-                    String.format("%02d", timePicker.getMinute());
-            CollectionReference collection = FirebaseFirestore.getInstance()
-                    .collection(JobRequests.DATABASE_COLLECTION);
-            Map<String, Object> updates = new HashMap<>();
-            updates.put(JobRequests.FIELD_CONFIRMED_TIMING, time);
-            updates.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CONFIRMED);
-            collection.document(requestId).update(updates);
-            Toast.makeText(getActivity(), "Job request confirmed", Toast.LENGTH_SHORT).show();
-        });
-
     }
 
 
@@ -355,10 +371,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 "Unable to carry out required job", "Others"};
         String[] selectedReason = {declineReasons[0]};
 
-        if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
-            Toast.makeText(getActivity(), "Job request has already been cancelled", Toast.LENGTH_SHORT).show();
-            return;
-        }
         // Ask for reason for cancellation
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle("Reason for cancellation")
@@ -377,6 +389,41 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         db.document(documentId).update(updates);
         Toast.makeText(getActivity(), "Job request declined", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "declineRequest: " + message);
+    }
+
+    private void confirmJob(String requestId) {
+        MaterialTimePicker timePicker =
+                new MaterialTimePicker.Builder()
+                        .setTimeFormat(TimeFormat.CLOCK_24H)
+                        .setHour(12)
+                        .setMinute(0)
+                        .setTitleText("Select job time")
+                        .build();
+
+        timePicker.show(getParentFragmentManager(), TAG);
+
+        timePicker.addOnPositiveButtonClickListener(view -> {
+            Log.d(TAG, "actionTwoClicked: clicked");
+            @SuppressLint("DefaultLocale")
+            String time = String.format("%02d", timePicker.getHour()) + ":" +
+                    String.format("%02d", timePicker.getMinute());
+            CollectionReference collection = FirebaseFirestore.getInstance()
+                    .collection(JobRequests.DATABASE_COLLECTION);
+            Map<String, Object> updates = new HashMap<>();
+            updates.put(JobRequests.FIELD_CONFIRMED_TIMING, time);
+            updates.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CONFIRMED);
+            collection.document(requestId).update(updates);
+            Toast.makeText(getActivity(), "Job request confirmed", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void markJobAsFinished(String requestId) {
+        CollectionReference collection = FirebaseFirestore.getInstance()
+                .collection(JobRequests.DATABASE_COLLECTION);
+        Map<String, Object> updates = new HashMap<>();
+        updates.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_FINISHED);
+        collection.document(requestId).update(updates);
+        Toast.makeText(getActivity(), "Job request marked as finished", Toast.LENGTH_SHORT).show();
     }
 
 }

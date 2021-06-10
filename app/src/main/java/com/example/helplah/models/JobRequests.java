@@ -28,6 +28,7 @@ public class JobRequests implements Parcelable {
     public static final String FIELD_DATE_OF_JOB = "dateOfJob";
 
     public static final int STATUS_CONFIRMED = 1;
+    public static final int STATUS_FINISHED = 3;
     public static final int STATUS_CANCELLED = 2;
     public static final int STATUS_PENDING = 0;
 
@@ -103,6 +104,11 @@ public class JobRequests implements Parcelable {
     public static String dateToString(Date date) {
         DateFormat formatter = new SimpleDateFormat("E, dd MMM");
         return formatter.format(date);
+    }
+
+    public static boolean isJobOver(JobRequests request) {
+        long current_time = System.currentTimeMillis();
+        return current_time > request.getDateOfJob().getTime();
     }
 
     public String getCustomerId() {

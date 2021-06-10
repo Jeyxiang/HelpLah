@@ -97,6 +97,8 @@ public class SendJobRequestFragment extends Fragment {
         this.businessPopularity = this.rootView.findViewById(R.id.businessPopularity);
         this.sendButton = this.rootView.findViewById(R.id.jobSendButton);
 
+        this.jobDate.setFocusable(false);
+
         getUserInformation();
         bind();
 

@@ -52,6 +52,7 @@ public class JobRequestFilterDialog extends DialogFragment implements
         private boolean statusConfirmed = true;
         private boolean statusPending = true;
         private boolean statusCancelled = true;
+        private boolean statusFinished = true;
 
         public int getSpinnerPosition() {
             return spinnerPosition;
@@ -85,6 +86,7 @@ public class JobRequestFilterDialog extends DialogFragment implements
     private CheckBox checkConfirmed;
     private CheckBox checkPending;
     private CheckBox checkCancelled;
+    private CheckBox checkFinished;
 
     public JobRequestFilterDialog(Fragment fragment) {
         if (fragment instanceof RequestFilterListener) {
@@ -104,6 +106,7 @@ public class JobRequestFilterDialog extends DialogFragment implements
         this.checkConfirmed = this.rootView.findViewById(R.id.status_confirmed);
         this.checkPending = this.rootView.findViewById(R.id.status_pending);
         this.checkCancelled = this.rootView.findViewById(R.id.status_cancelled);
+        this.checkFinished = this.rootView.findViewById(R.id.status_finished);
 
         this.rootView.findViewById(R.id.button_cancel).setOnClickListener(this);
         this.rootView.findViewById(R.id.button_apply).setOnClickListener(this);
@@ -145,6 +148,7 @@ public class JobRequestFilterDialog extends DialogFragment implements
         this.checkConfirmed.setChecked(this.mViewModel.statusConfirmed);
         this.checkPending.setChecked(this.mViewModel.statusPending);
         this.checkCancelled.setChecked(this.mViewModel.statusCancelled);
+        this.checkFinished.setChecked(this.mViewModel.statusFinished);
         if (this.mViewModel.getRadioGroupPosition() > -1) {
             this.dateRadioGroup.check(this.mViewModel.getRadioGroupPosition());
         } else {
@@ -199,10 +203,14 @@ public class JobRequestFilterDialog extends DialogFragment implements
         if (this.checkCancelled.isChecked()) {
             optionsSelected.add(JobRequests.STATUS_CANCELLED);
         }
+        if (this.checkFinished.isChecked()) {
+            optionsSelected.add(JobRequests.STATUS_FINISHED);
+        }
 
         this.mViewModel.statusConfirmed = this.checkConfirmed.isChecked();
         this.mViewModel.statusPending = this.checkPending.isChecked();
         this.mViewModel.statusCancelled = this.checkCancelled.isChecked();
+        this.mViewModel.statusFinished = this.checkFinished.isChecked();
 
         return optionsSelected;
     }

@@ -1,24 +1,20 @@
-package com.example.helplah.viewmodel.business;
+package com.example.helplah.viewmodel.consumer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import com.example.helplah.R;
-import com.example.helplah.viewmodel.login_screen.LoginScreen;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BusinessAccountFragment#newInstance} factory method to
+ * Use the {@link WriteReviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BusinessAccountFragment extends Fragment {
+public class WriteReviewFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +25,7 @@ public class BusinessAccountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public BusinessAccountFragment() {
+    public WriteReviewFragment() {
         // Required empty public constructor
     }
 
@@ -39,11 +35,11 @@ public class BusinessAccountFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BusinessAccountFragment.
+     * @return A new instance of fragment WriteReviewFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BusinessAccountFragment newInstance(String param1, String param2) {
-        BusinessAccountFragment fragment = new BusinessAccountFragment();
+    public static WriteReviewFragment newInstance(String param1, String param2) {
+        WriteReviewFragment fragment = new WriteReviewFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -64,20 +60,6 @@ public class BusinessAccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_business_account, container, false);
-        Button b = v.findViewById(R.id.logOutButton);
-        Button c = v.findViewById(R.id.goToSettings);
-        c.setOnClickListener(v1 -> Navigation.findNavController(v1).navigate(R.id.action_go_to_business_Settings));
-
-        b.setOnClickListener(v12 -> {
-            Intent i = new Intent(getActivity(), LoginScreen.class);
-            startActivity(i);
-        });
-
-        Button editButton = v.findViewById(R.id.editListingButton);
-        editButton.setOnClickListener(x -> {
-            Navigation.findNavController(v).navigate(R.id.action_edit_listing);
-        });
-        return v;
+        return inflater.inflate(R.layout.write_review_fragment, container, false);
     }
 }

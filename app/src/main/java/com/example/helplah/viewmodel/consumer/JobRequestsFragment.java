@@ -134,6 +134,9 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
 
     private void setToolbar() {
         this.toolbar.setOnMenuItemClickListener(menuItem -> {
+            if (this.mode != null) {
+                this.mode.finish();
+            }
             if (menuItem.getItemId() == R.id.topBarSort) {
                 sortOptionClicked();
                 return true;
@@ -279,21 +282,11 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     // Edits the request
     @Override
     public void actionTwoClicked(View v, JobRequests requests, String requestId) {
-
-        CollectionReference listingsReference = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
-
-        listingsReference.whereEqualTo(FieldPath.documentId(), requests.getBusinessId()).get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("listing", snapshot.toObject(Listings.class));
-                        bundle.putParcelable("request", requests);
-                        bundle.putString("id", requests.getBusinessId());
-                        bundle.putString("requestId", requestId);
-                        bundle.putString("category", requests.getService());
-                        Navigation.findNavController(v).navigate(R.id.editJobRequestAction, bundle);
-                    }
-                });
+        if (requests.getStatus() == JobRequests.STATUS_FINISHED) {
+            leaveAReview(requestId);
+        } else {
+            editRequest(v, requests, requestId);
+        }
     }
 
 
@@ -312,6 +305,28 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     @Override
     public void onChatClicked() {
 
+    }
+
+    private void editRequest(View v, JobRequests requests, String requestId) {
+        CollectionReference listingsReference = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
+
+        listingsReference.whereEqualTo(FieldPath.documentId(), requests.getBusinessId()).get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("listing", snapshot.toObject(Listings.class));
+                        bundle.putParcelable("request", requests);
+                        bundle.putString("id", requests.getBusinessId());
+                        bundle.putString("requestId", requestId);
+                        bundle.putString("category", requests.getService());
+                        Navigation.findNavController(v).navigate(R.id.editJobRequestAction, bundle);
+                    }
+                });
+    }
+
+    // TODO
+    private void leaveAReview(String requestId) {
+        Log.d(TAG, "leaveAReview: Leaving a review");
     }
 
     @Override
@@ -343,4 +358,5 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
                             Toast.LENGTH_SHORT).show();
                 });
     }
+
 }

@@ -78,6 +78,14 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         this.rv = rv;
     }
 
+    @NonNull
+    @Override
+    public RequestsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        return new RequestsViewHolder(inflater.inflate(R.layout.job_request_list_item, parent, false));
+    }
+
     @Override
     protected void onBindViewHolder(@NonNull RequestsViewHolder holder, int position, @NonNull JobRequests model) {
 
@@ -87,7 +95,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         layout.setActivated(isExpanded);
         holder.itemView.setActivated(isExpanded);
         String documentId = getSnapshots().getSnapshot(position).getId();
-        holder.bind(model, documentId);
+        holder.bind(getItem(position), documentId);
 
         holder.itemView.setOnClickListener(v -> {
             if (this.multiSelect) {
@@ -175,16 +183,9 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                 .show();
     }
 
-
-    @NonNull
-    @Override
-    public RequestsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        this.context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new RequestsViewHolder(inflater.inflate(R.layout.job_request_list_item, parent, false));
-    }
-
     public class RequestsViewHolder extends RecyclerView.ViewHolder {
+
+        private static final float DEACTIVATED = 0.3f;
 
         private final CardView requestCardView;
         private final TextView requestName;
@@ -196,6 +197,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         private final ExtendedFloatingActionButton actionOneButton;
         private final ExtendedFloatingActionButton actionTwoButton;
         private final ExtendedFloatingActionButton chatButton;
+        private String actionOneErrorMessage;
+        private String actionTwoErrorMessage;
 
         public RequestsViewHolder(@NonNull View itemView) {
 
@@ -210,10 +213,12 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             this.actionTwoButton = itemView.findViewById(R.id.requestEditButton);
             this.chatButton = itemView.findViewById(R.id.requestChatButton);
             this.image = itemView.findViewById(R.id.requestImage);
+            Log.d(TAG, "RequestsViewHolder: created");
         }
 
         public void bind(final JobRequests request, final String documentId) {
 
+            Log.d(TAG, "bind: Binding called" + request.getDateOfJob());
             if (selectedItems.contains(documentId)) {
                 this.requestCardView.setAlpha(0.3f);
             } else {
@@ -225,12 +230,15 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
             if (isBusiness) {
                 this.requestName.setText(request.getCustomerName());
-                this.actionTwoButton.setText("Confirm");
-                this.actionOneButton.setText("Decline");
             } else {
                 this.requestName.setText(request.getBusinessName());
                 this.image.setOnClickListener(x -> goToListing(request));
             }
+
+            setActionOneText(request);
+            setActionTwoText(request);
+            setActionOneAlpha(request);
+            setActionTwoAlpha(request);
 
             this.requestDescription.setText(request.getJobDescription());
 
@@ -248,6 +256,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                 return ContextCompat.getColor(context, R.color.jobRequestPending);
             } else if (request.getStatus() == JobRequests.STATUS_CONFIRMED) {
                 return ContextCompat.getColor(context, R.color.jobRequestAccepted);
+            } else if (request.getStatus() == JobRequests.STATUS_FINISHED) {
+                return ContextCompat.getColor(context, R.color.jobRequestFinished);
             } else {
                 return ContextCompat.getColor(context, R.color.jobRequestCancelled);
             }
@@ -271,7 +281,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
         private void configureActionOne(JobRequests request, String documentId) {
             this.actionOneButton.setOnClickListener(x -> {
-                if (request.getStatus() != JobRequests.STATUS_CANCELLED) {
+                if (this.actionOneErrorMessage == null) {
                     new MaterialAlertDialogBuilder(context)
                             .setTitle(isBusiness
                                     ? "Are you sure you want to decline this job request?"
@@ -284,22 +294,99 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                             .setNegativeButton("Dismiss", (dialog, which) -> dialog.dismiss())
                             .show();
                 } else {
-                    Log.d(TAG, "cancelClicked: cancelled already");
-                    Toast.makeText(context, "Request has already been cancelled", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Action one failed " + this.actionOneErrorMessage);
+                    Toast.makeText(context, this.actionOneErrorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
         private void configureActionTwo(JobRequests request, String documentId) {
             this.actionTwoButton.setOnClickListener(v -> {
-                if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
-                    Toast.makeText(context, "Request has been cancelled",
+                if (actionTwoErrorMessage != null) {
+                    Log.d(TAG, "Action two failed " + this.actionTwoErrorMessage);
+                    Toast.makeText(context, this.actionTwoErrorMessage,
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mListener.actionTwoClicked(v, request, documentId);
                 notifyItemChanged(getBindingAdapterPosition());
             });
+        }
+
+        private void setActionOneText(JobRequests request) {
+            if (isBusiness) {
+                this.actionOneButton.setText(R.string.action_one_decline);
+            } else {
+                this.actionOneButton.setText(R.string.action_one_cancel);
+            }
+        }
+
+        private void setActionTwoText(JobRequests request) {
+            if (isBusiness) {
+                if (request.getStatus() == JobRequests.STATUS_CONFIRMED ||
+                        request.getStatus() == JobRequests.STATUS_FINISHED) {
+                    this.actionTwoButton.setText(R.string.action_two_mark_finished);
+                } else {
+                    this.actionTwoButton.setText(R.string.action_two_confirm);
+                }
+            } else {
+                if (request.getStatus() == JobRequests.STATUS_FINISHED) {
+                    this.actionTwoButton.setText(R.string.action_two_leave_review);
+                } else {
+                    this.actionTwoButton.setText(R.string.action_two_edit);
+                }
+            }
+        }
+
+        private void setActionOneAlpha(JobRequests request) {
+            if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
+                this.actionOneButton.setAlpha(DEACTIVATED);
+                this.actionOneErrorMessage = "This request has been cancelled";
+            } else if (request.getStatus() == JobRequests.STATUS_FINISHED) {
+                this.actionOneButton.setAlpha(DEACTIVATED);
+                this.actionOneErrorMessage = "This request has already been completed";
+            } else if (request.getStatus() == JobRequests.STATUS_CONFIRMED &&
+                    JobRequests.isJobOver(request)) {
+                this.actionOneButton.setAlpha(DEACTIVATED);
+                this.actionOneErrorMessage = "Unable to cancel as Job is scheduled for today";
+            } else {
+                this.actionOneButton.setAlpha(1f);
+                this.actionOneErrorMessage = null;
+            }
+        }
+
+        private void setActionTwoAlpha(JobRequests request) {
+            if (isBusiness) {
+                if (request.getStatus() == JobRequests.STATUS_FINISHED) {
+                    this.actionTwoButton.setAlpha(DEACTIVATED);
+                    this.actionTwoErrorMessage = "This request is already marked as finished";
+                } else if (request.getStatus() == JobRequests.STATUS_CONFIRMED
+                        && !JobRequests.isJobOver(request)) {
+                    this.actionTwoButton.setAlpha(DEACTIVATED);
+                    this.actionTwoErrorMessage = "You can only mark the request as finished after the job date";
+                } else if (request.getStatus() == JobRequests.STATUS_PENDING
+                        && JobRequests.isJobOver(request)) {
+                    this.actionTwoButton.setAlpha(DEACTIVATED);
+                    this.actionTwoErrorMessage = "Scheduled job date has passed";
+                } else if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
+                    this.actionTwoButton.setAlpha(DEACTIVATED);
+                    this.actionTwoErrorMessage = "This request has been cancelled";
+                } else {
+                    this.actionTwoButton.setAlpha(1f);
+                    this.actionTwoErrorMessage = null;
+                }
+            } else {
+                if (JobRequests.isJobOver(request) && request.getStatus() != JobRequests.STATUS_FINISHED) {
+                    this.actionTwoButton.setAlpha(DEACTIVATED);
+                    this.actionTwoErrorMessage = "Unable to edit as job date has passed. Send a new request instead";
+                } else if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
+                    this.actionTwoButton.setAlpha(DEACTIVATED);
+                    this.actionTwoErrorMessage = "This request has been cancelled";
+                } else {
+                    this.actionTwoButton.setAlpha(1f);
+                    this.actionTwoErrorMessage = null;
+                }
+            }
         }
 
     }

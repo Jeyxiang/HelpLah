@@ -13,7 +13,11 @@
         <action
             android:id="@+id/action_edit_listing"
             app:destination="@id/editListingFragment" />
+        <action
+            android:id="@+id/action_go_to_business_Settings"
+            app:destination="@id/businessSettingsFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/businessJobsRequestsFragment"
         android:name="com.example.helplah.viewmodel.business.BusinessJobsRequestsFragment"
@@ -29,4 +33,32 @@
         android:name="com.example.helplah.viewmodel.business.EditListingFragment"
         android:label="edit_listings_fragment"
         tools:layout="@layout/edit_listings_fragment" />
+    <fragment
+        android:id="@+id/businessSettingsFragment"
+        android:name="com.example.helplah.viewmodel.business.BusinessSettingsFragment"
+        android:label="business_settings_fragment"
+        tools:layout="@layout/business_settings_fragment" >
+        <action
+            android:id="@+id/action_business_edit_account"
+            app:destination="@id/editAccountFragment2" />
+        <action
+            android:id="@+id/action_business_edit_password"
+            app:destination="@id/editPasswordFragment" />
+        <action
+            android:id="@+id/action_business_write_complaint"
+            app:destination="@id/writeComplainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editAccountFragment2"
+        android:name="com.example.helplah.viewmodel.business.EditAccountFragment"
+        android:label="EditAccountFragment" />
+    <fragment
+        android:id="@+id/editPasswordFragment"
+        android:name="com.example.helplah.viewmodel.business.EditPasswordFragment"
+        android:label="EditPasswordFragment" />
+    <fragment
+        android:id="@+id/writeComplainFragment"
+        android:name="com.example.helplah.viewmodel.business.WriteComplainFragment"
+        android:label="write_complain_fragment"
+        tools:layout="@layout/write_complain_fragment" />
 </navigation>
