@@ -49,8 +49,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     private static final String TAG = "Business job request fragment";
 
-    private static final String deletedTag = "removed";
-
     public static class BusinessJobRequestViewModel extends ViewModel {
 
         private Query query;
@@ -188,7 +186,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                         DocumentReference doc = snapshot.getReference();
-                        batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+                        batch.update(doc, JobRequests.FIELD_REMOVED, true);
                     }
                     batch.commit()
                             .addOnSuccessListener(unused -> {
@@ -217,7 +215,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                         DocumentReference doc = snapshot.getReference();
-                        batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+                        batch.update(doc, JobRequests.FIELD_REMOVED, true);
                     }
                     batch.commit()
                             .addOnSuccessListener(unused -> {
@@ -250,7 +248,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                         DocumentReference doc = snapshot.getReference();
-                        batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+                        batch.update(doc, JobRequests.FIELD_REMOVED, true);
                     }
                     batch.commit()
                             .addOnSuccessListener(unused -> {
@@ -335,7 +333,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         WriteBatch batch = db.batch();
         for (String id : arrayList) {
             DocumentReference doc = jobsCollection.document(id);
-            batch.update(doc, JobRequests.FIELD_BUSINESS_ID, deletedTag);
+            batch.update(doc, JobRequests.FIELD_REMOVED, true);
         }
 
         batch.commit()

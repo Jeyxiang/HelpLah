@@ -3,6 +3,9 @@ package com.example.helplah.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +27,8 @@ public class JobRequests implements Parcelable {
     public static final String FIELD_PHONE_NUMBER = "phoneNumber";
     public static final String FIELD_DATE_CREATED = "dateCreated";
     public static final String FIELD_DATE_TIMING_NOTE = "timingNote";
+    public static final String FIELD_REMOVED = "removed";
+    public static final String FIELD_REVIEWED = "reviewed";
 
     public static final String FIELD_DATE_OF_JOB = "dateOfJob";
 
@@ -46,6 +51,8 @@ public class JobRequests implements Parcelable {
     private Date dateCreated;
     private String timingNote;
     private Date dateOfJob;
+    private boolean removed = false;
+    private boolean reviewed = false;
 
     public JobRequests() {}
 
@@ -57,6 +64,7 @@ public class JobRequests implements Parcelable {
         this.dateCreated = new Date(System.currentTimeMillis());
     }
 
+
     protected JobRequests(Parcel in) {
         customerId = in.readString();
         businessId = in.readString();
@@ -65,22 +73,15 @@ public class JobRequests implements Parcelable {
         service = in.readString();
         jobDescription = in.readString();
         address = in.readString();
+        confirmedTiming = in.readString();
+        declineMessage = in.readString();
         status = in.readInt();
         phoneNumber = in.readInt();
         timingNote = in.readString();
+        removed = in.readByte() != 0;
+        reviewed = in.readByte() != 0;
+        dateOfJob = new Date(in.readLong());
     }
-
-    public static final Creator<JobRequests> CREATOR = new Creator<JobRequests>() {
-        @Override
-        public JobRequests createFromParcel(Parcel in) {
-            return new JobRequests(in);
-        }
-
-        @Override
-        public JobRequests[] newArray(int size) {
-            return new JobRequests[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -96,10 +97,27 @@ public class JobRequests implements Parcelable {
         dest.writeString(service);
         dest.writeString(jobDescription);
         dest.writeString(address);
+        dest.writeString(confirmedTiming);
+        dest.writeString(declineMessage);
         dest.writeInt(status);
         dest.writeInt(phoneNumber);
         dest.writeString(timingNote);
+        dest.writeByte((byte) (removed ? 1 : 0));
+        dest.writeByte((byte) (reviewed ? 1 : 0));
+        dest.writeLong(dateOfJob.getTime());
     }
+
+    public static final Creator<JobRequests> CREATOR = new Creator<JobRequests>() {
+        @Override
+        public JobRequests createFromParcel(Parcel in) {
+            return new JobRequests(in);
+        }
+
+        @Override
+        public JobRequests[] newArray(int size) {
+            return new JobRequests[size];
+        }
+    };
 
     public static String dateToString(Date date) {
         DateFormat formatter = new SimpleDateFormat("E, dd MMM");
@@ -109,6 +127,11 @@ public class JobRequests implements Parcelable {
     public static boolean isJobOver(JobRequests request) {
         long current_time = System.currentTimeMillis();
         return current_time > request.getDateOfJob().getTime();
+    }
+
+    public static void markAsReviewed(String requestId) {
+        CollectionReference db = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION);
+        db.document(requestId).update(FIELD_REVIEWED, true);
     }
 
     public String getCustomerId() {
@@ -221,5 +244,21 @@ public class JobRequests implements Parcelable {
 
     public void setDeclineMessage(String declineMessage) {
         this.declineMessage = declineMessage;
+    }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
+
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
     }
 }

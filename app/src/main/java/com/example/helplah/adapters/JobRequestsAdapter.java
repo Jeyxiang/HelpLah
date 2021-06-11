@@ -381,6 +381,9 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                 } else if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
                     this.actionTwoButton.setAlpha(DEACTIVATED);
                     this.actionTwoErrorMessage = "This request has been cancelled";
+                } else if (request.getStatus() == JobRequests.STATUS_FINISHED && request.isReviewed()) {
+                    this.actionTwoButton.setAlpha(DEACTIVATED);
+                    this.actionTwoErrorMessage = "This request has been reviewed";
                 } else {
                     this.actionTwoButton.setAlpha(1f);
                     this.actionTwoErrorMessage = null;

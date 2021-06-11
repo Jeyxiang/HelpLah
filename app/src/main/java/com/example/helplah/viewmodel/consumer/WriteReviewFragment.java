@@ -90,8 +90,14 @@ public class WriteReviewFragment extends Fragment {
         review.setScore(score);
         review.setReviewText(reviewText);
 
+        Log.d(TAG, "submitReview: " + review.getBusinessId());
         CollectionReference listingsCollection = FirebaseFirestore.getInstance()
                 .collection(Listings.DATABASE_COLLECTION);
-        //listingsCollection.document(review.getBusinessId()).collection(Review.DATABASE_COLLECTION).add(review);
+        listingsCollection.document(review.getBusinessId()).collection(Review.DATABASE_COLLECTION)
+                .add(review).addOnSuccessListener(documentReference -> {
+                    Log.d(TAG, "submitReview: Review added for " + review.getBusinessName());
+                    JobRequests.markAsReviewed(review.getJobRequestId());
+                    requireActivity().onBackPressed();
+                });
     }
 }

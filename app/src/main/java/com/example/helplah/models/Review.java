@@ -77,7 +77,7 @@ public class Review implements Parcelable {
     // Uses the information from a job request to initialise a review
     public static Review jobRequestToReview(JobRequests request) {
         Review review = new Review(request.getCustomerName(), request.getCustomerId(),
-                request.getBusinessName(), request.getCustomerId());
+                request.getBusinessName(), request.getBusinessId());
         review.setService(request.getService());
         return review;
     }
