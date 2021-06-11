@@ -20,9 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
+import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.adapters.DescriptionCategoryAdapter;
 import com.example.helplah.models.AvailabilityStatus;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.Services;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -33,7 +35,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
  * Use the {@link ListingDescription} factory method to
  * create an instance of this fragment.
  */
-public class ListingDescription extends Fragment {
+public class ListingDescription extends Fragment implements CategoriesAdapter.onCategorySelected {
 
     private static final String TAG = "Listing description";
 
@@ -103,7 +105,7 @@ public class ListingDescription extends Fragment {
         Log.d(TAG, "bind: " + this.listing.getServicesList().getServicesProvided());
 
         DescriptionCategoryAdapter adapter = new DescriptionCategoryAdapter(getActivity(),
-                this.listing.getServicesList().getServicesProvided());
+                this.listing.getServicesList().getServicesProvided(), this);
         this.rvServices.setLayoutManager(new LinearLayoutManager(getActivity(),
                 RecyclerView.HORIZONTAL, false));
         this.rvServices.setAdapter(adapter);
@@ -144,5 +146,13 @@ public class ListingDescription extends Fragment {
                 Navigation.findNavController(v).navigate(R.id.sendJobRequestAction, bundle);
             }
         });
+    }
+
+    @Override
+    public void onCategoryClicked(String category, View v) {
+        Log.d(TAG, "onCategoryClicked: " + category);
+        Bundle bundle = new Bundle();
+        bundle.putString(Services.SERVICE, category);
+        Navigation.findNavController(v).navigate(R.id.action_listingDescription_search_new_category, bundle);
     }
 }

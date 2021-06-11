@@ -80,6 +80,7 @@ public class BusinessSettingsFragment extends Fragment {
                 Intent i = new Intent(getActivity(), LoginScreen.class);
                 startActivity(i);
                 FirebaseAuth.getInstance().signOut(); //sign user out
+                getActivity().finish();
             }
         });
 

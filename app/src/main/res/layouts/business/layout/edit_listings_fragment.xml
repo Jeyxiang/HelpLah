@@ -1,257 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sendRequestLayout"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/almostBlack"
-    android:orientation="vertical"
+    android:background="#222222"
     tools:context=".viewmodel.business.EditListingFragment">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/editListingAppBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="?attr/actionBarSize"
+        android:backgroundTint="#222222" >
 
-        <TextView
-            android:id="@+id/editListTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:fontFamily="@font/sf_display_bold"
-            android:gravity="center"
-            android:text="Edit My Listing"
-            android:textColor="@color/white"
-            android:textSize="22sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="20dp"
-            app:layout_constraintStart_toEndOf="@id/backButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.272" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/requestToolbar"
+            android:layout_width="match_parent"
+            app:contentInsetStart="0dp"
+            app:contentInsetEnd="0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways" >
 
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="5dp"
-            android:background="@drawable/ic_baseline_arrow_back_24"
-            android:backgroundTint="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/editListTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/sf_display_bold"
+                    android:gravity="center"
+                    android:text="Edit Listing"
+                    android:textColor="@color/appRed"
+                    android:textSize="30sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="10dp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/white"/>
+                <ImageView
+                    android:id="@+id/backButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/ic_baseline_arrow_back_24" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="30dp">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/materialCardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" >
+                app:cardCornerRadius="10dp"
+                android:elevation="8dp"
+                android:backgroundTint="#222222"
+                app:strokeWidth="1dp"
+                app:strokeColor="#BFBBBB"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#353535"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/editNameHeading"
-                        android:layout_marginTop="5dp"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="10sp"
-                        android:paddingVertical="5sp"
-                        android:text=" Business Name"
-                        android:textColor="#F3E7E7"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:hint="Business Name"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editNameListing"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editNameListing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/bariol_regular"
+                            android:gravity="start|center_vertical"
+                            android:inputType="textCapSentences"
+                            android:paddingStart="10dp"
+                            app:textInputLayoutFocusedRectEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="40dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/edit_text_dark"
-                        android:clickable="false"
-                        android:fontFamily="@font/bariol_regular"
-                        android:gravity="top"
-                        android:hint=""
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:paddingStart="10dp"
-                        android:paddingTop="8dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white" />
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:hint="Web Address"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
-                    <TextView
-                        android:id="@+id/editWebHead"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editWebListing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            android:fontFamily="@font/bariol_regular"
+                            android:gravity="start|center_vertical"
+                            android:inputType="textCapSentences"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            app:textInputLayoutFocusedRectEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:paddingHorizontal="10sp"
-                        android:paddingVertical="5sp"
-                        android:text=" Edit Web Address"
-                        android:textColor="#F3E7E7"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:hint="Description for User"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editWebListing"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editDescListing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="180dp"
+                            android:fontFamily="@font/bariol_regular"
+                            android:gravity="start|top"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:paddingStart="10dp"
+                            app:textInputLayoutFocusedRectEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="40dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/edit_text_dark"
-                        android:fontFamily="@font/bariol_regular"
-                        android:gravity="top|left"
-                        android:inputType="textMultiLine"
-                        android:paddingStart="10dp"
-                        android:paddingTop="8dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white" />
+                        app:boxStrokeWidth="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:hint="Contact Number"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
-                    <TextView
-                        android:id="@+id/editDescpHead"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editContactNumberListing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/bariol_regular"
+                            android:gravity="start|center_vertical"
+                            android:inputType="number"
+                            android:maxLength="8"
+                            android:paddingStart="10dp"
+                            app:textInputLayoutFocusedRectEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:paddingHorizontal="10sp"
-                        android:paddingVertical="5sp"
-                        android:text=" Edit Description"
-                        android:textColor="#F3E7E7"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        app:boxStrokeWidth="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:hint="Starting price"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editDescListing"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editMinPriceListing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/bariol_regular"
+                            android:gravity="start|center_vertical"
+                            android:inputType="number"
+                            android:maxLines="1"
+                            android:paddingStart="10dp"
+                            app:textInputLayoutFocusedRectEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="160dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/edit_text_dark"
-                        android:fontFamily="@font/bariol_regular"
-                        android:gravity="top|left"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:lines="8"
-                        android:maxLength="100"
-                        android:maxLines="8"
-                        android:paddingStart="10dp"
-                        android:scrollbars="vertical"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white" />
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:hint="More information about your pricing"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
-                    <TextView
-                        android:id="@+id/editPhoneNumberTitle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:paddingHorizontal="10sp"
-                        android:paddingVertical="5sp"
-                        android:text="Contact Number"
-                        android:textColor="#F3E7E7"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editPriceNoteListing"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="130dp"
+                            android:fontFamily="@font/bariol_regular"
+                            android:gravity="start|top"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:paddingStart="10dp"
+                            app:textInputLayoutFocusedRectEnabled="false" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editContactNumberListing"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/edit_text_dark"
-                        android:clickable="false"
-                        android:fontFamily="@font/bariol_regular"
-                        android:gravity="top"
-                        android:inputType="number"
-                        android:paddingStart="10dp"
-                        android:paddingTop="8dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white" />
-
-                    <TextView
-                        android:id="@+id/editMinPriceHead"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:paddingHorizontal="10sp"
-                        android:paddingVertical="5sp"
-                        android:text="Minimum Price"
-                        android:textColor="#F3E7E7"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editMinPriceListing"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/edit_text_dark"
-                        android:clickable="false"
-                        android:fontFamily="@font/bariol_regular"
-                        android:gravity="top"
-                        android:inputType="number"
-                        android:paddingStart="10dp"
-                        android:paddingTop="8dp"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white" />
-
-                    <TextView
-                        android:id="@+id/editPriceNoteHead"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:paddingHorizontal="10sp"
-                        android:paddingVertical="5sp"
-                        android:text="Price Note (Description about your charges)"
-                        android:textColor="#F3E7E7"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/editPriceNoteListing"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="130dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="8dp"
-                        android:background="@drawable/edit_text_dark"
-                        android:fontFamily="@font/bariol_regular"
-                        android:gravity="top|left"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:paddingStart="10dp"
-                        android:textColor="@color/white"
-                        android:hint="Enter a description about your charges"
-                        android:textColorHint="@color/white" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
                         android:id="@+id/editAvailabilityHead"
@@ -261,18 +227,18 @@
                         android:paddingHorizontal="10sp"
                         android:paddingVertical="5sp"
                         android:text="Set Availability"
-                        android:textColor="#F3E7E7"
+                        android:textColor="#BFBBBB"
+                        android:layout_marginStart="12dp"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/availability"
                         style="@style/AppTheme.FilterSpinner"
-                        android:backgroundTint="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="12dp"
                         android:layout_marginTop="5dp"
                         android:entries="@array/business_availability" />
 
@@ -283,8 +249,9 @@
                         android:layout_marginTop="5dp"
                         android:paddingHorizontal="10sp"
                         android:paddingVertical="5sp"
-                        android:text="Select Languages"
-                        android:textColor="#F3E7E7"
+                        android:layout_marginStart="12dp"
+                        android:text="Languages"
+                        android:textColor="#BFBBBB"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -294,7 +261,6 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginTop="5dp"
-                        android:background="@drawable/edit_text_dark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
 
@@ -303,7 +269,6 @@
                             style="@style/AppTheme.FilterCheckBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-
                             android:layout_marginStart="40dp"
                             android:checked="false"
                             android:text="@string/language_english"
@@ -358,8 +323,9 @@
                         android:paddingHorizontal="10sp"
                         android:paddingVertical="5sp"
                         android:layout_marginTop="5dp"
-                        android:text="Select Services"
-                        android:textColor="#F3E7E7"
+                        android:layout_marginStart="12dp"
+                        android:text="Services Provided"
+                        android:textColor="#BFBBBB"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -370,7 +336,6 @@
                         android:layout_marginBottom="20dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@drawable/edit_text_dark"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent">
 
@@ -530,4 +495,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

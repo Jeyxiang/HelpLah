@@ -345,10 +345,9 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             } else if (request.getStatus() == JobRequests.STATUS_FINISHED) {
                 this.actionOneButton.setAlpha(DEACTIVATED);
                 this.actionOneErrorMessage = "This request has already been completed";
-            } else if (request.getStatus() == JobRequests.STATUS_CONFIRMED &&
-                    JobRequests.isJobOver(request)) {
+            } else if (JobRequests.isJobOver(request)) {
                 this.actionOneButton.setAlpha(DEACTIVATED);
-                this.actionOneErrorMessage = "Unable to cancel as Job is scheduled for today";
+                this.actionOneErrorMessage = "Unable to cancel as Job date has passed";
             } else {
                 this.actionOneButton.setAlpha(1f);
                 this.actionOneErrorMessage = null;

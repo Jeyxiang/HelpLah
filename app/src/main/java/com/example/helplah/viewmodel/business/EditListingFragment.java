@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -70,7 +71,7 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
         this.mAuth = FirebaseAuth.getInstance();
         String id = mAuth.getCurrentUser().getUid();
 
-        Button backButton = v.findViewById(R.id.backButton);
+        ImageView backButton = v.findViewById(R.id.backButton);
         Button updateButton = v.findViewById(R.id.updateButton);
         this.editName = v.findViewById(R.id.editNameListing);
         this.editWeb = v.findViewById(R.id.editWebListing);

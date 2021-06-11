@@ -283,7 +283,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     @Override
     public void actionTwoClicked(View v, JobRequests requests, String requestId) {
         if (requests.getStatus() == JobRequests.STATUS_FINISHED) {
-            leaveAReview(requestId);
+            leaveAReview(v, requestId);
         } else {
             editRequest(v, requests, requestId);
         }
@@ -324,9 +324,20 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
                 });
     }
 
-    // TODO
-    private void leaveAReview(String requestId) {
+    private void leaveAReview(View v, String requestId) {
         Log.d(TAG, "leaveAReview: Leaving a review");
+        CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
+        db.document(requestId).get().addOnSuccessListener(snapshot -> {
+            JobRequests request = snapshot.toObject(JobRequests.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("requestId", requestId);
+            bundle.putParcelable(JobRequests.DATABASE_COLLECTION, request);
+            Navigation.findNavController(v).navigate(R.id.action_user_write_review, bundle);
+        }).addOnFailureListener(e -> {
+            Log.d(TAG, "onFailure: Could not find request form database");
+            Toast.makeText(requireActivity(), "An error occurred. Please try again",
+                    Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override

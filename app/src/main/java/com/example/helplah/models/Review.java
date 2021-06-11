@@ -21,6 +21,7 @@ public class Review implements Parcelable {
     private String service;
     private String username;
     private String userId;
+    private String jobRequestId;
     private String businessName;
     private String businessId;
 
@@ -159,5 +160,13 @@ public class Review implements Parcelable {
 
     public void setBusinessId(String businessId) {
         this.businessId = businessId;
+    }
+
+    public String getJobRequestId() {
+        return jobRequestId;
+    }
+
+    public void setJobRequestId(String jobRequestId) {
+        this.jobRequestId = jobRequestId;
     }
 }

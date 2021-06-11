@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_jobRequests_to_listingDescription"
             app:destination="@id/listingDescription" />
+        <action
+            android:id="@+id/action_user_write_review"
+            app:destination="@id/writeReviewFragment" />
     </fragment>
     <fragment
         android:id="@+id/servicesCategoriesFragment"
@@ -60,10 +63,18 @@
         <action
             android:id="@+id/sendJobRequestAction"
             app:destination="@id/sendJobRequestFragment" />
+        <action
+            android:id="@+id/action_listingDescription_search_new_category"
+            app:destination="@id/businessListingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/sendJobRequestFragment"
         android:name="com.example.helplah.viewmodel.consumer.SendJobRequestFragment"
         android:label="fragment_send_job_request"
         tools:layout="@layout/fragment_send_job_request" />
+    <fragment
+        android:id="@+id/writeReviewFragment"
+        android:name="com.example.helplah.viewmodel.consumer.WriteReviewFragment"
+        android:label="write_review_fragment"
+        tools:layout="@layout/write_review_fragment" />
 </navigation>

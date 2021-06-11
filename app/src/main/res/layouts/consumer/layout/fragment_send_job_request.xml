@@ -32,7 +32,7 @@
             android:layout_marginTop="16dp"
             android:fontFamily="@font/sf_display_bold"
             android:text="Send a Job Request"
-            android:textColor="@color/white"
+            android:textColor="@color/appRed"
             android:textSize="22sp" />
 
     </LinearLayout>
