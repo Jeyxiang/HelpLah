@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_listingDescription_search_new_category"
             app:destination="@id/businessListingsFragment" />
+        <action
+            android:id="@+id/action_view_reviews"
+            app:destination="@id/viewReviewsFragment" />
     </fragment>
     <fragment
         android:id="@+id/sendJobRequestFragment"
@@ -77,4 +80,9 @@
         android:name="com.example.helplah.viewmodel.consumer.WriteReviewFragment"
         android:label="write_review_fragment"
         tools:layout="@layout/write_review_fragment" />
+    <fragment
+        android:id="@+id/viewReviewsFragment"
+        android:name="com.example.helplah.viewmodel.consumer.ViewReviewsFragment"
+        android:label="fragment_view_reviews"
+        tools:layout="@layout/fragment_view_reviews" />
 </navigation>

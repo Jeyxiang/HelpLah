@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/home_background"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
     tools:context=".viewmodel.consumer.JobRequestsFragment">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -33,7 +34,6 @@
         android:id="@+id/jobRequestsRv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -97,6 +97,7 @@ public class WriteReviewFragment extends Fragment {
                 .add(review).addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "submitReview: Review added for " + review.getBusinessName());
                     JobRequests.markAsReviewed(review.getJobRequestId());
+                    Toast.makeText(requireActivity(), "Review submitted", Toast.LENGTH_SHORT).show();
                     requireActivity().onBackPressed();
                 });
     }

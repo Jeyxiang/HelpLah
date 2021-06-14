@@ -28,8 +28,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -268,15 +266,13 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             CollectionReference listingsDb = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
             Bundle bundle = new Bundle();
 
-            listingsDb.whereEqualTo(FieldPath.documentId(), businessId).get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            Listings listing = snapshot.toObject(Listings.class);
-                            bundle.putParcelable("listing", listing);
-                            Navigation.findNavController(itemView)
-                                    .navigate(R.id.action_jobRequests_to_listingDescription, bundle);
-                        }
-                    });
+            listingsDb.document(businessId).get().addOnSuccessListener(snapshot -> {
+                Listings listing = snapshot.toObject(Listings.class);
+                bundle.putParcelable("listing", listing);
+                bundle.putString("id", businessId);
+                Navigation.findNavController(itemView)
+                        .navigate(R.id.action_jobRequests_to_listingDescription, bundle);
+            });
         }
 
         private void configureActionOne(JobRequests request, String documentId) {

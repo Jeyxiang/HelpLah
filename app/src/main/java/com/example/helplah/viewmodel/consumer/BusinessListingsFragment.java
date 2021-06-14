@@ -37,6 +37,8 @@ public class BusinessListingsFragment extends Fragment implements
 
         private Query query;
 
+        private int lastPosition = -1;
+
         public void setQuery(Query query) {
             this.query = query;
         }
@@ -61,6 +63,8 @@ public class BusinessListingsFragment extends Fragment implements
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "onCreate: called");
 
         this.category = this.getArguments().getString(Services.SERVICE);
 
@@ -109,7 +113,7 @@ public class BusinessListingsFragment extends Fragment implements
     private void configureFirestore(Query q) {
         this.rvConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(20)
+                .setInitialLoadSizeHint(30)
                 .setPageSize(10)
                 .setPrefetchDistance(10)
                 .build();
@@ -124,9 +128,9 @@ public class BusinessListingsFragment extends Fragment implements
     private void getQuery() {
         this.rvAdapter = new ListingsAdapter(this.options, this);
         this.rvAdapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
-        rvListings.setAdapter(rvAdapter);
+        this.rvListings.setAdapter(this.rvAdapter);
 
-        rvListings.setLayoutManager(new LinearLayoutManager(getActivity()));
+        this.rvListings.setLayoutManager(new LinearLayoutManager(getActivity()));
         //checkIfEmptyQuery();
     }
 
@@ -186,5 +190,17 @@ public class BusinessListingsFragment extends Fragment implements
         bundle.putString("id", listing.getId());
         bundle.putString("category", this.category);
         Navigation.findNavController(v).navigate(R.id.goToListingsDescription, bundle);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        this.rvAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        this.rvAdapter.stopListening();
     }
 }

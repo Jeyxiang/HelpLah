@@ -14,21 +14,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.adapters.DescriptionCategoryAdapter;
+import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.AvailabilityStatus;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.Review;
+import com.example.helplah.models.ReviewQuery;
 import com.example.helplah.models.Services;
+import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,10 +49,12 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
     private static final String TAG = "Listing description";
 
     private Listings listing;
+    private String listingId;
 
     private View rootView;
     private Bundle bundle;
     private RecyclerView rvServices;
+    private RecyclerView rvReviews;
     private TextView reviewScore;
     private TextView numberOfReviews;
     private RatingBar ratingBar;
@@ -60,6 +71,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
 
         this.bundle = this.getArguments();
         this.listing = this.getArguments().getParcelable("listing");
+        this.listingId = this.getArguments().getString("id");
 
         if (this.listing == null) {
             Toast.makeText(getActivity(), "An unexpected error occurred", Toast.LENGTH_SHORT).show();
@@ -82,6 +94,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         this.availability = this.rootView.findViewById(R.id.descriptionAvailability);
         this.website = this.rootView.findViewById(R.id.descriptionWebsite);
         this.rvServices = this.rootView.findViewById(R.id.descriptionServicesRv);
+        this.rvReviews = this.rootView.findViewById(R.id.descriptionReviews);
 
         bind();
         configureAppBarScroll(appBarLayout);
@@ -94,13 +107,22 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
     private void bind() {
 
         this.reviewScore.setText(String.format("%.1f", listing.getReviewScore()));
-        this.numberOfReviews.setText(this.listing.getNumberOfReviews() + " reviews");
-        this.ratingBar.setRating((float) this.listing.getNumberOfReviews());
+        this.numberOfReviews.setText("(" + this.listing.getNumberOfReviews() + ")");
+        this.ratingBar.setRating((float) this.listing.getReviewScore());
         this.description.setText(this.listing.getDescription());
         this.minPrice.setText("From " + (int) this.listing.getMinPrice());
         this.pricingNote.setText(this.listing.getPricingNote());
         this.availability.setText(AvailabilityStatus.getAvailabilityText(this.listing.getAvailability()));
         this.website.setText(this.listing.getPricingNote());
+        TextView viewReviewsButton = this.rootView.findViewById(R.id.goToReviewButton);
+
+        viewReviewsButton.setOnClickListener(this::viewReviews);
+        if (this.listing.getNumberOfReviews() > 0) {
+            configureReviews();
+        } else {
+            TextView noReviewTitle = this.rootView.findViewById(R.id.noReviewTitle);
+            noReviewTitle.setVisibility(View.VISIBLE);
+        }
 
         Log.d(TAG, "bind: " + this.listing.getServicesList().getServicesProvided());
 
@@ -109,6 +131,23 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         this.rvServices.setLayoutManager(new LinearLayoutManager(getActivity(),
                 RecyclerView.HORIZONTAL, false));
         this.rvServices.setAdapter(adapter);
+    }
+
+    private void configureReviews() {
+        PagedList.Config rvConfig = new PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(3)
+                .build();
+
+        Query query = ReviewQuery.getPreview(FirebaseFirestore.getInstance(), this.listingId);
+        FirestorePagingOptions<Review> options = new FirestorePagingOptions.Builder<Review>()
+                .setLifecycleOwner(this)
+                .setQuery(query, rvConfig, Review.class)
+                .build();
+
+        ReviewsAdapter adapter = new ReviewsAdapter(options);
+        this.rvReviews.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        this.rvReviews.setAdapter(adapter);
     }
 
     private void configureAppBarScroll(AppBarLayout appBarLayout) {
@@ -140,12 +179,21 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         FloatingActionButton chatButton = this.rootView.findViewById(R.id.descriptionChat);
 
         ExtendedFloatingActionButton sendJobButton = this.rootView.findViewById(R.id.descriptionJobRequest);
-        sendJobButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.sendJobRequestAction, bundle);
-            }
-        });
+        sendJobButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.sendJobRequestAction, bundle));
+    }
+
+    private void viewReviews(View v) {
+        if (this.listing.getNumberOfReviews() == 0) {
+            View snackBar = this.rootView.findViewById(R.id.snackBarView);
+            ViewCompat.setTranslationZ(snackBar, 10f);
+            Snackbar.make(snackBar, "There are no reviews for this listing", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        Bundle bundle = new Bundle();
+        bundle.putString("id", this.listingId);
+        bundle.putDouble(Listings.FIELD_REVIEW_SCORE, this.listing.getReviewScore());
+        Navigation.findNavController(v).navigate(R.id.action_view_reviews, bundle);
     }
 
     @Override

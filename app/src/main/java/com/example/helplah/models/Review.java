@@ -3,7 +3,10 @@ package com.example.helplah.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class Review implements Parcelable {
 
@@ -12,6 +15,9 @@ public class Review implements Parcelable {
     public static final String FIELD_REVIEW_TEXT =  "reviewText";
     public static final String FIELD_DATE_REVIEWED = "dateReviewed";
     public static final String FIELD_SCORE = "score";
+    public static final String FIELD_USER_ID = "userId";
+    public static final String FIELD_BUSINESS_ID = "businessId";
+
 
     private String reviewText;
     private Date dateReviewed;
@@ -79,7 +85,34 @@ public class Review implements Parcelable {
         Review review = new Review(request.getCustomerName(), request.getCustomerId(),
                 request.getBusinessName(), request.getBusinessId());
         review.setService(request.getService());
+        review.setDateReviewed(new Date(System.currentTimeMillis()));
         return review;
+    }
+
+    public static String getTimeAgo(Date past) {
+        if (past == null) {
+            return "";
+        }
+
+        Date now = new Date();
+        long timeDifference = now.getTime() - past.getTime();
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(timeDifference);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeDifference);
+        long hours = TimeUnit.MILLISECONDS.toHours(timeDifference);
+        long days = TimeUnit.MILLISECONDS.toDays(timeDifference);
+
+        if (seconds < 60) {
+            return seconds + " seconds ago";
+        } else if (minutes < 60) {
+            return minutes + " minutes ago";
+        } else if (hours < 24) {
+            return hours + " hours ago";
+        } else if (days < 25) {
+            return days + " days ago";
+        } else {
+            DateFormat formatter = new SimpleDateFormat("dd MMM");
+            return formatter.format(past);
+        }
     }
 
     public String getReviewText() {

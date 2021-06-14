@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/almostBlack"
     tools:context=".viewmodel.consumer.ListingDescription">
@@ -64,19 +65,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="170dp"
                     android:layout_marginTop="160dp"
-                    android:progressBackgroundTint="#fcfcfc"
-                    android:progressTint="@color/rating_star_color"
+                    android:progressBackgroundTint="#909090"
+                    android:progressTint="@color/appRed"
                     android:stepSize="0.1" />
-
-                <TextView
-                    android:id="@+id/descriptionNumOfReviews"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="260dp"
-                    android:layout_marginTop="160dp"
-                    android:text="21 reviews"
-                    android:textColor="#fcfcfc"
-                    android:textSize="12sp" />
 
             </RelativeLayout>
 
@@ -96,6 +87,7 @@
         android:id="@+id/descriptionScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#222222"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
@@ -117,7 +109,6 @@
                 android:id="@+id/businessDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/AppTheme.normalText"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
@@ -136,7 +127,6 @@
                 android:id="@+id/descriptionMinPrice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/AppTheme.normalText"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
@@ -146,7 +136,6 @@
                 android:id="@+id/descriptionPricingNote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/AppTheme.normalText"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
@@ -165,28 +154,10 @@
                 android:id="@+id/descriptionAvailability"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/AppTheme.normalText"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
                 android:text="From 4 hours" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/AppTheme.titleTag"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp"
-                android:text="Services provided" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/descriptionServicesRv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginStart="15dp" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="match_parent"
@@ -201,7 +172,6 @@
                 android:id="@+id/descriptionLanguages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/AppTheme.normalText"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginStart="15dp"
@@ -220,11 +190,83 @@
                 android:id="@+id/descriptionWebsite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/AppTheme.normalText"
                 android:layout_marginEnd="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="15dp"
                 android:text="www.google.com" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/AppTheme.titleTag"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:text="Services provided" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/descriptionServicesRv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal" >
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/AppTheme.titleTag"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="10dp"
+                    android:text="Reviews" />
+
+                <TextView
+                    android:id="@+id/descriptionNumOfReviews"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="9dp"
+                    android:layout_marginStart="5dp"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/goToReviewButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:text="View All"
+                    android:gravity="right"
+                    app:drawableEndCompat="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#BFBBBB"
+                android:layout_marginTop="15dp" />
+
+            <TextView
+                android:id="@+id/noReviewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="20dp"
+                android:text="No reviews yet" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/descriptionReviews"
+                android:overScrollMode="never"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="80dp" />
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
@@ -269,5 +311,14 @@
         android:paddingEnd="50dp"
         android:paddingStart="50dp"
         android:layout_marginBottom="20dp"/>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/snackBarView"
+        android:elevation="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@id/descriptionJobRequest"
+        app:layout_anchorGravity="bottom"
+        android:layout_marginBottom="20dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

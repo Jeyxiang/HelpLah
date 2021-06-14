@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/reviewLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#222222"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+
+    <ImageView
+        android:id="@+id/reviewOptionsButton"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_baseline_more_vert_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/reviewProfilePicture"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/plumbing_logos"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp" />
+
+    <TextView
+        android:id="@+id/reviewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/reviewProfilePicture"
+        app:layout_constraintEnd_toStartOf="@id/reviewOptionsButton"
+        app:layout_constraintHorizontal_bias="0"
+        android:text="Thz12345"
+        android:textSize="17sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/roboto_bold" />
+
+    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+        android:id="@+id/reviewRatingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/appRed"
+        android:stepSize="0.1"
+        style="@style/Widget.MaterialRatingBar.RatingBar.Indicator.Small"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewProfilePicture"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:id="@+id/reviewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="24/06/2021"
+        app:layout_constraintStart_toEndOf="@id/reviewRatingBar"
+        app:layout_constraintTop_toBottomOf="@id/reviewProfilePicture"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp" />
+
+    <TextView
+        android:id="@+id/reviewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/reviewRatingBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:text="Really good "
+        android:layout_marginEnd="15dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
