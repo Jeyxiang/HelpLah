@@ -61,6 +61,7 @@
             android:layout_marginTop="10dp"
             android:progressTint="@color/appRed"
             android:layout_gravity="center"
+            android:stepSize="1"
             style="@style/Widget.MaterialRatingBar.RatingBar" />
 
         <com.google.android.material.textfield.TextInputLayout

@@ -180,7 +180,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
 
         ExtendedFloatingActionButton sendJobButton = this.rootView.findViewById(R.id.descriptionJobRequest);
         sendJobButton.setOnClickListener(v ->
-                Navigation.findNavController(v).navigate(R.id.sendJobRequestAction, bundle));
+                Navigation.findNavController(v).navigate(R.id.sendJobRequestAction, this.bundle));
     }
 
     private void viewReviews(View v) {
@@ -192,6 +192,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         }
         Bundle bundle = new Bundle();
         bundle.putString("id", this.listingId);
+        bundle.putString(Services.SERVICE, getArguments().getString("category"));
         bundle.putDouble(Listings.FIELD_REVIEW_SCORE, this.listing.getReviewScore());
         Navigation.findNavController(v).navigate(R.id.action_view_reviews, bundle);
     }

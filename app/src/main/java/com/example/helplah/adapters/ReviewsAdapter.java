@@ -1,5 +1,6 @@
 package com.example.helplah.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +53,7 @@ public class ReviewsAdapter extends FirestorePagingAdapter<Review, ReviewsAdapte
         private final MaterialRatingBar reviewRatingBar;
         private final TextView reviewText;
         private final TextView reviewUsername;
+        private final TextView reviewService;
 
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -59,13 +61,16 @@ public class ReviewsAdapter extends FirestorePagingAdapter<Review, ReviewsAdapte
             this.reviewRatingBar = itemView.findViewById(R.id.reviewRatingBar);
             this.reviewText = itemView.findViewById(R.id.reviewText);
             this.reviewUsername = itemView.findViewById(R.id.reviewUserName);
+            this.reviewService = itemView.findViewById(R.id.reviewService);
         }
 
+        @SuppressLint("SetTextI18n")
         public void bind(final Review review) {
             this.reviewRatingBar.setRating(review.getScore());
             this.reviewText.setText(review.getReviewText());
             this.reviewUsername.setText(review.getUsername());
             this.reviewDate.setText(Review.getTimeAgo(review.getDateReviewed()));
+            this.reviewService.setText("Service provided: " + review.getService());
         }
 
     }

@@ -27,6 +27,7 @@ public class Listings implements Parcelable {
     public static final String FIELD_SERVICES_LIST = "servicesList.servicesProvided";
     public static final String FIELD_AVAILABILITY = "availability";
     public static final String FIELD_LANGUAGE = "language";
+    public static final String FIELD_LANGUAGE_SPOKEN = "languagesSpoken";
 
     // Properties which the user can sort on
     public static final ArrayList<String> sortable = new ArrayList<>(Arrays.asList(FIELD_NAME,
@@ -128,6 +129,15 @@ public class Listings implements Parcelable {
         dest.writeString(website);
     }
 
+    public static HashMap<String, Boolean> getTestLanguage() {
+        HashMap<String, Boolean> map = new HashMap<>();
+        map.put(LANGUAGE_ENGLISH, true);
+        map.put(LANGUAGE_CHINESE, true);
+        map.put(LANGUAGE_MALAY, true);
+        map.put(LANGUAGE_TAMIL, false);
+        return map;
+    }
+
     public Services getServicesList() {
         return servicesList;
     }
@@ -188,12 +198,6 @@ public class Listings implements Parcelable {
         return reviewScore;
     }
 
-    public void addReview(double newScore) {
-        double oldScore = numberOfReviews * reviewScore;
-        IncrementNumberOfReviews();
-        this.reviewScore = (oldScore + newScore) / getNumberOfReviews();
-    }
-
     public int getNumberOfReviews() {
         return numberOfReviews;
     }
@@ -242,4 +246,11 @@ public class Listings implements Parcelable {
         return website;
     }
 
+    public HashMap<String, Boolean> getLanguagesSpoken() {
+        return languagesSpoken;
+    }
+
+    public void setLanguagesSpoken(HashMap<String, Boolean> languagesSpoken) {
+        this.languagesSpoken = languagesSpoken;
+    }
 }

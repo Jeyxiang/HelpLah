@@ -16,6 +16,7 @@ public class Review implements Parcelable {
     public static final String FIELD_DATE_REVIEWED = "dateReviewed";
     public static final String FIELD_SCORE = "score";
     public static final String FIELD_USER_ID = "userId";
+    public static final String FIELD_SERVICE = "service";
     public static final String FIELD_BUSINESS_ID = "businessId";
 
 

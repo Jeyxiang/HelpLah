@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 public class ReviewQuery {
 
+    public static final String TAG = "Review query";
+
     private final FirebaseFirestore firestore;
     private final String listingId;
     private static final ArrayList<String> sortable = new ArrayList<>(Arrays.asList(
@@ -15,6 +17,8 @@ public class ReviewQuery {
 
     private String sortBy = null;
     private boolean ascending = false;
+    private String service;
+    private int rating = -1;
 
     public ReviewQuery(FirebaseFirestore firebaseFirestore, String listingId) {
         this.firestore = firebaseFirestore;
@@ -30,6 +34,13 @@ public class ReviewQuery {
     public Query createQuery() {
         Query query = this.firestore.collection(Listings.DATABASE_COLLECTION)
                         .document(this.listingId).collection(Review.DATABASE_COLLECTION);
+
+        if (this.hasService()) {
+            query = query.whereEqualTo(Review.FIELD_SERVICE, this.service);
+        }
+        if (this.hasRating()) {
+            query = query.whereEqualTo(Review.FIELD_SCORE, this.rating);
+        }
 
         if (this.hasSortBy()) {
             if (this.ascending) {
@@ -49,8 +60,30 @@ public class ReviewQuery {
         }
     }
 
+    public void setRating(int rating) {
+        if (rating > 0 && rating <= 5) {
+            this.rating = rating;
+        } else {
+            this.rating = -1;
+        }
+    }
+
+    public void setService(String service) {
+        if (Services.ALLSERVICES.contains(service)) {
+            this.service = service;
+        }
+    }
+
     public boolean hasSortBy() {
         return this.sortBy != null;
+    }
+
+    public boolean hasRating() {
+        return this.rating != -1;
+    }
+
+    public boolean hasService() {
+        return this.service != null;
     }
 
     public boolean isAscending() {

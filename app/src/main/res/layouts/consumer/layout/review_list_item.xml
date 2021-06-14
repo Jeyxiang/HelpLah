@@ -43,6 +43,16 @@
         android:textColor="@color/white"
         android:fontFamily="@font/roboto_bold" />
 
+    <TextView
+        android:id="@+id/reviewService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/reviewProfilePicture"
+        app:layout_constraintTop_toBottomOf="@id/reviewUserName"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="20dp" />
+
     <me.zhanghai.android.materialratingbar.MaterialRatingBar
         android:id="@+id/reviewRatingBar"
         android:layout_width="wrap_content"
@@ -59,7 +69,6 @@
         android:id="@+id/reviewDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="24/06/2021"
         app:layout_constraintStart_toEndOf="@id/reviewRatingBar"
         app:layout_constraintTop_toBottomOf="@id/reviewProfilePicture"
         android:layout_marginTop="8dp"

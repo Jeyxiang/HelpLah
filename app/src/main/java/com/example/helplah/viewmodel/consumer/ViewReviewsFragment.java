@@ -1,12 +1,15 @@
 package com.example.helplah.viewmodel.consumer;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,11 +22,14 @@ import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.Review;
 import com.example.helplah.models.ReviewQuery;
+import com.example.helplah.models.Services;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ViewReviewsFragment extends Fragment {
 
@@ -32,14 +38,15 @@ public class ViewReviewsFragment extends Fragment {
     public static class ReviewsViewModel extends ViewModel {
 
         private Query query;
-        private int toolbarSelectedPosition;
+        private int ratingFilter = 0;
+        private boolean allServices = true;
 
-        public int getToolbarSelectedPosition() {
-            return toolbarSelectedPosition;
+        public int getRatingFilter() {
+            return ratingFilter;
         }
 
-        public void setToolbarSelectedPosition(int toolbarSelectedPosition) {
-            this.toolbarSelectedPosition = toolbarSelectedPosition;
+        public void setRatingFilter(int ratingFilter) {
+            this.ratingFilter = ratingFilter;
         }
 
         public Query getQuery() {
@@ -57,9 +64,9 @@ public class ViewReviewsFragment extends Fragment {
     private ReviewsAdapter rvAdapter;
     private PagedList.Config rvConfig;
     private String listingId;
-    private TextView reviewScore;
-    private MaterialToolbar toolbar;
+    private String category;
     private FirestorePagingOptions<Review> options;
+    private ArrayList<CardView> allRatingsFilters;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,8 @@ public class ViewReviewsFragment extends Fragment {
 
         this.viewModel = new ViewModelProvider(this).get(ReviewsViewModel.class);
         this.listingId = getArguments().getString("id");
+        this.category = getArguments().getString(Services.SERVICE);
+        Log.d(TAG, "onCreate: " + this.category);
 
         ReviewQuery reviewQuery = new ReviewQuery(FirebaseFirestore.getInstance(), this.listingId);
         reviewQuery.setSortBy(Review.FIELD_DATE_REVIEWED, false);
@@ -87,16 +96,42 @@ public class ViewReviewsFragment extends Fragment {
         // Inflate the layout for this fragment
         this.rootView = inflater.inflate(R.layout.fragment_view_reviews, container, false);
         this.rvReviews = this.rootView.findViewById(R.id.reviewsRecyclerView);
-        this.toolbar = this.rootView.findViewById(R.id.reviewsToolbar);
-        this.reviewScore = this.rootView.findViewById(R.id.reviewScore);
-
-        this.reviewScore.setText(String.format("%.1f",
+        MaterialToolbar toolbar = this.rootView.findViewById(R.id.reviewsToolbar);
+        TextView reviewScore = this.rootView.findViewById(R.id.reviewScore);
+        toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
+        reviewScore.setText(String.format("%.1f",
                 getArguments().getDouble(Listings.FIELD_REVIEW_SCORE)));
 
+        bindFilters();
         getQuery();
-        configureToolbar();
 
         return this.rootView;
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void bindFilters() {
+        CardView all = this.rootView.findViewById(R.id.reviewSelectedAll);
+        CardView fiveStar = this.rootView.findViewById(R.id.reviewSelected5Stars);
+        CardView fourStar = this.rootView.findViewById(R.id.reviewSelected4Stars);
+        CardView threeStar = this.rootView.findViewById(R.id.reviewSelected3Stars);
+        CardView twoStar = this.rootView.findViewById(R.id.reviewSelected2Stars);
+        CardView oneStar = this.rootView.findViewById(R.id.reviewSelected1Stars);
+        allRatingsFilters = new ArrayList<>(Arrays.asList(all, oneStar, twoStar, threeStar,
+                fourStar, fiveStar));
+        for (int i = 0; i < this.allRatingsFilters.size(); i++) {
+            final int x = i;
+            this.allRatingsFilters.get(i).setOnClickListener(v -> ratingFilterSelected(x));
+        }
+
+        CardView services = this.rootView.findViewById(R.id.reviewCategoryFilters);
+        TextView serviceText = this.rootView.findViewById(R.id.reviewCategoryText);
+        serviceText.setText("Show results for " + this.category + " only");
+        services.setOnClickListener(v -> serviceFilterSelected(services));
+
+        this.allRatingsFilters.get(this.viewModel.getRatingFilter())
+                .setCardBackgroundColor(Color.parseColor("#800CC96E"));
+        services.setCardBackgroundColor(this.viewModel.allServices ? Color.parseColor("#222222")
+                : Color.parseColor("#800CC96E"));
     }
 
     private void getQuery() {
@@ -121,39 +156,32 @@ public class ViewReviewsFragment extends Fragment {
                 .build();
     }
 
-    private void filterOptionClicked() {
-
-        String[] sortOptions = {"Highest First", "Lowest First", "Most Recent"};
-
-        new MaterialAlertDialogBuilder(requireActivity())
-                .setTitle("Sort by?")
-                .setSingleChoiceItems(sortOptions, this.viewModel.getToolbarSelectedPosition(),
-                        ((dialog, which) -> {
-                            if (which == 0) { // Sort by Highest First
-                                this.viewModel.setToolbarSelectedPosition(0);
-                                changeQuery(true, false);
-                                dialog.dismiss();
-                            } else if (which == 1) { // sort by Lowest first
-                                this.viewModel.setToolbarSelectedPosition(1);
-                                changeQuery(true, true);
-                                dialog.dismiss();
-                            } else { // Sort by most recent first
-                                this.viewModel.setToolbarSelectedPosition(2);
-                                changeQuery(false, false);
-                                dialog.dismiss();
-                            }
-                        })).show();
+    private void ratingFilterSelected(int rating) {
+        for (CardView card : this.allRatingsFilters) {
+            card.setCardBackgroundColor(Color.parseColor("#222222"));
+        }
+        this.allRatingsFilters.get(rating).setCardBackgroundColor(Color.parseColor("#800CC96E"));
+        this.viewModel.setRatingFilter(rating);
+        changeQuery();
     }
 
-    private void changeQuery(boolean score, boolean ascending) {
+    private void serviceFilterSelected(CardView card) {
+        if (this.viewModel.allServices) {
+            this.viewModel.allServices = false;
+            card.setCardBackgroundColor(Color.parseColor("#800CC96E"));
+        } else {
+            this.viewModel.allServices = true;
+            card.setCardBackgroundColor(Color.parseColor("#222222"));
+        }
+        changeQuery();
+    }
+
+    private void changeQuery() {
         ReviewQuery query = new ReviewQuery(FirebaseFirestore.getInstance(), this.listingId);
 
-        if (score && ascending) {
-            query.setSortBy(Review.FIELD_SCORE, true);
-        } else if (score) {
-            query.setSortBy(Review.FIELD_SCORE, false);
-        } else {
-            query.setSortBy(Review.FIELD_DATE_REVIEWED, false);
+        query.setRating(this.viewModel.getRatingFilter());
+        if (!this.viewModel.allServices) {
+            query.setService(this.category);
         }
 
         this.viewModel.setQuery(query.createQuery());
@@ -162,16 +190,5 @@ public class ViewReviewsFragment extends Fragment {
                 .setQuery(this.viewModel.getQuery(), this.rvConfig, Review.class)
                 .build();
         this.rvAdapter.updateOptions(this.options);
-    }
-    private void configureToolbar() {
-        this.toolbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.topBarFilter) {
-                filterOptionClicked();
-                return true;
-            }
-            return false;
-        });
-
-        this.toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
     }
 }
