@@ -80,7 +80,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
     @Override
     public RequestsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         this.context = parent.getContext();
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater inflater = LayoutInflater.from(this.context);
         return new RequestsViewHolder(inflater.inflate(R.layout.job_request_list_item, parent, false));
     }
 

@@ -33,15 +33,16 @@
         app:layout_constraintStart_toEndOf="@id/chatChannelProfilePicture" />
 
     <TextView
-        android:id="@+id/chatLastMessage"
+        android:id="@+id/chatChannelLastMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/chatChannelProfilePicture"
         app:layout_constraintTop_toBottomOf="@id/chatChannelUsername"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chatChannelUnreadCountLayout"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
-        android:maxLines="1"
+        android:layout_marginEnd="10dp"
+        android:maxLines="2"
         android:text="Hello!"
         android:ellipsize="end" />
 
@@ -56,5 +57,35 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:maxLines="1" />
+
+    <FrameLayout
+        android:id="@+id/chatChannelUnreadCountLayout"
+        app:layout_constraintTop_toBottomOf="@id/chatChannelTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="invisible"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp" >
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/appRed"
+            app:borderWidth="0dp"
+            android:elevation="10dp"
+            android:src="@android:color/transparent" />
+
+        <TextView
+            android:id="@+id/chatChannelUnreadCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="12"
+            android:elevation="16dp"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

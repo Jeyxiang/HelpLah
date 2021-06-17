@@ -6,12 +6,11 @@ import android.os.Parcelable;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class ChatDialogue implements Parcelable {
+public class ChatChannel implements Parcelable {
 
     public static final String DATABASE_CHANNELS_COLLECTION = "Chats";
     public static final String DATABASE_MESSAGE_COLLECTION = "Messages";
@@ -27,19 +26,21 @@ public class ChatDialogue implements Parcelable {
     private String businessName;
     private String businessId;
     private String chatId;
+    private String lastMessage;
+    private int unreadMessageCount;
     private long time;
 
-    public ChatDialogue() {}
+    public ChatChannel() {}
 
-    public ChatDialogue(String customerId, String customerName,
-                        String businessId, String businessName) {
+    public ChatChannel(String customerId, String customerName,
+                       String businessId, String businessName) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.businessId = businessId;
         this.businessName = businessName;
     }
 
-    protected ChatDialogue(Parcel in) {
+    protected ChatChannel(Parcel in) {
         customerId = in.readString();
         customerName = in.readString();
         businessName = in.readString();
@@ -47,15 +48,15 @@ public class ChatDialogue implements Parcelable {
         chatId = in.readString();
     }
 
-    public static final Creator<ChatDialogue> CREATOR = new Creator<ChatDialogue>() {
+    public static final Creator<ChatChannel> CREATOR = new Creator<ChatChannel>() {
         @Override
-        public ChatDialogue createFromParcel(Parcel in) {
-            return new ChatDialogue(in);
+        public ChatChannel createFromParcel(Parcel in) {
+            return new ChatChannel(in);
         }
 
         @Override
-        public ChatDialogue[] newArray(int size) {
-            return new ChatDialogue[size];
+        public ChatChannel[] newArray(int size) {
+            return new ChatChannel[size];
         }
     };
 
@@ -75,7 +76,7 @@ public class ChatDialogue implements Parcelable {
 
     // Takes the chat channel and creates one if it does not exist.
     // Then go to the appropriate chat channel chatView.
-    public static void goToChatChannel(ChatDialogue channel, Consumer<Bundle> action) {
+    public static void goToChatChannel(ChatChannel channel, Consumer<Bundle> action) {
         CollectionReference chatReference = FirebaseFirestore.getInstance()
                 .collection(DATABASE_CHANNELS_COLLECTION);
 
@@ -101,22 +102,10 @@ public class ChatDialogue implements Parcelable {
                 });
     }
 
-    public static ChatDialogue createChatFromJobRequest(JobRequests request) {
-        ChatDialogue chat = new ChatDialogue(request.getCustomerId(), request.getCustomerName(),
+    public static ChatChannel createChatFromJobRequest(JobRequests request) {
+        ChatChannel chat = new ChatChannel(request.getCustomerId(), request.getCustomerName(),
                 request.getBusinessId(), request.getBusinessName());
         return chat;
-    }
-
-    public static Query getLastMessageQuery(ChatDialogue chatDialogue) {
-        if (!chatDialogue.isInitialised()) {
-            return null;
-        }
-        return FirebaseFirestore.getInstance()
-                .collection(DATABASE_CHANNELS_COLLECTION)
-                .document(chatDialogue.getChatId())
-                .collection(DATABASE_MESSAGE_COLLECTION)
-                .orderBy(ChatMessage.FIELD_DATE, Query.Direction.DESCENDING)
-                .limit(1);
     }
 
     public void sendMessage(String text, boolean business) {
@@ -179,11 +168,27 @@ public class ChatDialogue implements Parcelable {
         this.time = time;
     }
 
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public int getUnreadMessageCount() {
+        return unreadMessageCount;
+    }
+
+    public void setUnreadMessageCount(int unreadMessageCount) {
+        this.unreadMessageCount = unreadMessageCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChatDialogue that = (ChatDialogue) o;
+        ChatChannel that = (ChatChannel) o;
         return Objects.equals(chatId, that.chatId);
     }
 

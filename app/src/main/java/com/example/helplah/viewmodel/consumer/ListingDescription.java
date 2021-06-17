@@ -26,7 +26,7 @@ import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.adapters.DescriptionCategoryAdapter;
 import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.AvailabilityStatus;
-import com.example.helplah.models.ChatDialogue;
+import com.example.helplah.models.ChatChannel;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.Review;
 import com.example.helplah.models.ReviewQuery;
@@ -196,9 +196,9 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
 
         users.document(userId).get().addOnSuccessListener(snapshot -> {
             User user = snapshot.toObject(User.class);
-            ChatDialogue chatDialogue = new ChatDialogue(userId, Objects.requireNonNull(user).getUsername(),
+            ChatChannel chatChannel = new ChatChannel(userId, Objects.requireNonNull(user).getUsername(),
                     listingId, listing.getName());
-            ChatDialogue.goToChatChannel(chatDialogue, bundle -> {
+            ChatChannel.goToChatChannel(chatChannel, bundle -> {
                 Navigation.findNavController(v).navigate(R.id.action_listingDescription_to_chatView, bundle);
             });
         });

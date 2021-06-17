@@ -5,11 +5,16 @@ import java.util.Date;
 public class ChatMessage {
 
     public static final String FIELD_DATE = "date";
+    public static final String FIELD_STATUS = "status";
+
+    public static final int STATUS_UNREAD = 1;
+    public static final int STATUS_READ = 2;
 
     private String senderId;
     private String messageText;
     private boolean isImage;
     private Date date;
+    private int status;
 
     public ChatMessage() {}
 
@@ -58,5 +63,13 @@ public class ChatMessage {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }
