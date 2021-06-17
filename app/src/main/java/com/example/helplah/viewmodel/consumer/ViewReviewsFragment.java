@@ -121,6 +121,7 @@ public class ViewReviewsFragment extends Fragment {
         for (int i = 0; i < this.allRatingsFilters.size(); i++) {
             final int x = i;
             this.allRatingsFilters.get(i).setOnClickListener(v -> ratingFilterSelected(x));
+            changeQuery();
         }
 
         CardView services = this.rootView.findViewById(R.id.reviewCategoryFilters);

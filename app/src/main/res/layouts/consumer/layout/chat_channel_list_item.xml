@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="#222222"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/chatChannelProfilePicture"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/plumbing_logos"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="15dp" />
+
+    <TextView
+        android:id="@+id/chatChannelUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto_bold"
+        android:ellipsize="end"
+        android:textSize="20sp"
+        android:textColor="#fcfcfc"
+        android:text="Jian Xiang"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chatChannelTime"
+        app:layout_constraintStart_toEndOf="@id/chatChannelProfilePicture" />
+
+    <TextView
+        android:id="@+id/chatLastMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/chatChannelProfilePicture"
+        app:layout_constraintTop_toBottomOf="@id/chatChannelUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:maxLines="1"
+        android:text="Hello!"
+        android:ellipsize="end" />
+
+    <TextView
+        android:id="@+id/chatChannelTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="14 Mar"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@id/chatChannelUsername"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:maxLines="1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

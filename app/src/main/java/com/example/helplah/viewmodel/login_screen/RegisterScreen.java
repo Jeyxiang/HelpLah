@@ -188,6 +188,7 @@ public class RegisterScreen extends AppCompatActivity {
     private void addUserToFirestore(String id, String email, String username) {
         String phoneNumber = this.mPhoneNumber.getText().toString();
         User user = new User(username, email, Integer.parseInt(phoneNumber), false);
+        user.setUserId(id);
 
         CollectionReference mCollection = FirebaseFirestore.getInstance()
                                                 .collection(User.DATABASE_COLLECTION);

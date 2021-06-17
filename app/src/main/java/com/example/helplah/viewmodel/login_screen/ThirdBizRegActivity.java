@@ -128,6 +128,7 @@ public class ThirdBizRegActivity extends AppCompatActivity {
         //Updating the collections for user and businesses with the same user id
         User user = new User(this.listing.getName(), this.emailAdd, this.listing.getPhoneNumber(),true);
         user.setAddress(this.address);
+        user.setUserId(id);
         userCollection.document(id).set(user);
         businessCollection.document(id).set(this.listing);
     }

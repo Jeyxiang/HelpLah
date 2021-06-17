@@ -26,18 +26,24 @@ import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.adapters.DescriptionCategoryAdapter;
 import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.AvailabilityStatus;
+import com.example.helplah.models.ChatDialogue;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.Review;
 import com.example.helplah.models.ReviewQuery;
 import com.example.helplah.models.Services;
+import com.example.helplah.models.User;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -177,10 +183,25 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         });
 
         FloatingActionButton chatButton = this.rootView.findViewById(R.id.descriptionChat);
+        chatButton.setOnClickListener(this::chatButtonClicked);
 
         ExtendedFloatingActionButton sendJobButton = this.rootView.findViewById(R.id.descriptionJobRequest);
         sendJobButton.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.sendJobRequestAction, this.bundle));
+    }
+
+    private void chatButtonClicked(View v) {
+        CollectionReference users = FirebaseFirestore.getInstance().collection(User.DATABASE_COLLECTION);
+        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
+
+        users.document(userId).get().addOnSuccessListener(snapshot -> {
+            User user = snapshot.toObject(User.class);
+            ChatDialogue chatDialogue = new ChatDialogue(userId, Objects.requireNonNull(user).getUsername(),
+                    listingId, listing.getName());
+            ChatDialogue.goToChatChannel(chatDialogue, bundle -> {
+                Navigation.findNavController(v).navigate(R.id.action_listingDescription_to_chatView, bundle);
+            });
+        });
     }
 
     private void viewReviews(View v) {

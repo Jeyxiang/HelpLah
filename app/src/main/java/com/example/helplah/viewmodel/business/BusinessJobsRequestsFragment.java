@@ -315,11 +315,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
     }
 
     @Override
-    public void onChatClicked() {
-        // TODO
-    }
-
-    @Override
     public void configureSupportAction(ActionMode.Callback callback) {
         AppCompatActivity activity = (AppCompatActivity) requireActivity();
         this.mode = activity.startSupportActionMode(callback);
@@ -377,6 +372,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 .setSingleChoiceItems(declineReasons, 0, (dialog, which) ->
                         selectedReason[0] = declineReasons[which])
                 .show();
+    }
+
+    @Override
+    public void onChatClicked(View v, JobRequests request) {
+        // TODO
     }
 
     private void declineRequest(String documentId, String message) {

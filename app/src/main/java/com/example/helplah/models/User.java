@@ -16,9 +16,11 @@ public class User {
     private String address;
     private String username;
     private String email;
+    private String profilePicture;
     boolean isBusiness = false;
     private int postalCode;
     private int phoneNumber;
+    private String userId;
 
     public User() {}
 
@@ -89,6 +91,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
 

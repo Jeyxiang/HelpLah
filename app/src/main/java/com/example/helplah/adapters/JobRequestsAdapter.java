@@ -41,7 +41,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
     public interface RequestClickedListener {
 
-        void onChatClicked();
+        void onChatClicked(View v, JobRequests request);
 
         void deleteSelection(ArrayList<String> arrayList);
 
@@ -247,6 +247,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
             configureActionTwo(request, documentId);
             configureActionOne(request, documentId);
+            this.chatButton.setOnClickListener(v -> mListener.onChatClicked(v, request));
         }
 
         private int getColor(JobRequests request) {
