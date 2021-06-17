@@ -5,12 +5,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.stfalcon.chatkit.commons.models.IDialog;
+import com.stfalcon.chatkit.commons.models.IMessage;
+import com.stfalcon.chatkit.commons.models.IUser;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class ChatChannel implements Parcelable {
+public class ChatDialogue implements Parcelable, IDialog {
 
     public static final String DATABASE_CHANNELS_COLLECTION = "Chats";
     public static final String DATABASE_MESSAGE_COLLECTION = "Messages";
@@ -25,22 +32,30 @@ public class ChatChannel implements Parcelable {
     private String customerName;
     private String businessName;
     private String businessId;
-    private String chatId;
-    private String lastMessage;
-    private int unreadMessageCount;
     private long time;
+    private ArrayList<MessageAuthor> users = new ArrayList<>();
+    private String chatId;
+    private ChatMessage lastMessage;
+    private int unreadCount;
+    private boolean isBusiness;
 
-    public ChatChannel() {}
+    public ChatDialogue() {}
 
-    public ChatChannel(String customerId, String customerName,
-                       String businessId, String businessName) {
+    public ChatDialogue(String customerId, String customerName,
+                        String businessId, String businessName, boolean isBusiness) {
         this.customerId = customerId;
         this.customerName = customerName;
         this.businessId = businessId;
         this.businessName = businessName;
+        this.isBusiness = isBusiness;
+        this.time = new Date().getTime();
+        MessageAuthor customer = new MessageAuthor(customerId, customerName);
+        MessageAuthor business = new MessageAuthor(businessId, businessName);
+        this.users.add(customer);
+        this.users.add(business);
     }
 
-    protected ChatChannel(Parcel in) {
+    protected ChatDialogue(Parcel in) {
         customerId = in.readString();
         customerName = in.readString();
         businessName = in.readString();
@@ -48,15 +63,15 @@ public class ChatChannel implements Parcelable {
         chatId = in.readString();
     }
 
-    public static final Creator<ChatChannel> CREATOR = new Creator<ChatChannel>() {
+    public static final Creator<ChatDialogue> CREATOR = new Creator<ChatDialogue>() {
         @Override
-        public ChatChannel createFromParcel(Parcel in) {
-            return new ChatChannel(in);
+        public ChatDialogue createFromParcel(Parcel in) {
+            return new ChatDialogue(in);
         }
 
         @Override
-        public ChatChannel[] newArray(int size) {
-            return new ChatChannel[size];
+        public ChatDialogue[] newArray(int size) {
+            return new ChatDialogue[size];
         }
     };
 
@@ -76,7 +91,7 @@ public class ChatChannel implements Parcelable {
 
     // Takes the chat channel and creates one if it does not exist.
     // Then go to the appropriate chat channel chatView.
-    public static void goToChatChannel(ChatChannel channel, Consumer<Bundle> action) {
+    public static void goToChatChannel(ChatDialogue channel, Consumer<Bundle> action) {
         CollectionReference chatReference = FirebaseFirestore.getInstance()
                 .collection(DATABASE_CHANNELS_COLLECTION);
 
@@ -90,34 +105,26 @@ public class ChatChannel implements Parcelable {
                             documentReference.update(FIELD_ID, id, FIELD_DATE, System.currentTimeMillis())
                             .addOnSuccessListener(unused -> {
                                 Bundle bundle = new Bundle();
-                                bundle.putParcelable(PARCELABLE_KEY, channel);
+                                bundle.putString("id", id);
                                 action.accept(bundle);
                             });
                         });
                     } else {
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable(PARCELABLE_KEY, channel);
-                        action.accept(bundle);
+                        for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                            String id = snapshot.getReference().getId();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("id", id);
+                            action.accept(bundle);
+                            return;
+                        }
                     }
                 });
     }
 
-    public static ChatChannel createChatFromJobRequest(JobRequests request) {
-        ChatChannel chat = new ChatChannel(request.getCustomerId(), request.getCustomerName(),
-                request.getBusinessId(), request.getBusinessName());
+    public static ChatDialogue createChatFromJobRequest(JobRequests request, Boolean isBusiness) {
+        ChatDialogue chat = new ChatDialogue(request.getCustomerId(), request.getCustomerName(),
+                request.getBusinessId(), request.getBusinessName(), isBusiness);
         return chat;
-    }
-
-    public void sendMessage(String text, boolean business) {
-        ChatMessage message = ChatMessage.newTextChat(business ? businessId : customerId, text);
-        CollectionReference dbMessages = FirebaseFirestore.getInstance()
-                .collection(DATABASE_CHANNELS_COLLECTION).document(this.chatId)
-                .collection(DATABASE_MESSAGE_COLLECTION);
-        dbMessages.add(message);
-    }
-
-    public boolean isInitialised() {
-        return this.chatId != null;
     }
 
     public String getCustomerId() {
@@ -160,6 +167,18 @@ public class ChatChannel implements Parcelable {
         this.chatId = chatId;
     }
 
+    public void setUsers(ArrayList<MessageAuthor> users) {
+        this.users = users;
+    }
+
+    public boolean isBusiness() {
+        return isBusiness;
+    }
+
+    public void setBusiness(boolean business) {
+        isBusiness = business;
+    }
+
     public long getTime() {
         return time;
     }
@@ -168,32 +187,65 @@ public class ChatChannel implements Parcelable {
         this.time = time;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
+    @Override
+    public String getId() {
+        return this.chatId;
     }
 
-    public void setLastMessage(String lastMessage) {
+    @Override
+    public String getDialogPhoto() {
+        return null;
+    }
+
+    @Override
+    public String getDialogName() {
+        return this.isBusiness ? this.customerName : this.businessName;
+    }
+
+    @Override
+    public List<? extends IUser> getUsers() {
+        return this.users;
+    }
+
+    @Override
+    public IMessage getLastMessage() {
+        return this.lastMessage;
+    }
+
+    @Override
+    public void setLastMessage(IMessage message) {
         this.lastMessage = lastMessage;
     }
 
-    public int getUnreadMessageCount() {
-        return unreadMessageCount;
+    @Override
+    public int getUnreadCount() {
+        return this.unreadCount;
     }
 
-    public void setUnreadMessageCount(int unreadMessageCount) {
-        this.unreadMessageCount = unreadMessageCount;
+
+    public void setUnreadCount(int unreadCount) {
+        this.unreadCount = unreadCount;
     }
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChatChannel that = (ChatChannel) o;
+        ChatDialogue that = (ChatDialogue) o;
         return Objects.equals(chatId, that.chatId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(chatId);
+    }
+
+    @Override
+    public String toString() {
+        return "ChatChannel{" +
+                "customerName='" + customerName + '\'' +
+                ", businessName='" + businessName + '\'' +
+                '}';
     }
 }

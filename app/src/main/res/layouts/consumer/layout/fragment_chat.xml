@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
-    android:background="#222222"
+    android:background="#fcfcfc"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".viewmodel.consumer.ChatFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatChannelsRv"
+    <com.stfalcon.chatkit.dialogs.DialogsList
+        android:id="@+id/chatDialogsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

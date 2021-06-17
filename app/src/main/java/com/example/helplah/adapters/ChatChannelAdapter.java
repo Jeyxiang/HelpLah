@@ -13,7 +13,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
-import com.example.helplah.models.ChatChannel;
+import com.example.helplah.models.ChatDialogue;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatChannelAdapter extends FirestoreRecyclerAdapter<ChatChannel, ChatChannelAdapter.ChatViewHolder> {
+public class ChatChannelAdapter extends FirestoreRecyclerAdapter<ChatDialogue, ChatChannelAdapter.ChatViewHolder> {
 
     public interface ChatClickListener {
 
@@ -37,7 +37,7 @@ public class ChatChannelAdapter extends FirestoreRecyclerAdapter<ChatChannel, Ch
     private ActionMode actionMode;
     private Context context;
 
-    public ChatChannelAdapter(@NonNull FirestoreRecyclerOptions<ChatChannel> options,
+    public ChatChannelAdapter(@NonNull FirestoreRecyclerOptions<ChatDialogue> options,
                               ChatClickListener listener, RecyclerView rv) {
         super(options);
         this.mListener = listener;
@@ -54,7 +54,7 @@ public class ChatChannelAdapter extends FirestoreRecyclerAdapter<ChatChannel, Ch
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull ChatChannel model) {
+    protected void onBindViewHolder(@NonNull ChatViewHolder holder, int position, @NonNull ChatDialogue model) {
         holder.bindChatChannel(getItem(position));
     }
 
@@ -83,20 +83,14 @@ public class ChatChannelAdapter extends FirestoreRecyclerAdapter<ChatChannel, Ch
         }
 
         @SuppressLint("SetTextI18n")
-        public void bindChatChannel(ChatChannel chatChannel) {
+        public void bindChatChannel(ChatDialogue chatDialogue) {
             String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            if (id.equals(chatChannel.getCustomerId())) {
-                this.chatName.setText(chatChannel.getBusinessName());
+            if (id.equals(chatDialogue.getCustomerId())) {
+                this.chatName.setText(chatDialogue.getBusinessName());
             } else {
-                this.chatName.setText(chatChannel.getCustomerName());
+                this.chatName.setText(chatDialogue.getCustomerName());
             }
 
-            this.lastMessage.setText(chatChannel.getLastMessage());
-            this.lastMessageDate.setText(getTimeAgo(chatChannel.getTime()));
-            if (chatChannel.getUnreadMessageCount() > 0) {
-                this.unreadCountLayout.setVisibility(View.VISIBLE);
-                this.unreadCount.setText(chatChannel.getUnreadMessageCount() + "");
-            }
         }
 
         private String getTimeAgo(long time) {

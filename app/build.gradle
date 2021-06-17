@@ -88,6 +88,5 @@ dependencies {
     implementation files('libs/mail.jar')
 
     implementation 'com.github.stfalcon-studio:Chatkit:0.4.1'
-
 }
 apply plugin: 'com.google.gms.google-services'

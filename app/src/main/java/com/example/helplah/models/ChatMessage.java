@@ -1,8 +1,14 @@
 package com.example.helplah.models;
 
+import androidx.annotation.Nullable;
+
+import com.stfalcon.chatkit.commons.models.IMessage;
+import com.stfalcon.chatkit.commons.models.IUser;
+import com.stfalcon.chatkit.commons.models.MessageContentType;
+
 import java.util.Date;
 
-public class ChatMessage {
+public class ChatMessage implements IMessage, MessageContentType.Image {
 
     public static final String FIELD_DATE = "date";
     public static final String FIELD_STATUS = "status";
@@ -10,66 +16,46 @@ public class ChatMessage {
     public static final int STATUS_UNREAD = 1;
     public static final int STATUS_READ = 2;
 
-    private String senderId;
+
     private String messageText;
-    private boolean isImage;
+    private String messageId;
+    private String imageURL = null;
+    private MessageAuthor user;
     private Date date;
     private int status;
 
     public ChatMessage() {}
 
-    private ChatMessage(String senderId, String messageText, boolean isImage) {
-        this.senderId = senderId;
+    public ChatMessage(String senderId, String senderName, String messageText) {
+        this.user = new MessageAuthor(senderId, senderName);
         this.messageText = messageText;
-        this.isImage = isImage;
         this.date = new Date();
+        this.user = new MessageAuthor(senderId, senderName);
     }
 
-    public static ChatMessage newTextChat(String senderId, String messageText) {
-        return new ChatMessage(senderId, messageText, false);
+    @Override
+    public String getId() {
+        return this.messageId;
     }
 
-    public static ChatMessage newImageChat(String senderId, String imageLink) {
-        return new ChatMessage(senderId, imageLink, true);
+    @Override
+    public String getText() {
+        return this.messageText;
     }
 
-    public String getSenderId() {
-        return senderId;
+    @Override
+    public IUser getUser() {
+        return this.user;
     }
 
-    public void setSenderId(String senderId) {
-        this.senderId = senderId;
+    @Override
+    public Date getCreatedAt() {
+        return this.date;
     }
 
-    public String getMessageText() {
-        return messageText;
-    }
-
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
-    }
-
-    public boolean isImage() {
-        return isImage;
-    }
-
-    public void setImage(boolean image) {
-        isImage = image;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
+    @Nullable
+    @Override
+    public String getImageUrl() {
+        return this.imageURL == null ? null : this.imageURL;
     }
 }
