@@ -21,12 +21,15 @@ import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cometchat.pro.constants.CometChatConstants;
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.uikit.ui_resources.constants.UIKitConstants;
 import com.example.helplah.R;
 import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.adapters.DescriptionCategoryAdapter;
 import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.AvailabilityStatus;
-import com.example.helplah.models.ChatDialogue;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.Review;
 import com.example.helplah.models.ReviewQuery;
@@ -194,13 +197,27 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         CollectionReference users = FirebaseFirestore.getInstance().collection(User.DATABASE_COLLECTION);
         String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
 
-        users.document(userId).get().addOnSuccessListener(snapshot -> {
-            User user = snapshot.toObject(User.class);
-            ChatDialogue chatDialogue = new ChatDialogue(userId, Objects.requireNonNull(user).getUsername(),
-                    listingId, listing.getName(), false);
-            ChatDialogue.goToChatChannel(chatDialogue, bundle -> {
+        com.cometchat.pro.models.User receiver = new com.cometchat.pro.models.User();
+        receiver.setUid(listingId);
+        receiver.setName(listing.getName());
+        CometChat.getUser(listingId, new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
+            @Override
+            public void onSuccess(com.cometchat.pro.models.User user) {
+                Log.d(TAG, "onSuccess: Found" + user.getName());
+                Bundle bundle = new Bundle();
+                bundle.putString(UIKitConstants.IntentStrings.UID, user.getUid());
+                bundle.putString(UIKitConstants.IntentStrings.AVATAR, user.getAvatar());
+                bundle.putString(UIKitConstants.IntentStrings.STATUS, user.getStatus());
+                bundle.putString(UIKitConstants.IntentStrings.NAME, user.getName());
+                bundle.putString(UIKitConstants.IntentStrings.LINK,user.getLink());
+                bundle.putString(UIKitConstants.IntentStrings.TYPE, CometChatConstants.RECEIVER_TYPE_USER);
                 Navigation.findNavController(v).navigate(R.id.action_listingDescription_to_chatView, bundle);
-            });
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d(TAG, "onError: Failed. This user may be a mock data and has no account to chat with. " + e.getMessage());
+            }
         });
     }
 

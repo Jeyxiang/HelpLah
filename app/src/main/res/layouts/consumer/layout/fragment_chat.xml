@@ -7,9 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".viewmodel.consumer.ChatFragment">
 
-    <com.stfalcon.chatkit.dialogs.DialogsList
-        android:id="@+id/chatDialogsList"
+    <fragment
+        android:id="@+id/conversationList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        class="com.cometchat.pro.uikit.ui_components.chats.CometChatConversationList" />
 
 </LinearLayout>

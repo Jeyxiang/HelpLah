@@ -1,2 +1,3 @@
 rootProject.name = "Helplah"
 include ':app'
+include ':uikit'

@@ -1,8 +1,6 @@
 package com.example.helplah.models;
 
-import com.stfalcon.chatkit.commons.models.IUser;
-
-public class MessageAuthor implements IUser {
+public class MessageAuthor  {
 
     private String id;
     private String name;
@@ -27,18 +25,4 @@ public class MessageAuthor implements IUser {
         this.avatar = avatar;
     }
 
-    @Override
-    public String getId() {
-        return this.id;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String getAvatar() {
-        return null;
-    }
 }

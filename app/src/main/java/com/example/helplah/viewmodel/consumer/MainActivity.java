@@ -9,6 +9,8 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
+import com.cometchat.pro.core.CometChat;
+import com.cometchat.pro.exceptions.CometChatException;
 import com.example.helplah.R;
 import com.example.helplah.models.User;
 import com.example.helplah.viewmodel.business.BusinessMainActivity;
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main activity";
 
+    private String authKey = "c9ecc97d55c6800554e9c618c464b0246ff316f2";
+    private String userId;
+    private String userName;
     private BottomNavigationView navigationBar;
     private NavController navController;
 
@@ -42,19 +47,23 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        String id = mUser.getUid();
+        this.userId = mUser.getUid();
+
 
         CollectionReference dbUsers = FirebaseFirestore.getInstance().collection(User.DATABASE_COLLECTION);
 
-        dbUsers.whereEqualTo(FieldPath.documentId(), id).get().addOnSuccessListener(queryDocumentSnapshots -> {
+        dbUsers.whereEqualTo(FieldPath.documentId(), this.userId).get().addOnSuccessListener(queryDocumentSnapshots -> {
             for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                 User user = snapshot.toObject(User.class);
+                userName = user.getUsername();
                 if (user.isBusiness()) {
+                    configureCometChat();
                     Intent goToBiz = new Intent(getApplicationContext(), BusinessMainActivity.class);
                     startActivity(goToBiz);
                     this.finish();
                     return;
                 } else{
+                    configureCometChat();
                     goToConsumer();
                 }
             }
@@ -79,6 +88,45 @@ public class MainActivity extends AppCompatActivity {
                     navController.popBackStack(R.id.chatFragment, false);
                 case R.id.accountFragment:
                     navController.popBackStack(R.id.accountFragment, false);
+            }
+        });
+    }
+
+    private void configureCometChat() {
+        if (CometChat.getLoggedInUser() != null) {
+            return;
+        }
+        cometChatLogin();
+    }
+
+    private void cometChatLogin() {
+        CometChat.login(this.userId, authKey, new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
+            @Override
+            public void onSuccess(com.cometchat.pro.models.User user) {
+                Log.d(TAG, "onSuccess: Signed in successfully " + user.toString());
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d(TAG, "onError: No user found " + e.getMessage());
+                cometCreateUser();
+            }
+        });
+    }
+
+    private void cometCreateUser() {
+        com.cometchat.pro.models.User user = new com.cometchat.pro.models.User();
+        user.setUid(this.userId);
+        user.setName(this.userName);
+        CometChat.createUser(user, authKey, new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
+            @Override
+            public void onSuccess(com.cometchat.pro.models.User user) {
+                cometChatLogin();
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d(TAG, "onError: Failed to log in or create user. Try again " + e.getMessage());
             }
         });
     }

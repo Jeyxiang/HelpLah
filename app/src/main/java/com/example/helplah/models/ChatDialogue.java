@@ -7,17 +7,13 @@ import android.os.Parcelable;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.stfalcon.chatkit.commons.models.IDialog;
-import com.stfalcon.chatkit.commons.models.IMessage;
-import com.stfalcon.chatkit.commons.models.IUser;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public class ChatDialogue implements Parcelable, IDialog {
+public class ChatDialogue implements Parcelable {
 
     public static final String DATABASE_CHANNELS_COLLECTION = "Chats";
     public static final String DATABASE_MESSAGE_COLLECTION = "Messages";
@@ -185,41 +181,6 @@ public class ChatDialogue implements Parcelable, IDialog {
 
     public void setTime(long time) {
         this.time = time;
-    }
-
-    @Override
-    public String getId() {
-        return this.chatId;
-    }
-
-    @Override
-    public String getDialogPhoto() {
-        return null;
-    }
-
-    @Override
-    public String getDialogName() {
-        return this.isBusiness ? this.customerName : this.businessName;
-    }
-
-    @Override
-    public List<? extends IUser> getUsers() {
-        return this.users;
-    }
-
-    @Override
-    public IMessage getLastMessage() {
-        return this.lastMessage;
-    }
-
-    @Override
-    public void setLastMessage(IMessage message) {
-        this.lastMessage = lastMessage;
-    }
-
-    @Override
-    public int getUnreadCount() {
-        return this.unreadCount;
     }
 
 

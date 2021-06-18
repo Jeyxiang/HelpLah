@@ -27,6 +27,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        manifestPlaceholders = [file_provider: "com.example.helplah"]
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -36,6 +38,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -87,6 +94,7 @@ dependencies {
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
 
-    implementation 'com.github.stfalcon-studio:Chatkit:0.4.1'
+    implementation 'com.cometchat:pro-android-chat-sdk:2.3.5'
+    implementation project(path: ':uikit')
 }
 apply plugin: 'com.google.gms.google-services'

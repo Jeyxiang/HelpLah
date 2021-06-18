@@ -1,47 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+    android:background="#fcfcfc"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#222222"
-    android:weightSum="1"
     tools:context=".viewmodel.consumer.ChatView">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/layoutChat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        android:background="@color/appRed" >
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbarChat_View"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/Widget.AppCompat.Toolbar"
-            app:popupTheme="@style/Theme.AppCompat.Light">
-
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <com.stfalcon.chatkit.messages.MessagesList
-        android:id="@+id/chatMessageList"
+    <fragment
+        android:id="@+id/messageList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"/>
-
-    <com.stfalcon.chatkit.messages.MessageInput
-        android:id="@+id/chatMessageInput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:inputHint="Message"
-        app:inputTextColor="@color/white"
-        app:inputHintColor="@color/white"
-        android:layout_weight="0.1" />
+        class="com.cometchat.pro.uikit.ui_components.messages.message_list.CometChatMessageList" />
 
 </LinearLayout>
