@@ -6,6 +6,7 @@ import android.util.Log;
 import com.cometchat.pro.core.AppSettings;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.uikit.ui_settings.UIKitSettings;
 
 public class MainApplication extends Application {
 
@@ -32,5 +33,11 @@ public class MainApplication extends Application {
                 Log.d(TAG, "onError: Initialization failed " + e.getMessage());
             }
         });
+
+        UIKitSettings.calls(false);
+        UIKitSettings.userAudioCall(false);
+        UIKitSettings.userVideoCall(false);
+        UIKitSettings.blockUser(false);
+        UIKitSettings.threadedChats(false);
     }
 }

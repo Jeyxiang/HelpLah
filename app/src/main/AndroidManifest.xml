@@ -21,7 +21,8 @@
         <activity android:name=".viewmodel.login_screen.BizRegActivity" />
         <activity android:name=".viewmodel.login_screen.RegisterScreen" />
         <activity android:name=".viewmodel.login_screen.LoginScreen" />
-        <activity android:name=".viewmodel.consumer.MainActivity">
+        <activity android:name=".viewmodel.consumer.MainActivity"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

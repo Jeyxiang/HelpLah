@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:stateListAnimator="@animator/toolbar_elevation"
     android:layout_height="wrap_content"
+    android:backgroundTint="#00022E"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <RelativeLayout
@@ -13,7 +14,7 @@
             android:layout_margin="8dp"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_back_24dp"
-            android:tint="@color/primaryTextColor"
+            android:tint="@color/appRed"
             android:id="@+id/back_action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
@@ -39,7 +40,6 @@
                 android:maxLines="1"
                 tools:text="@tools:sample/full_names"
                 android:layout_width="wrap_content"
-                android:textColor="@color/primaryTextColor"
                 android:layout_height="wrap_content"/>
 
             <TextView
@@ -67,7 +67,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:id="@+id/video_call_action"
-                android:tint="@color/colorPrimary"
+                android:tint="@color/appRed"
                 android:src="@drawable/ic_videocall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -76,7 +76,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:id="@+id/audio_call_action"
-                android:tint="@color/colorPrimary"
+                android:tint="@color/appRed"
                 android:src="@drawable/ic_audiocall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -85,7 +85,7 @@
                 android:focusable="true"
                 android:padding="8dp"
                 android:id="@+id/info_action"
-                android:tint="@color/colorPrimary"
+                android:tint="@color/appRed"
                 android:src="@drawable/ic_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
