@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.adapters.JobRequestsAdapter;
+import com.example.helplah.models.ChatMessage;
 import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -376,7 +377,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     @Override
     public void onChatClicked(View v, JobRequests request) {
-        // TODO
+        ChatMessage.createChat(request.getCustomerId(), request.getCustomerName(), getActivity());
     }
 
     private void declineRequest(String documentId, String message) {

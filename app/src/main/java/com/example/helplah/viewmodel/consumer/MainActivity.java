@@ -93,10 +93,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configureCometChat() {
-        if (CometChat.getLoggedInUser() != null) {
+        if (CometChat.getLoggedInUser() == null) {
+            cometChatLogin();
             return;
         }
-        cometChatLogin();
+        String cometId = CometChat.getLoggedInUser().getUid();
+        if (!cometId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            cometChatLogin();
+        }
     }
 
     private void cometChatLogin() {

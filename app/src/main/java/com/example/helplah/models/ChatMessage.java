@@ -1,15 +1,16 @@
 package com.example.helplah.models;
 
-import android.os.Bundle;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.cometchat.pro.constants.CometChatConstants;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.uikit.ui_components.messages.message_list.CometChatMessageListActivity;
 import com.cometchat.pro.uikit.ui_resources.constants.UIKitConstants;
 
 import java.util.Date;
-import java.util.function.Consumer;
 
 public class ChatMessage {
 
@@ -38,7 +39,7 @@ public class ChatMessage {
         this.user = new MessageAuthor(senderId, senderName);
     }
 
-    public static void createChat(String receiverId, String receiverName, Consumer<Bundle> action) {
+    public static void createChat(String receiverId, String receiverName, Context context) {
         com.cometchat.pro.models.User receiver = new com.cometchat.pro.models.User();
         receiver.setUid(receiverId);
         receiver.setName(receiverName);
@@ -46,14 +47,14 @@ public class ChatMessage {
             @Override
             public void onSuccess(com.cometchat.pro.models.User user) {
                 Log.d(TAG, "onSuccess: Found" + user.getName());
-                Bundle bundle = new Bundle();
-                bundle.putString(UIKitConstants.IntentStrings.UID, user.getUid());
-                bundle.putString(UIKitConstants.IntentStrings.AVATAR, user.getAvatar());
-                bundle.putString(UIKitConstants.IntentStrings.STATUS, user.getStatus());
-                bundle.putString(UIKitConstants.IntentStrings.NAME, user.getName());
-                bundle.putString(UIKitConstants.IntentStrings.LINK,user.getLink());
-                bundle.putString(UIKitConstants.IntentStrings.TYPE, CometChatConstants.RECEIVER_TYPE_USER);
-                action.accept(bundle);
+                Intent intent = new Intent(context, CometChatMessageListActivity.class);
+                intent.putExtra(UIKitConstants.IntentStrings.UID, user.getUid());
+                intent.putExtra(UIKitConstants.IntentStrings.AVATAR, user.getAvatar());
+                intent.putExtra(UIKitConstants.IntentStrings.STATUS, user.getStatus());
+                intent.putExtra(UIKitConstants.IntentStrings.NAME, user.getName());
+                intent.putExtra(UIKitConstants.IntentStrings.LINK,user.getLink());
+                intent.putExtra(UIKitConstants.IntentStrings.TYPE, CometChatConstants.RECEIVER_TYPE_USER);
+                context.startActivity(intent);
             }
 
             @Override

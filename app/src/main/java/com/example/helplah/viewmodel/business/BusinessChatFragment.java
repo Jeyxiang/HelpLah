@@ -1,5 +1,6 @@
 package com.example.helplah.viewmodel.business;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,59 +8,39 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 
+import com.cometchat.pro.constants.CometChatConstants;
+import com.cometchat.pro.models.Conversation;
+import com.cometchat.pro.models.User;
+import com.cometchat.pro.uikit.ui_components.chats.CometChatConversationList;
+import com.cometchat.pro.uikit.ui_components.messages.message_list.CometChatMessageListActivity;
+import com.cometchat.pro.uikit.ui_resources.constants.UIKitConstants;
+import com.cometchat.pro.uikit.ui_resources.utils.item_clickListener.OnItemClickListener;
 import com.example.helplah.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BusinessChatFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BusinessChatFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public BusinessChatFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BusinessChatFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BusinessChatFragment newInstance(String param1, String param2) {
-        BusinessChatFragment fragment = new BusinessChatFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_business_chat, container, false);
+        View v = inflater.inflate(R.layout.fragment_business_chat, container, false);
+        CometChatConversationList.setItemClickListener(new OnItemClickListener<Conversation>() {
+            @Override
+            public void OnItemClick(Conversation var, int position) {
+                User user = (User) var.getConversationWith();
+                Intent intent = new Intent(getActivity(), CometChatMessageListActivity.class);
+                intent.putExtra(UIKitConstants.IntentStrings.UID, user.getUid());
+                intent.putExtra(UIKitConstants.IntentStrings.NAME, user.getName());
+                intent.putExtra(UIKitConstants.IntentStrings.AVATAR, user.getAvatar());
+                intent.putExtra(UIKitConstants.IntentStrings.TYPE, CometChatConstants.RECEIVER_TYPE_USER);
+                startActivity(intent);
+            }
+        });
+        return v;
     }
 }

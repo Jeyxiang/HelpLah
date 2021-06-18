@@ -24,9 +24,6 @@
         <action
             android:id="@+id/action_user_write_review"
             app:destination="@id/writeReviewFragment" />
-        <action
-            android:id="@+id/action_jobRequestsFragment_to_chatView"
-            app:destination="@id/chatView" />
     </fragment>
     <fragment
         android:id="@+id/servicesCategoriesFragment"
@@ -42,11 +39,7 @@
         android:id="@+id/chatFragment"
         android:name="com.example.helplah.viewmodel.consumer.ChatFragment"
         android:label="fragment_chat"
-        tools:layout="@layout/fragment_chat" >
-        <action
-            android:id="@+id/action_chatFragment_to_chatView"
-            app:destination="@id/chatView" />
-    </fragment>
+        tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/businessListingsFragment"
         android:name="com.example.helplah.viewmodel.consumer.BusinessListingsFragment"
@@ -76,9 +69,6 @@
         <action
             android:id="@+id/action_view_reviews"
             app:destination="@id/viewReviewsFragment" />
-        <action
-            android:id="@+id/action_listingDescription_to_chatView"
-            app:destination="@id/chatView" />
     </fragment>
     <fragment
         android:id="@+id/sendJobRequestFragment"
@@ -95,9 +85,4 @@
         android:name="com.example.helplah.viewmodel.consumer.ViewReviewsFragment"
         android:label="fragment_view_reviews"
         tools:layout="@layout/fragment_view_reviews" />
-    <fragment
-        android:id="@+id/chatView"
-        android:name="com.example.helplah.viewmodel.consumer.ChatView"
-        android:label="fragment_chat_view"
-        tools:layout="@layout/fragment_chat_view" />
 </navigation>
