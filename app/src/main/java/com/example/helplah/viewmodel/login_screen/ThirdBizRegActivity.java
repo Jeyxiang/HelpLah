@@ -6,7 +6,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,9 +16,6 @@ import com.example.helplah.models.Listings;
 import com.example.helplah.models.Services;
 import com.example.helplah.models.User;
 import com.example.helplah.viewmodel.consumer.MainActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -88,28 +84,29 @@ public class ThirdBizRegActivity extends AppCompatActivity {
     private void createBiz() {
         Log.d(TAG, "createBiz: " + emailAdd);
         Log.d(TAG, "createBiz: " + passWord);
-        this.mAuth.createUserWithEmailAndPassword(emailAdd,passWord)
-                .addOnCompleteListener(ThirdBizRegActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG,"onComplete: Completed registration");
-                        if (task.isSuccessful()) {
-                            //Successfully created user
-                            FirebaseUser bizUser = mAuth.getCurrentUser();
-                            if (bizUser == null) {
-                                Toast.makeText(ThirdBizRegActivity.this,"Registration failed",Toast.LENGTH_LONG).show();
-                            } else {
-                                addBizUserToFirestore(bizUser.getUid());
-                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                startActivity(intent);
-                            }
-                        } else {
-                            //Failed to create user
-                            Toast.makeText(ThirdBizRegActivity.this,
-                                    "Registration failed",Toast.LENGTH_LONG).show();
-                        }
+        if (!checkFields()) {
+            return;
 
+        }
+        this.mAuth.createUserWithEmailAndPassword(emailAdd,passWord)
+                .addOnCompleteListener(ThirdBizRegActivity.this, task -> {
+                    Log.d(TAG,"onComplete: Completed registration");
+                    if (task.isSuccessful()) {
+                        //Successfully created user
+                        FirebaseUser bizUser = mAuth.getCurrentUser();
+                        if (bizUser == null) {
+                            Toast.makeText(ThirdBizRegActivity.this,"Registration failed",Toast.LENGTH_LONG).show();
+                        } else {
+                            addBizUserToFirestore(bizUser.getUid());
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(intent);
+                        }
+                    } else {
+                        //Failed to create user
+                        Toast.makeText(ThirdBizRegActivity.this,
+                                "Registration failed",Toast.LENGTH_LONG).show();
                     }
+
                 });
     }
 
@@ -131,5 +128,14 @@ public class ThirdBizRegActivity extends AppCompatActivity {
         user.setUserId(id);
         userCollection.document(id).set(user);
         businessCollection.document(id).set(this.listing);
+    }
+
+    private boolean checkFields() {
+        ArrayList<String> serviceList = (ArrayList<String>) this.serviceAdapter.listofSelected();
+        if (serviceList.size() == 0) {
+            Toast.makeText(this, "Please select a service", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

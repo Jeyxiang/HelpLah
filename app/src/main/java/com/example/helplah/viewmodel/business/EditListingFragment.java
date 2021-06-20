@@ -110,9 +110,12 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
                 editWeb.setText(updatedListing.getWebsite());
                 editDescription.setText(updatedListing.getDescription());
                 editNumber.setText(updatedListing.getPhoneNumber() + "");
-                editMinPrice.setText(updatedListing.getMinPrice() + "");
+                int minPrice = (int) updatedListing.getMinPrice();
+                editMinPrice.setText(minPrice < 0 ? "0" : minPrice + "");
                 editPriceNote.setText(updatedListing.getPricingNote());
-                editAvailability.setSelection(updatedListing.getAvailability() - 1);
+                Log.d(TAG, "onEvent: availability is " + updatedListing.getAvailability());
+                int position = updatedListing.getAvailability() - 1;
+                editAvailability.setSelection(position < 0 ? 5 : position);
 
 
                 //Check the language boxes TODO
@@ -145,12 +148,7 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
+        backButton.setOnClickListener(v1 -> getActivity().onBackPressed());
 
         updateButton.setOnClickListener(x -> saveChanges());
 

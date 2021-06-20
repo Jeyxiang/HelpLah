@@ -5,7 +5,6 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 
 /**
  * Abstracts a business listing in the app.
@@ -26,8 +25,7 @@ public class Listings implements Parcelable {
     public static final String FIELD_PRICING_NOTE = "pricingNote";
     public static final String FIELD_SERVICES_LIST = "servicesList.servicesProvided";
     public static final String FIELD_AVAILABILITY = "availability";
-    public static final String FIELD_LANGUAGE = "language";
-    public static final String FIELD_LANGUAGE_SPOKEN = "languagesSpoken";
+    public static final String FIELD_LISTING_ID = "listingId";
 
     // Properties which the user can sort on
     public static final ArrayList<String> sortable = new ArrayList<>(Arrays.asList(FIELD_NAME,
@@ -55,7 +53,7 @@ public class Listings implements Parcelable {
     private int phoneNumber;
     private String website = "";
     private Services servicesList;
-    private HashMap<String, Boolean> languagesSpoken;  // TODO
+    private String listingId;
 
     // Firestore requires empty constructor to run
     public Listings() {}
@@ -92,6 +90,7 @@ public class Listings implements Parcelable {
         profilePic = in.readString();
         phoneNumber = in.readInt();
         website = in.readString();
+        listingId = in.readString();
     }
 
 
@@ -127,15 +126,7 @@ public class Listings implements Parcelable {
         dest.writeString(profilePic);
         dest.writeInt(phoneNumber);
         dest.writeString(website);
-    }
-
-    public static HashMap<String, Boolean> getTestLanguage() {
-        HashMap<String, Boolean> map = new HashMap<>();
-        map.put(LANGUAGE_ENGLISH, true);
-        map.put(LANGUAGE_CHINESE, true);
-        map.put(LANGUAGE_MALAY, true);
-        map.put(LANGUAGE_TAMIL, false);
-        return map;
+        dest.writeString(listingId);
     }
 
     public Services getServicesList() {
@@ -246,11 +237,11 @@ public class Listings implements Parcelable {
         return website;
     }
 
-    public HashMap<String, Boolean> getLanguagesSpoken() {
-        return languagesSpoken;
+    public String getListingId() {
+        return listingId;
     }
 
-    public void setLanguagesSpoken(HashMap<String, Boolean> languagesSpoken) {
-        this.languagesSpoken = languagesSpoken;
+    public void setListingId(String listingId) {
+        this.listingId = listingId;
     }
 }

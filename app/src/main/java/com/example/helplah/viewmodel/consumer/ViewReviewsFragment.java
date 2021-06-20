@@ -102,8 +102,8 @@ public class ViewReviewsFragment extends Fragment {
         reviewScore.setText(String.format("%.1f",
                 getArguments().getDouble(Listings.FIELD_REVIEW_SCORE)));
 
-        bindFilters();
         getQuery();
+        bindFilters();
 
         return this.rootView;
     }

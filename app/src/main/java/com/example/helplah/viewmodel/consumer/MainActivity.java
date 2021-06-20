@@ -22,6 +22,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSuccess(com.cometchat.pro.models.User user) {
                 Log.d(TAG, "onSuccess: Signed in successfully " + user.toString());
+                registerFCMToken();
             }
 
             @Override
@@ -132,6 +134,25 @@ public class MainActivity extends AppCompatActivity {
             public void onError(CometChatException e) {
                 Log.d(TAG, "onError: Failed to log in or create user. Try again " + e.getMessage());
             }
+        });
+    }
+
+    private void registerFCMToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                return;
+            }
+            CometChat.registerTokenForPushNotification(task.getResult(), new CometChat.CallbackListener<String>() {
+                @Override
+                public void onSuccess(String s) {
+                    Log.d(TAG, "onSuccess: Registered for push notifications with token " + task.getResult());
+                }
+
+                @Override
+                public void onError(CometChatException e) {
+                    Log.d(TAG, "onError: Failed to register for push notifications: " + e.getMessage());
+                }
+            });
         });
     }
 }
