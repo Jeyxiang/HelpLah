@@ -1,75 +1,75 @@
 <resources>
-    <string name="app_name">HelpLah</string>
-    <string name="bottom_navigation_item1">Search</string>
-    <string name="bottom_navigation_item2">Job Requests</string>
-    <string name="bottom_navigation_item3">Chats</string>
-    <string name="bottom_navigation_item4">Account</string>
+    <string name="app_name" translatable="false">HelpLah</string>
+    <string name="bottom_navigation_item1" translatable="false">Search</string>
+    <string name="bottom_navigation_item2" translatable="false">Job Requests</string>
+    <string name="bottom_navigation_item3" translatable="false">Chats</string>
+    <string name="bottom_navigation_item4" translatable="false">Account</string>
 
-    <string name="content_description_search">Searching</string>
-    <string name="content_description_filter">Filtering</string>
-    <string name="content_description_show_new">Show recently sent Job Requests</string>
-    <string name="content_description_remove_cancelled">Remove cancelled Job Requests</string>
-    <string name="content_description_remove_old">Remove Job Requests older than a week</string>
-    <string name="content_description_default">Restore default filters</string>
+    <string name="content_description_search" translatable="false">Searching</string>
+    <string name="content_description_filter" translatable="false">Filtering</string>
+    <string name="content_description_show_new" translatable="false">Show recently sent Job Requests</string>
+    <string name="content_description_remove_cancelled" translatable="false">Remove cancelled Job Requests</string>
+    <string name="content_description_remove_old" translatable="false">Remove Job Requests older than a week</string>
+    <string name="content_description_default" translatable="false">Restore default filters</string>
 
-    <string name="availability_4_hours">4 Hours</string>
-    <string name="availability_1_day">1 Day</string>
-    <string name="availability_2_days">2 Days</string>
-    <string name="availability_3_day">3 Days</string>
-    <string name="availability_1_week">1 Week</string>
+    <string name="availability_4_hours" translatable="false">4 Hours</string>
+    <string name="availability_1_day" translatable="false">1 Day</string>
+    <string name="availability_2_days" translatable="false">2 Days</string>
+    <string name="availability_3_day" translatable="false">3 Days</string>
+    <string name="availability_1_week" translatable="false">1 Week</string>
 
-    <string name="status_confirmed">Confirmed</string>
-    <string name="status_pending">Pending</string>
-    <string name="status_cancelled">Cancelled</string>
-    <string name="status_finished">Finished</string>
+    <string name="status_confirmed" translatable="false">Confirmed</string>
+    <string name="status_pending" translatable="false">Pending</string>
+    <string name="status_cancelled" translatable="false">Cancelled</string>
+    <string name="status_finished" translatable="false">Finished</string>
 
-    <string name="language_english">English</string>
-    <string name="language_mandarin">Mandarin</string>
-    <string name="language_malay">Malay</string>
-    <string name="language_tamil">Tamil</string>
-    <string name="language_no_preference">No Preference</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_mandarin" translatable="false">Mandarin</string>
+    <string name="language_malay" translatable="false">Malay</string>
+    <string name="language_tamil" translatable="false">Tamil</string>
+    <string name="language_no_preference" translatable="false">No Preference</string>
 
-    <string name="sort_by_score">Sort by Score</string>
-    <string name="sort_by_number_of_reviews">Sort by Popularity</string>
-    <string name="sort_by_price_ascending">Sort by Price (Ascending)</string>
-    <string name="sort_by_price_descending">Sort by Price (Descending)</string>
+    <string name="sort_by_score" translatable="false">Sort by Score</string>
+    <string name="sort_by_number_of_reviews" translatable="false">Sort by Popularity</string>
+    <string name="sort_by_price_ascending" translatable="false">Sort by Price (Ascending)</string>
+    <string name="sort_by_price_descending" translatable="false">Sort by Price (Descending)</string>
 
-    <string name="date_today">Next 24 Hours</string>
-    <string name="date_next_3_days">Next 3 Days</string>
-    <string name="date_next_week">Next Week</string>
-    <string name="date_past_week">Past Week</string>
-    <string name="date_all">All</string>
+    <string name="date_today" translatable="false">Next 24 Hours</string>
+    <string name="date_next_3_days" translatable="false">Next 3 Days</string>
+    <string name="date_next_week" translatable="false">Next Week</string>
+    <string name="date_past_week" translatable="false">Past Week</string>
+    <string name="date_all" translatable="false">All</string>
 
-    <string name="complain_title">Write a brief summary of the Complain, or any feedback regarding our services.
+    <string name="complain_title" translatable="false">Write a brief summary of the Complain, or any feedback regarding our services.
     Include necessary information if required.</string>
 
-    <string name="sort_ascending">Oldest first </string>
-    <string name="sort_descending">Newest first</string>
-    <string name="sort_date_of_job_ascending">Date of Job (Ascending)</string>
-    <string name="sort_date_of_job_descending">Date of Job (Descending)</string>
-    <string name="sort_date_created">Show Recent Requests</string>
+    <string name="sort_ascending" translatable="false">Oldest first </string>
+    <string name="sort_descending" translatable="false">Newest first</string>
+    <string name="sort_date_of_job_ascending" translatable="false">Date of Job (Ascending)</string>
+    <string name="sort_date_of_job_descending" translatable="false">Date of Job (Descending)</string>
+    <string name="sort_date_created" translatable="false">Show Recent Requests</string>
 
-    <string name="sort_review_score_descending">Highest First</string>
-    <string name="sort_review_score_ascending">Lowest First</string>
-    <string name="sort_review_score_recent">Most Recent</string>
+    <string name="sort_review_score_descending" translatable="false">Highest First</string>
+    <string name="sort_review_score_ascending" translatable="false">Lowest First</string>
+    <string name="sort_review_score_recent" translatable="false">Most Recent</string>
 
-    <string name="send_job_request_confirmation">Send job request?</string>
-    <string name="edit_job_request_confirmation">Edit job request?</string>
-    <string name="cancel_Request_dialog_title">Are you sure you want to cancel the request?</string>
+    <string name="send_job_request_confirmation" translatable="false">Send job request?</string>
+    <string name="edit_job_request_confirmation" translatable="false">Edit job request?</string>
+    <string name="cancel_Request_dialog_title" translatable="false">Are you sure you want to cancel the request?</string>
 
-    <string name="confirm_remove_cancelled_request">All cancelled requests will be removed</string>
-    <string name="confirm_remove_old_request">All requests older than a week will be removed</string>
-    <string name="confirm_remove_finished_request">All requests marked as finished will be removed</string>
-    <string name="irreversible_warning">This action is irreversible</string>
+    <string name="confirm_remove_cancelled_request" translatable="false">All cancelled requests will be removed</string>
+    <string name="confirm_remove_old_request" translatable="false">All requests older than a week will be removed</string>
+    <string name="confirm_remove_finished_request" translatable="false">All requests marked as finished will be removed</string>
+    <string name="irreversible_warning" translatable="false">This action is irreversible</string>
 
-    <string name="action_one_cancel">Cancel</string>
-    <string name="action_one_decline">Decline</string>
-    <string name="action_two_confirm">Confirm</string>
-    <string name="action_two_mark_finished">Finished</string>
-    <string name="action_two_edit">Edit</string>
-    <string name="action_two_leave_review">Review</string>
+    <string name="action_one_cancel" translatable="false">Cancel</string>
+    <string name="action_one_decline" translatable="false">Decline</string>
+    <string name="action_two_confirm" translatable="false">Confirm</string>
+    <string name="action_two_mark_finished" translatable="false">Finished</string>
+    <string name="action_two_edit" translatable="false">Edit</string>
+    <string name="action_two_leave_review" translatable="false">Review</string>
 
-    <string name="reset_password_title">Please enter your Email Address first. An authentication code will be sent to
+    <string name="reset_password_title" translatable="false">Please enter your Email Address first. An authentication code will be sent to
     you via Email</string>
 
     <!-- Services provided by the app -->

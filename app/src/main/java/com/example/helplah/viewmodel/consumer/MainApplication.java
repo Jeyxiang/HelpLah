@@ -7,22 +7,21 @@ import com.cometchat.pro.core.AppSettings;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.uikit.ui_settings.UIKitSettings;
+import com.example.helplah.models.Constants;
 
 public class MainApplication extends Application {
 
     private static final String TAG = "Main Application";
-
-    String appId = "189332e5f5e42a30";
-    String region = "us";
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         AppSettings appSettings = new AppSettings.AppSettingsBuilder()
-                .subscribePresenceForAllUsers().setRegion(region).build();
+                .subscribePresenceForAllUsers().setRegion(Constants.COMET_CHAT_REGION).build();
 
-        CometChat.init(this, appId, appSettings, new CometChat.CallbackListener<String>() {
+        CometChat.init(this, Constants.COMET_CHAT_APP_ID,
+                appSettings, new CometChat.CallbackListener<String>() {
             @Override
             public void onSuccess(String s) {
                 Log.d(TAG, "onSuccess: Initialisation completed");
@@ -39,5 +38,6 @@ public class MainApplication extends Application {
         UIKitSettings.userVideoCall(false);
         UIKitSettings.blockUser(false);
         UIKitSettings.threadedChats(false);
+        UIKitSettings.enableSoundForMessages(false); // TODO settings
     }
 }

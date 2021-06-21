@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_go_to_business_Settings"
             app:destination="@id/businessSettingsFragment" />
+        <action
+            android:id="@+id/action_businessAccountFragment_to_businessViewListing"
+            app:destination="@id/businessViewListing" />
     </fragment>
 
     <fragment
@@ -61,4 +64,18 @@
         android:name="com.example.helplah.viewmodel.business.WriteComplainFragment"
         android:label="write_complain_fragment"
         tools:layout="@layout/write_complain_fragment" />
+    <fragment
+        android:id="@+id/businessViewListing"
+        android:name="com.example.helplah.viewmodel.business.BusinessViewListing"
+        android:label="business_view_listing_fragment"
+        tools:layout="@layout/business_view_listing_fragment" >
+        <action
+            android:id="@+id/action_businessViewListing_to_viewReviewsFragment2"
+            app:destination="@id/viewReviewsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewReviewsFragment2"
+        android:name="com.example.helplah.viewmodel.consumer.ViewReviewsFragment"
+        android:label="fragment_view_reviews"
+        tools:layout="@layout/fragment_view_reviews" />
 </navigation>

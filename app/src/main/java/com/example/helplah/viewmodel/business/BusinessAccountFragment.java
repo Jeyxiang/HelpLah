@@ -1,83 +1,151 @@
 package com.example.helplah.viewmodel.business;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.helplah.R;
-import com.example.helplah.viewmodel.login_screen.LoginScreen;
+import com.example.helplah.adapters.AccountPagerAdapter;
+import com.example.helplah.models.Listings;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BusinessAccountFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import de.hdodenhof.circleimageview.CircleImageView;
+import me.zhanghai.android.materialratingbar.MaterialRatingBar;
+
 public class BusinessAccountFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static class BusinessAccountViewModel extends ViewModel {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+        Listings listings;
 
-    public BusinessAccountFragment() {
-        // Required empty public constructor
+        public Listings getListings() {
+            return listings;
+        }
+
+        public void setListings(Listings listings) {
+            this.listings = listings;
+        }
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BusinessAccountFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BusinessAccountFragment newInstance(String param1, String param2) {
-        BusinessAccountFragment fragment = new BusinessAccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private View rootView;
+    private BusinessAccountViewModel viewModel;
+    private TextView accountName;
+    private TextView accountScore;
+    private TextView accountNumberOfReviews;
+    private CircleImageView accountPicture;
+    private MaterialRatingBar ratingBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_business_account, container, false);
-        Button b = v.findViewById(R.id.logOutButton);
-        Button c = v.findViewById(R.id.goToSettings);
-        c.setOnClickListener(v1 -> Navigation.findNavController(v1).navigate(R.id.action_go_to_business_Settings));
+        this.rootView = inflater.inflate(R.layout.fragment_business_account, container, false);
+        this.viewModel = new ViewModelProvider(this).get(BusinessAccountViewModel.class);
 
-        b.setOnClickListener(v12 -> {
-            Intent i = new Intent(getActivity(), LoginScreen.class);
-            startActivity(i);
+        AppBarLayout appBarLayout = this.rootView.findViewById(R.id.accountAppBar);
+        configureAppBarScroll(appBarLayout);
+        this.accountName = this.rootView.findViewById(R.id.accountName);
+        this.accountScore = this.rootView.findViewById(R.id.accountScore);
+        this.accountNumberOfReviews = this.rootView.findViewById(R.id.accountNumberOfReviews);
+        this.accountPicture = this.rootView.findViewById(R.id.accountProfilePicture);
+        this.ratingBar = this.rootView.findViewById(R.id.accountRatingBar);
+
+        getListingFromDatabase();
+        configureViewPager();
+
+
+        return rootView;
+    }
+
+    private void getListingFromDatabase() {
+        if (this.viewModel.getListings() != null) {
+            bindData();
+            configureButtons();
+            return;
+        }
+        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference doc = FirebaseFirestore.getInstance()
+                .collection(Listings.DATABASE_COLLECTION).document(id);
+
+        doc.get().addOnSuccessListener(documentSnapshot -> {
+            Listings listing = documentSnapshot.toObject(Listings.class);
+            viewModel.setListings(listing);
+            bindData();
+            configureButtons();
+        });
+    }
+
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
+    private void bindData() {
+        Listings listing = this.viewModel.getListings();
+        this.accountName.setText(listing.getName());
+        this.accountScore.setText(String.format("%.1f", listing.getReviewScore()));
+        this.accountNumberOfReviews.setText("(" + listing.getNumberOfReviews() + " reviews)");
+        this.ratingBar.setRating((float) listing.getReviewScore());
+    }
+
+    private void configureButtons() {
+        Button editListingButton = this.rootView.findViewById(R.id.accountEditListingButton);
+        Button viewListingButton = this.rootView.findViewById(R.id.accountViewListingButton);
+        ImageView settingsButton = this.rootView.findViewById(R.id.accountSettingsButton);
+
+        editListingButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_edit_listing));
+
+        viewListingButton.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("listing", viewModel.getListings());
+            bundle.putString("id", viewModel.getListings().getListingId());
+            Navigation.findNavController(v)
+                    .navigate(R.id.action_businessAccountFragment_to_businessViewListing, bundle);
         });
 
-        Button editButton = v.findViewById(R.id.editListingButton);
-        editButton.setOnClickListener(x -> {
-            Navigation.findNavController(v).navigate(R.id.action_edit_listing);
+        settingsButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_go_to_business_Settings));
+    }
+
+    private void configureViewPager() {
+        ViewPager2 viewPager = this.rootView.findViewById(R.id.businessAccountViewPager);
+        TabLayout tabLayout = this.rootView.findViewById(R.id.businessAccountTabLayout);
+        AccountPagerAdapter accountPagerAdapter = new AccountPagerAdapter(this, true);
+        viewPager.setAdapter(accountPagerAdapter);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
+                tab.setText(position == 0 ? "My reviews" : "Notifications")
+        ).attach();
+    }
+
+    private void configureAppBarScroll(AppBarLayout appBarLayout) {
+
+        ConstraintLayout constraintLayout = this.rootView.findViewById(R.id.accountConstraintLayout);
+
+        appBarLayout.addOnOffsetChangedListener((BarLayout, verticalOffset) -> {
+            if (verticalOffset > -80) {
+                constraintLayout.setVisibility(View.VISIBLE);
+            } else {
+                constraintLayout.setVisibility(View.INVISIBLE);
+            }
         });
-        return v;
     }
 }

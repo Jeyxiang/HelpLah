@@ -76,7 +76,7 @@ public class Listings implements Parcelable {
         this.language = language;
     }
 
-    protected Listings(Parcel in) {
+    public Listings(Parcel in) {
         servicesList = in.readParcelable(Services.class.getClassLoader());
         name = in.readString();
         description = in.readString();

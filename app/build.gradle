@@ -32,6 +32,11 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packagingOptions {
+        exclude 'META-INF/*.kotlin_module'
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -68,6 +73,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:23.0.1'
     implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'com.google.firebase:firebase-functions'
     implementation 'com.google.firebase:firebase-messaging'
 
     // Material design dependencies
@@ -79,6 +85,7 @@ dependencies {
     implementation 'androidx.paging:paging-runtime:2.1.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation "androidx.recyclerview:recyclerview:1.2.1"
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // AndroidX implementation
@@ -95,7 +102,16 @@ dependencies {
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
 
+    // Chat API
     implementation 'com.cometchat:pro-android-chat-sdk:2.3.5'
     implementation project(path: ':uikit')
+
+
+    // Algolia dependency for firestore search
+    implementation 'com.algolia:instantsearch-android:2.10.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common:2.3.1"
+
+
 }
 apply plugin: 'com.google.gms.google-services'

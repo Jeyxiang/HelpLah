@@ -24,10 +24,7 @@ import com.example.helplah.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.ArrayList;
 
@@ -100,50 +97,47 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
                 .document(id);
 
         //Obtain the necessary data from the database
-        userDoc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent( DocumentSnapshot value, FirebaseFirestoreException error) {
+        userDoc.addSnapshotListener((value, error) -> {
 
-                updatedListing = value.toObject(Listings.class);
-                assert updatedListing != null;
-                editName.setText(updatedListing.getName());
-                editWeb.setText(updatedListing.getWebsite());
-                editDescription.setText(updatedListing.getDescription());
-                editNumber.setText(updatedListing.getPhoneNumber() + "");
-                int minPrice = (int) updatedListing.getMinPrice();
-                editMinPrice.setText(minPrice < 0 ? "0" : minPrice + "");
-                editPriceNote.setText(updatedListing.getPricingNote());
-                Log.d(TAG, "onEvent: availability is " + updatedListing.getAvailability());
-                int position = updatedListing.getAvailability() - 1;
-                editAvailability.setSelection(position < 0 ? 5 : position);
+            updatedListing = value.toObject(Listings.class);
+            assert updatedListing != null;
+            editName.setText(updatedListing.getName());
+            editWeb.setText(updatedListing.getWebsite());
+            editDescription.setText(updatedListing.getDescription());
+            editNumber.setText(updatedListing.getPhoneNumber() + "");
+            int minPrice = (int) updatedListing.getMinPrice();
+            editMinPrice.setText(minPrice < 0 ? "0" : minPrice + "");
+            editPriceNote.setText(updatedListing.getPricingNote());
+            Log.d(TAG, "onEvent: availability is " + updatedListing.getAvailability());
+            int position = updatedListing.getAvailability() - 1;
+            editAvailability.setSelection(position < 0 ? 5 : position);
 
 
-                //Check the language boxes TODO
+            //Check the language boxes TODO
 
-                ArrayList<String> arrServ = updatedListing.getServicesList().getServicesProvided();
+            ArrayList<String> arrServ = updatedListing.getServicesList().getServicesProvided();
 
-                for (String s : arrServ) {
-                    if (s.equals(Services.PLUMBER)) {
-                        checkboxPlumbing.setChecked(true);
-                    } else if (s.equals(Services.ELECTRICIAN)) {
-                        checkboxElectrician.setChecked(true);
-                    } else if (s.equals(Services.AIRCONDITIONING)) {
-                        checkboxAircon.setChecked(true);
-                    } else if (s.equals(Services.CLEANER)) {
-                        checkboxClean.setChecked(true);
-                    } else if (s.equals(Services.MOVERS)) {
-                        checkboxMovers.setChecked(true);
-                    } else if (s.equals(Services.LOCKSMITH)) {
-                        checkboxLockSmith.setChecked(true);
-                    } else if (s.equals(Services.PAINTERS)) {
-                        checkboxPaint.setChecked(true);
-                    } else if (s.equals(Services.PEST_CONTROL)) {
-                        checkBoxPest.setChecked(true);
-                    } else if (s.equals(Services.CAR_WASH)) {
-                        checkBoxCarWash.setChecked(true);
-                    } else if (s.equals(Services.LAUNDRY)) {
-                        checkBoxLaundry.setChecked(true);
-                    }
+            for (String s : arrServ) {
+                if (s.equals(Services.PLUMBER)) {
+                    checkboxPlumbing.setChecked(true);
+                } else if (s.equals(Services.ELECTRICIAN)) {
+                    checkboxElectrician.setChecked(true);
+                } else if (s.equals(Services.AIRCONDITIONING)) {
+                    checkboxAircon.setChecked(true);
+                } else if (s.equals(Services.CLEANER)) {
+                    checkboxClean.setChecked(true);
+                } else if (s.equals(Services.MOVERS)) {
+                    checkboxMovers.setChecked(true);
+                } else if (s.equals(Services.LOCKSMITH)) {
+                    checkboxLockSmith.setChecked(true);
+                } else if (s.equals(Services.PAINTERS)) {
+                    checkboxPaint.setChecked(true);
+                } else if (s.equals(Services.PEST_CONTROL)) {
+                    checkBoxPest.setChecked(true);
+                } else if (s.equals(Services.CAR_WASH)) {
+                    checkBoxCarWash.setChecked(true);
+                } else if (s.equals(Services.LAUNDRY)) {
+                    checkBoxLaundry.setChecked(true);
                 }
             }
         });

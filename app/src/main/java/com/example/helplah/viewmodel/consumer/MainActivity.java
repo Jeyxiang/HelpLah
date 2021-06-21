@@ -12,6 +12,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
 import com.example.helplah.R;
+import com.example.helplah.models.Constants;
 import com.example.helplah.models.User;
 import com.example.helplah.viewmodel.business.BusinessMainActivity;
 import com.example.helplah.viewmodel.login_screen.LoginScreen;
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "Main activity";
 
-    private String authKey = "c9ecc97d55c6800554e9c618c464b0246ff316f2";
     private String userId;
     private String userName;
     private BottomNavigationView navigationBar;
@@ -105,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void cometChatLogin() {
-        CometChat.login(this.userId, authKey, new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
+        CometChat.login(this.userId, Constants.COMET_CHAT_AUTH_KEY,
+                new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
             @Override
             public void onSuccess(com.cometchat.pro.models.User user) {
                 Log.d(TAG, "onSuccess: Signed in successfully " + user.toString());
@@ -124,7 +125,8 @@ public class MainActivity extends AppCompatActivity {
         com.cometchat.pro.models.User user = new com.cometchat.pro.models.User();
         user.setUid(this.userId);
         user.setName(this.userName);
-        CometChat.createUser(user, authKey, new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
+        CometChat.createUser(user, Constants.COMET_CHAT_AUTH_KEY,
+                new CometChat.CallbackListener<com.cometchat.pro.models.User>() {
             @Override
             public void onSuccess(com.cometchat.pro.models.User user) {
                 cometChatLogin();

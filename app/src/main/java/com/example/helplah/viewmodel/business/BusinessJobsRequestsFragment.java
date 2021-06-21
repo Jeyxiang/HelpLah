@@ -21,6 +21,7 @@ import com.example.helplah.adapters.JobRequestsAdapter;
 import com.example.helplah.models.ChatMessage;
 import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
+import com.example.helplah.models.NotificationHandler;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -350,9 +351,9 @@ public class BusinessJobsRequestsFragment extends Fragment implements
     public void actionTwoClicked(View v, JobRequests requests, String requestId) {
 
         if (requests.getStatus() == JobRequests.STATUS_PENDING) {
-            confirmJob(requestId);
+            confirmJob(requests, requestId);
         } else if (requests.getStatus() == JobRequests.STATUS_CONFIRMED) {
-            markJobAsFinished(requestId);
+            markJobAsFinished(requests, requestId);
         }
     }
 
@@ -369,7 +370,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         new MaterialAlertDialogBuilder(requireActivity())
                 .setTitle("Reason for cancellation")
                 .setPositiveButton("Ok", (dialog, which) -> declineRequest(documentId,
-                        selectedReason[0]))
+                        selectedReason[0], request))
                 .setSingleChoiceItems(declineReasons, 0, (dialog, which) ->
                         selectedReason[0] = declineReasons[which])
                 .show();
@@ -380,17 +381,19 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         ChatMessage.createChat(request.getCustomerId(), request.getCustomerName(), getActivity());
     }
 
-    private void declineRequest(String documentId, String message) {
+    private void declineRequest(String documentId, String message, JobRequests request) {
         Map<String, Object> updates = new HashMap<>();
         updates.put(JobRequests.FIELD_DECLINE_MESSAGE, message);
         updates.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
         CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
         db.document(documentId).update(updates);
+        request.setDeclineMessage(message);
+        NotificationHandler.requestCancelled(request, false);
         Toast.makeText(getActivity(), "Job request declined", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "declineRequest: " + message);
     }
 
-    private void confirmJob(String requestId) {
+    private void confirmJob(JobRequests request, String requestId) {
         MaterialTimePicker timePicker =
                 new MaterialTimePicker.Builder()
                         .setTimeFormat(TimeFormat.CLOCK_24H)
@@ -412,16 +415,18 @@ public class BusinessJobsRequestsFragment extends Fragment implements
             updates.put(JobRequests.FIELD_CONFIRMED_TIMING, time);
             updates.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CONFIRMED);
             collection.document(requestId).update(updates);
+            NotificationHandler.requestConfirmed(request);
             Toast.makeText(getActivity(), "Job request confirmed", Toast.LENGTH_SHORT).show();
         });
     }
 
-    private void markJobAsFinished(String requestId) {
+    private void markJobAsFinished(JobRequests request, String requestId) {
         CollectionReference collection = FirebaseFirestore.getInstance()
                 .collection(JobRequests.DATABASE_COLLECTION);
         Map<String, Object> updates = new HashMap<>();
         updates.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_FINISHED);
         collection.document(requestId).update(updates);
+        NotificationHandler.requestFinished(request);
         Toast.makeText(getActivity(), "Job request marked as finished", Toast.LENGTH_SHORT).show();
     }
 

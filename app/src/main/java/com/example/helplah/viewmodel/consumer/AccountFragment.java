@@ -5,74 +5,125 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.helplah.R;
+import com.example.helplah.adapters.AccountPagerAdapter;
+import com.example.helplah.models.User;
 import com.example.helplah.viewmodel.login_screen.LoginScreen;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class AccountFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static class UserAccountViewModel extends ViewModel {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+        private User user;
 
-    public AccountFragment() {
-        // Required empty public constructor
+        public User getUser() {
+            return user;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AccountFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private View rootView;
+    private UserAccountViewModel viewModel;
+    private TextView name;
+    private CircleImageView profilePicture;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        this.viewModel = new ViewModelProvider(this).get(UserAccountViewModel.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_account, container, false);
+        this.rootView = inflater.inflate(R.layout.fragment_account, container, false);
+        this.name = this.rootView.findViewById(R.id.accountName);
+        this.profilePicture = this.rootView.findViewById(R.id.accountProfilePicture);
 
-        Button b = v.findViewById(R.id.logoutButton);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), LoginScreen.class);
-                startActivity(i);
+        getUserFromDataBase();
+        configureButtons();
+        configureViewPager();
+        AppBarLayout appBarLayout = this.rootView.findViewById(R.id.accountAppBar);
+        configureAppBarScroll(appBarLayout);
+
+        return this.rootView;
+    }
+
+    private void getUserFromDataBase() {
+        if (this.viewModel.getUser() != null) {
+            bindData();
+            return;
+        }
+
+        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference doc = FirebaseFirestore.getInstance()
+                .collection(User.DATABASE_COLLECTION).document(id);
+
+        doc.get().addOnSuccessListener(documentSnapshot -> {
+            User user = documentSnapshot.toObject(User.class);
+            viewModel.setUser(user);
+            bindData();
+        });
+    }
+
+    private void bindData() {
+        User user = this.viewModel.getUser();
+        this.name.setText(user.getUsername());
+    }
+
+    private void configureButtons() {
+
+        ImageView settingsButton = this.rootView.findViewById(R.id.accountSettingsButton);
+
+        settingsButton.setOnClickListener(v -> {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(requireActivity(), LoginScreen.class);
+            startActivity(intent);
+            requireActivity().finish();
+        });
+    }
+
+    private void configureViewPager() {
+        ViewPager2 viewPager = this.rootView.findViewById(R.id.userAccountViewPager);
+        TabLayout tabLayout = this.rootView.findViewById(R.id.userAccountTabLayout);
+        AccountPagerAdapter accountPagerAdapter = new AccountPagerAdapter(this, false);
+        viewPager.setAdapter(accountPagerAdapter);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
+                tab.setText(position == 0 ? "My reviews" : "Notifications")
+        ).attach();
+    }
+
+    private void configureAppBarScroll(AppBarLayout appBarLayout) {
+
+        ConstraintLayout constraintLayout = this.rootView.findViewById(R.id.accountConstraintLayout);
+
+        appBarLayout.addOnOffsetChangedListener((BarLayout, verticalOffset) -> {
+            if (verticalOffset > -80) {
+                constraintLayout.setVisibility(View.VISIBLE);
+            } else {
+                constraintLayout.setVisibility(View.INVISIBLE);
             }
         });
-        return v;
     }
 }

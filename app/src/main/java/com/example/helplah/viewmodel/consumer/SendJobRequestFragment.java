@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.NotificationHandler;
 import com.example.helplah.models.User;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -224,10 +225,12 @@ public class SendJobRequestFragment extends Fragment {
 
     private void addToDataBase(JobRequests requests) {
         CollectionReference dbRequests = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
-        if (this.previousRequest != null) {
+        if (this.previousRequest != null) { // Edit request
+            requests.setDateCreated(this.previousRequest.getDateCreated());
             dbRequests.document(this.previousRequestId).set(requests)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(getActivity(), "Request edited", Toast.LENGTH_SHORT).show();
+                        NotificationHandler.requestChanged(requests);
                         requireActivity().onBackPressed();})
                     .addOnFailureListener(e ->
                             Toast.makeText(getActivity(),
@@ -235,9 +238,13 @@ public class SendJobRequestFragment extends Fragment {
             return;
         }
 
-        dbRequests.add(requests)
+        String requestId = dbRequests.document().getId();
+        requests.setId(requestId);
+
+        dbRequests.document(requestId).set(requests)
                 .addOnSuccessListener(documentReference -> {
                     Toast.makeText(getActivity(), "Request sent", Toast.LENGTH_SHORT).show();
+                    NotificationHandler.requestCreated(requests);
                     requireActivity().onBackPressed();})
                 .addOnFailureListener(e ->
                         Toast.makeText(getActivity(),

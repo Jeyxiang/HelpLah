@@ -125,6 +125,10 @@ public class ViewReviewsFragment extends Fragment {
         }
 
         CardView services = this.rootView.findViewById(R.id.reviewCategoryFilters);
+        if (this.category == null) {
+            services.setVisibility(View.GONE);
+        }
+
         TextView serviceText = this.rootView.findViewById(R.id.reviewCategoryText);
         serviceText.setText("Show results for " + this.category + " only");
         services.setOnClickListener(v -> serviceFilterSelected(services));
@@ -181,6 +185,7 @@ public class ViewReviewsFragment extends Fragment {
         ReviewQuery query = new ReviewQuery(FirebaseFirestore.getInstance(), this.listingId);
 
         query.setRating(this.viewModel.getRatingFilter());
+        query.setSortBy(Review.FIELD_DATE_REVIEWED, false);
         if (!this.viewModel.allServices) {
             query.setService(this.category);
         }

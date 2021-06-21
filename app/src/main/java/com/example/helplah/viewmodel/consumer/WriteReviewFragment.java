@@ -14,10 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
-import com.example.helplah.models.Listings;
 import com.example.helplah.models.Review;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
@@ -91,14 +88,6 @@ public class WriteReviewFragment extends Fragment {
         review.setReviewText(reviewText);
 
         Log.d(TAG, "submitReview: " + review.getBusinessId());
-        CollectionReference listingsCollection = FirebaseFirestore.getInstance()
-                .collection(Listings.DATABASE_COLLECTION);
-        listingsCollection.document(review.getBusinessId()).collection(Review.DATABASE_COLLECTION)
-                .add(review).addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "submitReview: Review added for " + review.getBusinessName());
-                    JobRequests.markAsReviewed(review.getJobRequestId());
-                    Toast.makeText(requireActivity(), "Review submitted", Toast.LENGTH_SHORT).show();
-                    requireActivity().onBackPressed();
-                });
+        Review.submitReview(review, requireActivity());
     }
 }

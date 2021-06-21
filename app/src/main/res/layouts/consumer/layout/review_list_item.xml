@@ -7,13 +7,13 @@
     android:background="#222222"
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
 
-    <ImageView
+    <TextView
         android:id="@+id/reviewOptionsButton"
         android:layout_width="30dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_baseline_more_vert_24"
+        android:layout_height="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/ic_baseline_more_vert_24"
         android:visibility="gone"
         android:layout_marginEnd="15dp"
         android:layout_marginTop="10dp" />
@@ -81,12 +81,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/reviewRatingBar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/reviewReplyCardView"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="10dp"
         android:layout_marginStart="15dp"
         android:text="Really good "
         android:layout_marginEnd="15dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/reviewReplyCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/reviewText"
+        android:backgroundTint="#333333"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/reviewRepliedTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/reviewReplyText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reviewRepliedTitle"
+                android:padding="10dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.card.MaterialCardView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

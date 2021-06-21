@@ -2,6 +2,13 @@ package com.example.helplah.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Review implements Parcelable {
 
+    private static final String TAG = "Reviews";
     public static final String DATABASE_COLLECTION = "Reviews";
 
     public static final String FIELD_REVIEW_TEXT =  "reviewText";
@@ -18,6 +26,7 @@ public class Review implements Parcelable {
     public static final String FIELD_USER_ID = "userId";
     public static final String FIELD_SERVICE = "service";
     public static final String FIELD_BUSINESS_ID = "businessId";
+    public static final String FIELD_REVIEW_ID = "reviewId";
 
 
     private String reviewText;
@@ -31,6 +40,7 @@ public class Review implements Parcelable {
     private String jobRequestId;
     private String businessName;
     private String businessId;
+    private String reviewId;
 
     public Review() {}
 
@@ -50,6 +60,7 @@ public class Review implements Parcelable {
         userId = in.readString();
         businessName = in.readString();
         businessId = in.readString();
+        reviewId = in.readString();
     }
 
     public static final Creator<Review> CREATOR = new Creator<Review>() {
@@ -79,6 +90,7 @@ public class Review implements Parcelable {
         dest.writeString(userId);
         dest.writeString(businessName);
         dest.writeString(businessId);
+        dest.writeString(reviewId);
     }
 
     // Uses the information from a job request to initialise a review
@@ -114,6 +126,27 @@ public class Review implements Parcelable {
             DateFormat formatter = new SimpleDateFormat("dd MMM");
             return formatter.format(past);
         }
+    }
+
+    public static void submitReview(Review review, FragmentActivity context) {
+
+        CollectionReference listingReviews = FirebaseFirestore.getInstance()
+                .collection(Listings.DATABASE_COLLECTION)
+                .document(review.getBusinessId())
+                .collection(Review.DATABASE_COLLECTION);
+
+        listingReviews.add(review).addOnSuccessListener(documentReference -> {
+            Log.d(TAG, "submitReview: Review added for " + review.getBusinessName());
+            JobRequests.markAsReviewed(review.getJobRequestId());
+
+            String id = documentReference.getId();
+            listingReviews.document(id).update(FIELD_REVIEW_ID, id);
+            review.setReviewId(id);
+            NotificationHandler.LeftAReview(review);
+
+            Toast.makeText(context, "Review submitted", Toast.LENGTH_SHORT).show();
+            context.onBackPressed();
+        });
     }
 
     public String getReviewText() {
@@ -202,5 +235,13 @@ public class Review implements Parcelable {
 
     public void setJobRequestId(String jobRequestId) {
         this.jobRequestId = jobRequestId;
+    }
+
+    public String getReviewId() {
+        return reviewId;
+    }
+
+    public void setReviewId(String reviewId) {
+        this.reviewId = reviewId;
     }
 }

@@ -22,6 +22,7 @@ import com.example.helplah.models.ChatMessage;
 import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.NotificationHandler;
 import com.example.helplah.viewmodel.business.JobRequestFilterDialog;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -299,6 +300,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         Map<String, Object> status = new HashMap<>();
         status.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
         db.document(documentId).update(status);
+        NotificationHandler.requestCancelled(request, true);
         Toast.makeText(getActivity(), "Request has been cancelled", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "cancelClicked: " + documentId + " status updated");
     }

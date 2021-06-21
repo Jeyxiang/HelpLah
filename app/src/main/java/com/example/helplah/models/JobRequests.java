@@ -29,8 +29,8 @@ public class JobRequests implements Parcelable {
     public static final String FIELD_DATE_TIMING_NOTE = "timingNote";
     public static final String FIELD_REMOVED = "removed";
     public static final String FIELD_REVIEWED = "reviewed";
-
     public static final String FIELD_DATE_OF_JOB = "dateOfJob";
+    public static final String FIELD_ID = "id";
 
     public static final int STATUS_CONFIRMED = 1;
     public static final int STATUS_FINISHED = 3;
@@ -53,6 +53,7 @@ public class JobRequests implements Parcelable {
     private Date dateOfJob;
     private boolean removed = false;
     private boolean reviewed = false;
+    private String id;
 
     public JobRequests() {}
 
@@ -81,6 +82,7 @@ public class JobRequests implements Parcelable {
         removed = in.readByte() != 0;
         reviewed = in.readByte() != 0;
         dateOfJob = new Date(in.readLong());
+        id = in.readString();
     }
 
     @Override
@@ -105,6 +107,7 @@ public class JobRequests implements Parcelable {
         dest.writeByte((byte) (removed ? 1 : 0));
         dest.writeByte((byte) (reviewed ? 1 : 0));
         dest.writeLong(dateOfJob.getTime());
+        dest.writeString(id);
     }
 
     public static final Creator<JobRequests> CREATOR = new Creator<JobRequests>() {
@@ -260,5 +263,13 @@ public class JobRequests implements Parcelable {
 
     public void setReviewed(boolean reviewed) {
         this.reviewed = reviewed;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
