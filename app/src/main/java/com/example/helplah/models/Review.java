@@ -168,6 +168,7 @@ public class Review implements Parcelable {
                     @Override
                     public void onSuccess(Void unused) {
                         Toast.makeText(context, "Review editted", Toast.LENGTH_SHORT).show();
+                        context.onBackPressed();
                     }
                 });
     }
