@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.helplah.R;
 import com.example.helplah.adapters.AccountPagerAdapter;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -80,12 +81,15 @@ public class BusinessAccountFragment extends Fragment {
     }
 
     private void getListingFromDatabase() {
+        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        ProfilePictureHandler.setProfilePicture(this.accountPicture, id, requireActivity());
+
         if (this.viewModel.getListings() != null) {
             bindData();
             configureButtons();
             return;
         }
-        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         DocumentReference doc = FirebaseFirestore.getInstance()
                 .collection(Listings.DATABASE_COLLECTION).document(id);
 

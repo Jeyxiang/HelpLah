@@ -117,14 +117,14 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         return this.rootView;
     }
 
-    private void configureFirestore(Query query) {
+    public void configureFirestore(Query query) {
 
         this.options = new FirestoreRecyclerOptions.Builder<JobRequests>()
                 .setQuery(query, JobRequests.class)
                 .build();
     }
 
-    private void getQuery() {
+    public void getQuery() {
         Log.d(TAG, "getQuery: Getting query");
 
         this.rvAdapter = new JobRequestsAdapter(this.options, this, false, this.rvJobRequests);
@@ -214,7 +214,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                         DocumentReference doc = snapshot.getReference();
-                        batch.delete(doc);
+                        batch.update(doc, JobRequests.FIELD_USER_REMOVED, true);
                     }
                     batch.commit()
                             .addOnSuccessListener(unused -> {
@@ -245,7 +245,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                         DocumentReference doc = snapshot.getReference();
-                        batch.delete(doc);
+                        batch.update(doc, JobRequests.FIELD_USER_REMOVED, true);
                     }
                     batch.commit()
                             .addOnSuccessListener(unused -> {
@@ -264,12 +264,18 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
     @Override
     public void onStart() {
         super.onStart();
+        if (this.rvAdapter == null) {
+            return;
+        }
         this.rvAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if (this.rvAdapter == null) {
+            return;
+        }
         this.rvAdapter.stopListening();
     }
 
@@ -299,6 +305,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
         Map<String, Object> status = new HashMap<>();
         status.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
+        status.put(JobRequests.FIELD_DECLINE_MESSAGE, "Cancelled by user");
         db.document(documentId).update(status);
         NotificationHandler.requestCancelled(request, true);
         Toast.makeText(getActivity(), "Request has been cancelled", Toast.LENGTH_SHORT).show();
@@ -310,7 +317,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         ChatMessage.createChat(request.getBusinessId(), request.getBusinessName(), getActivity());
     }
 
-    private void editRequest(View v, JobRequests requests, String requestId) {
+    public void editRequest(View v, JobRequests requests, String requestId) {
         CollectionReference listingsReference = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
 
         listingsReference.whereEqualTo(FieldPath.documentId(), requests.getBusinessId()).get()
@@ -327,7 +334,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
                 });
     }
 
-    private void leaveAReview(View v, String requestId) {
+    public void leaveAReview(View v, String requestId) {
         Log.d(TAG, "leaveAReview: Leaving a review");
         CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
         db.document(requestId).get().addOnSuccessListener(snapshot -> {
@@ -357,7 +364,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
         WriteBatch batch = db.batch();
         for (String id : arrayList) {
             DocumentReference doc = jobsCollection.document(id);
-            batch.delete(doc);
+            batch.update(doc, JobRequests.FIELD_USER_REMOVED, true);
         }
 
         batch.commit()
@@ -372,5 +379,4 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
                             Toast.LENGTH_SHORT).show();
                 });
     }
-
 }

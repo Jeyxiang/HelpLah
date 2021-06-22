@@ -227,6 +227,7 @@ public class SendJobRequestFragment extends Fragment {
         CollectionReference dbRequests = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
         if (this.previousRequest != null) { // Edit request
             requests.setDateCreated(this.previousRequest.getDateCreated());
+            requests.setId(this.previousRequestId);
             dbRequests.document(this.previousRequestId).set(requests)
                     .addOnSuccessListener(documentReference -> {
                         Toast.makeText(getActivity(), "Request edited", Toast.LENGTH_SHORT).show();

@@ -9,7 +9,17 @@
         android:id="@+id/accountFragment"
         android:name="com.example.helplah.viewmodel.consumer.AccountFragment"
         android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_accountFragment_to_consumerSettingsFragment"
+            app:destination="@id/consumerSettingsFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_userJobRequestNotification"
+            app:destination="@id/userJobRequestNotification" />
+        <action
+            android:id="@+id/action_accountFragment_to_editReviewFragment"
+            app:destination="@id/editReviewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/jobRequestsFragment"
         android:name="com.example.helplah.viewmodel.consumer.JobRequestsFragment"
@@ -85,4 +95,57 @@
         android:name="com.example.helplah.viewmodel.consumer.ViewReviewsFragment"
         android:label="fragment_view_reviews"
         tools:layout="@layout/fragment_view_reviews" />
+    <fragment
+        android:id="@+id/consumerSettingsFragment"
+        android:name="com.example.helplah.viewmodel.consumer.ConsumerSettingsFragment"
+        android:label="ConsumerSettingsFragment" >
+        <action
+            android:id="@+id/action_consumerSettingsFragment_to_editConAccountFragment"
+            app:destination="@id/editConAccountFragment" />
+        <action
+            android:id="@+id/action_consumerSettingsFragment_to_consumerPictureFragment"
+            app:destination="@id/consumerPictureFragment" />
+        <action
+            android:id="@+id/action_consumerSettingsFragment_to_editConPasswordFragment"
+            app:destination="@id/editConPasswordFragment" />
+        <action
+            android:id="@+id/action_consumerSettingsFragment_to_writeComplainFragment2"
+            app:destination="@id/writeComplainFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/editConAccountFragment"
+        android:name="com.example.helplah.viewmodel.consumer.EditConAccountFragment"
+        android:label="EditConAccountFragment" />
+    <fragment
+        android:id="@+id/consumerPictureFragment"
+        android:name="com.example.helplah.viewmodel.consumer.ConsumerPictureFragment"
+        android:label="ConsumerPictureFragment" />
+    <fragment
+        android:id="@+id/editConPasswordFragment"
+        android:name="com.example.helplah.viewmodel.consumer.EditConPasswordFragment"
+        android:label="EditConPasswordFragment" />
+    <fragment
+        android:id="@+id/writeComplainFragment2"
+        android:name="com.example.helplah.viewmodel.business.WriteComplainFragment"
+        android:label="write_complain_fragment"
+        tools:layout="@layout/write_complain_fragment" />
+    <fragment
+        android:id="@+id/userJobRequestNotification"
+        android:name="com.example.helplah.viewmodel.consumer.UserJobRequestNotification"
+        android:label="user_job_request_notification_fragment"
+        tools:layout="@layout/user_job_request_notification_fragment" >
+        <action
+            android:id="@+id/action_user_write_review"
+            app:destination="@id/writeReviewFragment" />
+        <action
+            android:id="@+id/action_jobRequests_to_listingDescription"
+            app:destination="@id/listingDescription" />
+        <action
+            android:id="@+id/editJobRequestAction"
+            app:destination="@id/sendJobRequestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editReviewFragment"
+        android:name="com.example.helplah.viewmodel.consumer.EditReviewFragment"
+        android:label="EditReviewFragment" />
 </navigation>

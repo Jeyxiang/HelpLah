@@ -1,6 +1,5 @@
 package com.example.helplah.viewmodel.business;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,15 +25,6 @@ public class BusinessSettingsFragment extends Fragment {
 
     private AlertDialog.Builder builder;
     private View dialogView;
-    private ImageView backButton;
-    private TextView logoutButton;
-    private TextView accountButton;
-    private TextView contactButton;
-    private TextView helpButton;
-    private TextView complainButton;
-    private TextView passwordButton;
-    private TextView notificationButton;
-    private TextView recoveryButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,76 +35,52 @@ public class BusinessSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.business_settings_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.settings_fragment, container, false);
 
         //Initialise
-        builder = new AlertDialog.Builder(getActivity());
+        builder = new AlertDialog.Builder(requireActivity());
 
-        backButton = v.findViewById(R.id.backButton);
-        logoutButton = v.findViewById(R.id.signoutButton);
-        accountButton = v.findViewById(R.id.accountSetting);
-        contactButton = v.findViewById(R.id.contactSetting);
-        helpButton = v.findViewById(R.id.helpSetting);
-        complainButton = v.findViewById(R.id.complainSetting);
-        passwordButton = v.findViewById(R.id.passwordSetting);
-        notificationButton = v.findViewById(R.id.notificationSetting);
-        recoveryButton = v.findViewById(R.id.recoverySetting);
+        ImageView backButton = rootView.findViewById(R.id.backButton);
+        TextView logoutButton = rootView.findViewById(R.id.signoutButton);
+        TextView accountButton = rootView.findViewById(R.id.accountSetting);
+        TextView contactButton = rootView.findViewById(R.id.contactSetting);
+        TextView helpButton = rootView.findViewById(R.id.helpSetting);
+        TextView complainButton = rootView.findViewById(R.id.complainSetting);
+        TextView passwordButton = rootView.findViewById(R.id.passwordSetting);
+        TextView notificationButton = rootView.findViewById(R.id.notificationSetting);
+        TextView recoveryButton = rootView.findViewById(R.id.recoverySetting);
+        TextView editPictureButton = rootView.findViewById(R.id.editProfilePicture);
 
 
-        accountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_business_edit_account);
-            }
-        });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();;
-            }
-        });
+        accountButton.setOnClickListener(v -> Navigation.findNavController(v).navigate(R.id.action_business_edit_account));
 
-        logoutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getActivity(), LoginScreen.class);
-                startActivity(i);
-                FirebaseAuth.getInstance().signOut(); //sign user out
-                getActivity().finish();
-            }
+        backButton.setOnClickListener(v -> requireActivity().onBackPressed());
+
+        editPictureButton.setOnClickListener(v -> Navigation.findNavController(v)
+                .navigate(R.id.action_businessSettingsFragment_to_businessPictureFragment));
+
+        logoutButton.setOnClickListener(v -> {
+            Intent i = new Intent(getActivity(), LoginScreen.class);
+            startActivity(i);
+            FirebaseAuth.getInstance().signOut(); //sign user out
+            requireActivity().finish();
         });
 
 
-        contactButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogView = inflater.inflate(R.layout.contact_popup_window,null);
-                builder.setView(dialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                builder.show();
-            }
+        contactButton.setOnClickListener(v -> {
+            dialogView = inflater.inflate(R.layout.contact_popup_window,null);
+            builder.setView(dialogView).setPositiveButton("OK", (dialog, which) -> dialog.cancel());
+            builder.show();
         });
 
         //helpButton.setOnClickListener(x -> gotoChat()); TODO chat with administrators live
 
-        complainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_business_write_complaint);
-            }
-        });
+        complainButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_business_write_complaint));
 
-        passwordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Navigation.findNavController(v).navigate(R.id.action_business_edit_password);
-            }
-        });
+        passwordButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigate(R.id.action_business_edit_password));
 
-        return v;
+        return rootView;
     }
 }

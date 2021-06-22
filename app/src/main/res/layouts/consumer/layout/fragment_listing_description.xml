@@ -44,7 +44,6 @@
                     android:layout_gravity="left"
                     android:elevation="8dp"
                     app:layout_collapseParallaxMultiplier="0"
-                    android:src="@drawable/plumbing_logos"
                     app:layout_collapseMode="parallax" />
 
                 <TextView

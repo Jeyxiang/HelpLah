@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,7 +72,11 @@ public class BusinessAccountReviewsTab extends Fragment implements ReviewTabAdap
     }
 
     @Override
-    public void optionClicked() {
+    public void optionClicked(View v, Review review) {
         // Reply review
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("review", review);
+        Navigation.findNavController(v)
+                .navigate(R.id.action_businessAccountFragment_to_replyReviewFragment, bundle);
     }
 }

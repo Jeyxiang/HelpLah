@@ -4,13 +4,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#222222"
+    android:foreground="?android:attr/selectableItemBackground"
     android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/notificationPicture"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/plumbing_logos"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,7 +49,7 @@
         app:layout_constraintStart_toEndOf="@id/notificationPicture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />

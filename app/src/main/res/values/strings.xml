@@ -71,6 +71,7 @@
 
     <string name="reset_password_title" translatable="false">Please enter your Email Address first. An authentication code will be sent to
     you via Email</string>
+    <string name="pick_image_intent_text" translatable="false">Please select an image</string>
 
     <!-- Services provided by the app -->
     <string-array name="service_providers">

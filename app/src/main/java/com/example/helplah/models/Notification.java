@@ -1,9 +1,20 @@
 package com.example.helplah.models;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
+
+import androidx.navigation.Navigation;
+
+import com.example.helplah.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.Date;
 
 public class Notification {
 
+    private static final String TAG = "Notifications model";
     public static final String DATABASE_COLLECTION = "Notifications";
 
     public static final String FIELD_TYPE = "type";
@@ -83,5 +94,34 @@ public class Notification {
 
     public void setSenderId(String senderId) {
         this.senderId = senderId;
+    }
+
+    public static void notificationClicked(Notification notification, View v,
+                                           boolean isBusiness, Context context) {
+        if (notification.getType() >= Notification.JOB_REQUEST_CREATED
+                && notification.getType() <= Notification.JOB_REQUEST_FINISHED) {
+            FirebaseFirestore.getInstance()
+                    .collection(JobRequests.DATABASE_COLLECTION)
+                    .document(notification.getActionId())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        JobRequests request = documentSnapshot.toObject(JobRequests.class);
+                        if (request == null) {
+                            Toast.makeText(context,
+                                    "This request has already been deleted by the user.",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        Bundle bundle = new Bundle();
+                        bundle.putString("id", request.getId());
+                        if (isBusiness) {
+                            Navigation.findNavController(v)
+                                    .navigate(R.id.action_businessAccountFragment_to_businessJobRequestNotification, bundle);
+                        } else {
+                            Navigation.findNavController(v)
+                                    .navigate(R.id.action_accountFragment_to_userJobRequestNotification, bundle);
+                        }
+                    });
+        }
     }
 }

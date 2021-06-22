@@ -115,7 +115,6 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="35dp"
             android:elevation="8dp"
-            android:src="@drawable/plumbing_logos"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

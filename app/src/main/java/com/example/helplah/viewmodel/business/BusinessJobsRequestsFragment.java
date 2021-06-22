@@ -112,14 +112,14 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         return this.rootView;
     }
 
-    private void configureFirestore(Query query) {
+    public void configureFirestore(Query query) {
 
         this.options = new FirestoreRecyclerOptions.Builder<JobRequests>()
                 .setQuery(query, JobRequests.class)
                 .build();
     }
 
-    private void getQuery() {
+    public void getQuery() {
         Log.d(TAG, "getQuery: Getting query");
 
         this.rvAdapter = new JobRequestsAdapter(this.options, this, true, this.rvJobRequests);
@@ -129,7 +129,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         this.rvJobRequests.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private void setToolbar() {
+    public void setToolbar() {
         this.toolbar.setOnMenuItemClickListener(menuItem -> {
             if (this.mode != null) {
                 this.mode.finish();
@@ -175,7 +175,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     // Deletes all cancelled requests (Does not actually delete the request, only prevents it from
     // being shown. Only the customer who made the original request can delete it from the database)
-    private void removeAllCancelledRequest() {
+    public void removeAllCancelledRequest() {
         String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
@@ -204,7 +204,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 });
     }
 
-    private void removeFinishedRequests() {
+    public void removeFinishedRequests() {
         String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
@@ -235,7 +235,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     // Remove requests older than a week (Does not actually delete the request, only prevents it from
     // being shown. Only the customer who made the original request can delete it from the database)
-    private void removeOldRequests() {
+    public void removeOldRequests() {
         String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         long currentTime = System.currentTimeMillis();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -299,12 +299,18 @@ public class BusinessJobsRequestsFragment extends Fragment implements
     @Override
     public void onStart() {
         super.onStart();
+        if( this.rvAdapter == null) {
+            return;
+        }
         this.rvAdapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if( this.rvAdapter == null) {
+            return;
+        }
         this.rvAdapter.stopListening();
     }
 
@@ -389,7 +395,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         db.document(documentId).update(updates);
         request.setDeclineMessage(message);
         NotificationHandler.requestCancelled(request, false);
-        Toast.makeText(getActivity(), "Job request declined", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireActivity(), "Job request declined", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "declineRequest: " + message);
     }
 

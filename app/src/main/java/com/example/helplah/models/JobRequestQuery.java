@@ -47,6 +47,7 @@ public class JobRequestQuery {
             query = query.whereEqualTo(JobRequests.FIELD_REMOVED, false);
         } else {
             query = query.whereEqualTo(JobRequests.FIELD_CUSTOMER_ID, this.id);
+            query = query.whereEqualTo(JobRequests.FIELD_USER_REMOVED, false);
         }
 
         if (this.hasStatus()) {

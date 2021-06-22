@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.AvailabilityStatus;
 import com.example.helplah.models.ChatMessage;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.Review;
 import com.example.helplah.models.ReviewQuery;
 import com.example.helplah.models.Services;
@@ -64,6 +66,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
     private TextView pricingNote;
     private TextView availability;
     private TextView website;
+    private ImageView profilePicture;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         this.website = this.rootView.findViewById(R.id.descriptionWebsite);
         this.rvServices = this.rootView.findViewById(R.id.descriptionServicesRv);
         this.rvReviews = this.rootView.findViewById(R.id.descriptionReviews);
+        this.profilePicture = this.rootView.findViewById(R.id.descriptionProfilePicture);
 
         bind();
         configureAppBarScroll(appBarLayout);
@@ -115,6 +119,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         this.pricingNote.setText(this.listing.getPricingNote());
         this.availability.setText(AvailabilityStatus.getAvailabilityText(this.listing.getAvailability()));
         this.website.setText(this.listing.getPricingNote());
+        ProfilePictureHandler.setProfilePicture(this.profilePicture, this.listingId, requireActivity());
         TextView viewReviewsButton = this.rootView.findViewById(R.id.goToReviewButton);
 
         viewReviewsButton.setOnClickListener(this::viewReviews);

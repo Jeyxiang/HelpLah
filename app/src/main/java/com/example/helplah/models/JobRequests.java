@@ -28,6 +28,7 @@ public class JobRequests implements Parcelable {
     public static final String FIELD_DATE_CREATED = "dateCreated";
     public static final String FIELD_DATE_TIMING_NOTE = "timingNote";
     public static final String FIELD_REMOVED = "removed";
+    public static final String FIELD_USER_REMOVED = "userRemoved";
     public static final String FIELD_REVIEWED = "reviewed";
     public static final String FIELD_DATE_OF_JOB = "dateOfJob";
     public static final String FIELD_ID = "id";
@@ -52,6 +53,7 @@ public class JobRequests implements Parcelable {
     private String timingNote;
     private Date dateOfJob;
     private boolean removed = false;
+    private boolean userRemoved = false;
     private boolean reviewed = false;
     private String id;
 
@@ -80,6 +82,7 @@ public class JobRequests implements Parcelable {
         phoneNumber = in.readInt();
         timingNote = in.readString();
         removed = in.readByte() != 0;
+        userRemoved = in.readByte() != 0;
         reviewed = in.readByte() != 0;
         dateOfJob = new Date(in.readLong());
         id = in.readString();
@@ -105,6 +108,7 @@ public class JobRequests implements Parcelable {
         dest.writeInt(phoneNumber);
         dest.writeString(timingNote);
         dest.writeByte((byte) (removed ? 1 : 0));
+        dest.writeByte((byte) (userRemoved ? 1 : 0));
         dest.writeByte((byte) (reviewed ? 1 : 0));
         dest.writeLong(dateOfJob.getTime());
         dest.writeString(id);
@@ -255,6 +259,14 @@ public class JobRequests implements Parcelable {
 
     public void setRemoved(boolean removed) {
         this.removed = removed;
+    }
+
+    public boolean isUserRemoved() {
+        return userRemoved;
+    }
+
+    public void setUserRemoved(boolean userRemoved) {
+        this.userRemoved = userRemoved;
     }
 
     public boolean isReviewed() {

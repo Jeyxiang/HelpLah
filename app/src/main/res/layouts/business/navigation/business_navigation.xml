@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_businessAccountFragment_to_businessViewListing"
             app:destination="@id/businessViewListing" />
+        <action
+            android:id="@+id/action_businessAccountFragment_to_replyReviewFragment"
+            app:destination="@id/replyReviewFragment" />
+        <action
+            android:id="@+id/action_businessAccountFragment_to_businessJobRequestNotification"
+            app:destination="@id/businessJobRequestNotification" />
     </fragment>
 
     <fragment
@@ -40,7 +46,7 @@
         android:id="@+id/businessSettingsFragment"
         android:name="com.example.helplah.viewmodel.business.BusinessSettingsFragment"
         android:label="business_settings_fragment"
-        tools:layout="@layout/business_settings_fragment" >
+        tools:layout="@layout/settings_fragment" >
         <action
             android:id="@+id/action_business_edit_account"
             app:destination="@id/editAccountFragment2" />
@@ -50,6 +56,9 @@
         <action
             android:id="@+id/action_business_write_complaint"
             app:destination="@id/writeComplainFragment" />
+        <action
+            android:id="@+id/action_businessSettingsFragment_to_businessPictureFragment"
+            app:destination="@id/businessPictureFragment" />
     </fragment>
     <fragment
         android:id="@+id/editAccountFragment2"
@@ -78,4 +87,17 @@
         android:name="com.example.helplah.viewmodel.consumer.ViewReviewsFragment"
         android:label="fragment_view_reviews"
         tools:layout="@layout/fragment_view_reviews" />
+    <fragment
+        android:id="@+id/businessPictureFragment"
+        android:name="com.example.helplah.viewmodel.business.BusinessPictureFragment"
+        android:label="BusinessPictureFragment" />
+    <fragment
+        android:id="@+id/replyReviewFragment"
+        android:name="com.example.helplah.viewmodel.business.ReplyReviewFragment"
+        android:label="ReplyReviewFragment" />
+    <fragment
+        android:id="@+id/businessJobRequestNotification"
+        android:name="com.example.helplah.viewmodel.business.BusinessJobRequestNotification"
+        android:label="business_job_request_notification_fragment"
+        tools:layout="@layout/business_job_request_notification_fragment" />
 </navigation>

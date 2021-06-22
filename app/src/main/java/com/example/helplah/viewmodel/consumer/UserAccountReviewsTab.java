@@ -6,15 +6,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.adapters.ReviewTabAdapter;
+import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Review;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -69,7 +73,21 @@ public class UserAccountReviewsTab extends Fragment implements ReviewTabAdapter.
     }
 
     @Override
-    public void optionClicked() {
-        // Reply review
+    public void optionClicked(View v, Review review) {
+        // Edit review
+        FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION)
+                .document(review.getJobRequestId())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        JobRequests requests = documentSnapshot.toObject(JobRequests.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(JobRequests.DATABASE_COLLECTION, requests);
+                        bundle.putParcelable(Review.DATABASE_COLLECTION, review);
+                        Navigation.findNavController(v)
+                                .navigate(R.id.action_accountFragment_to_editReviewFragment, bundle);
+                    }
+                });
     }
 }

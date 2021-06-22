@@ -27,7 +27,7 @@ public class AccountPagerAdapter extends FragmentStateAdapter {
                 return new UserAccountReviewsTab();
             }
         } else {
-            return new AccountNotificationsTab();
+            return AccountNotificationsTab.newInstance(this.business);
         }
     }
 

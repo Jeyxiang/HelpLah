@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -93,7 +94,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         layout.setActivated(isExpanded);
         holder.itemView.setActivated(isExpanded);
         String documentId = getSnapshots().getSnapshot(position).getId();
-        holder.bind(getItem(position), documentId);
+        JobRequests request = getItem(position);
+        holder.bind(request, documentId);
 
         holder.itemView.setOnClickListener(v -> {
             if (this.multiSelect) {
@@ -191,6 +193,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         private final TextView requestTime;
         private final TextView requestDescription;
         private final TextView requestTimingNote;
+        private final TextView cancellationReason;
+        private final TextView cancellationTitle;
         private final CircleImageView image;
         private final ExtendedFloatingActionButton actionOneButton;
         private final ExtendedFloatingActionButton actionTwoButton;
@@ -207,6 +211,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             this.requestTime = itemView.findViewById(R.id.requestTiming);
             this.requestDescription = itemView.findViewById(R.id.requestDescription);
             this.requestTimingNote = itemView.findViewById(R.id.requestTimingNote);
+            this.cancellationReason = itemView.findViewById(R.id.requestCancellationReason);
+            this.cancellationTitle = itemView.findViewById(R.id.requestCancellationTitle);
             this.actionOneButton = itemView.findViewById(R.id.requestCancelButton);
             this.actionTwoButton = itemView.findViewById(R.id.requestEditButton);
             this.chatButton = itemView.findViewById(R.id.requestChatButton);
@@ -228,9 +234,11 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
             if (isBusiness) {
                 this.requestName.setText(request.getCustomerName());
+                ProfilePictureHandler.setProfilePicture(this.image, request.getCustomerId(), context);
             } else {
                 this.requestName.setText(request.getBusinessName());
                 this.image.setOnClickListener(x -> goToListing(request));
+                ProfilePictureHandler.setProfilePicture(this.image, request.getBusinessId(), context);
             }
 
             setActionOneText(request);
@@ -238,7 +246,17 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             setActionOneAlpha(request);
             setActionTwoAlpha(request);
 
+
             this.requestDescription.setText(request.getJobDescription());
+            this.cancellationReason.setText(request.getDeclineMessage());
+
+            if (request.getDeclineMessage() == null) {
+                this.cancellationReason.setVisibility(View.GONE);
+                this.cancellationTitle.setVisibility(View.GONE);
+            } else {
+                this.cancellationReason.setVisibility(View.VISIBLE);
+                this.cancellationTitle.setVisibility(View.VISIBLE);
+            }
 
             this.requestDate.setText(JobRequests.dateToString(request.getDateOfJob()));
             String time = request.getConfirmedTiming();
@@ -286,7 +304,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                             .setPositiveButton(isBusiness ? "Decline request" : "Cancel request",
                                     (dialog, which) -> {
                                         mListener.actionOneClicked(request, documentId);
-                                        notifyItemChanged(getBindingAdapterPosition());
+                                        notifyDataSetChanged();
                                     })
                             .setNegativeButton("Dismiss", (dialog, which) -> dialog.dismiss())
                             .show();

@@ -1,5 +1,6 @@
 package com.example.helplah.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.models.Notification;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.Review;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
@@ -19,13 +21,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class NotificationTabAdapter extends FirestorePagingAdapter<Notification,
         NotificationTabAdapter.NotificationViewHolder> {
 
+    public interface NotificationClickedListener {
+        void notificationClicked(Notification notification, View v);
+    }
+
+    private final NotificationClickedListener listener;
+
     /**
      * Construct a new FirestorePagingAdapter from the given {@link FirestorePagingOptions}.
      *
      * @param options
      */
-    public NotificationTabAdapter(@NonNull FirestorePagingOptions<Notification> options) {
+    public NotificationTabAdapter(@NonNull FirestorePagingOptions<Notification> options, NotificationClickedListener listener) {
         super(options);
+        this.listener = listener;
     }
 
     @Override
@@ -37,28 +46,34 @@ public class NotificationTabAdapter extends FirestorePagingAdapter<Notification,
     @Override
     public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        return new NotificationViewHolder(inflater.inflate(R.layout.notification_tab_list_item, parent, false));
+        return new NotificationViewHolder(inflater.inflate(R.layout.notification_tab_list_item, parent, false),
+                parent.getContext());
     }
 
-    public static class NotificationViewHolder extends RecyclerView.ViewHolder {
+    public class NotificationViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView title;
         private final TextView text;
         private final TextView date;
         private final CircleImageView image;
+        private final Context context;
 
-        public NotificationViewHolder(@NonNull View itemView) {
+        public NotificationViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
             this.text = itemView.findViewById(R.id.notificationText);
             this.title = itemView.findViewById(R.id.notificationTitle);
             this.date = itemView.findViewById(R.id.notificationDate);
             this.image = itemView.findViewById(R.id.notificationPicture);
+            this.context = context;
         }
 
         public void bind(Notification notification) {
             this.title.setText(notification.getTitle());
             this.text.setText(notification.getText());
             this.date.setText(Review.getTimeAgo(notification.getDate()));
+            ProfilePictureHandler.setProfilePicture(this.image, notification.getSenderId(), this.context);
+
+            itemView.setOnClickListener(v -> listener.notificationClicked(notification, v));
         }
 
     }

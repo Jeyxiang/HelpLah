@@ -10,34 +10,9 @@ import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.uikit.ui_components.messages.message_list.CometChatMessageListActivity;
 import com.cometchat.pro.uikit.ui_resources.constants.UIKitConstants;
 
-import java.util.Date;
-
 public class ChatMessage {
 
     private static final String TAG = "Chat message";
-
-    public static final String FIELD_DATE = "date";
-    public static final String FIELD_STATUS = "status";
-
-    public static final int STATUS_UNREAD = 1;
-    public static final int STATUS_READ = 2;
-
-
-    private String messageText;
-    private String messageId;
-    private String imageURL = null;
-    private MessageAuthor user;
-    private Date date;
-    private int status;
-
-    public ChatMessage() {}
-
-    public ChatMessage(String senderId, String senderName, String messageText) {
-        this.user = new MessageAuthor(senderId, senderName);
-        this.messageText = messageText;
-        this.date = new Date();
-        this.user = new MessageAuthor(senderId, senderName);
-    }
 
     public static void createChat(String receiverId, String receiverName, Context context) {
         com.cometchat.pro.models.User receiver = new com.cometchat.pro.models.User();

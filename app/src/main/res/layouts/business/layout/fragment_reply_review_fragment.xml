@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/replyReviewScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+    android:background="@drawable/home_background"
+    tools:context=".viewmodel.consumer.WriteReviewFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Reply to"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:layout_marginTop="60dp"
+            android:layout_weight="5"
+            android:fontFamily="@font/roboto_bold" />
+
+        <TextView
+            android:id="@+id/replyReviewUserNameTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="thz12345's review"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            android:layout_weight="5"
+            android:fontFamily="@font/roboto_bold" />
+
+        <TextView
+            android:id="@+id/replyReviewUserNameText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:text="thz12345 review:" />
+
+        <TextView
+            android:id="@+id/replyReviewReviewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Great locksmith to work with. Would recommend."
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:hint="Write reply"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reviewReply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="180dp"
+                android:fontFamily="@font/bariol_regular"
+                android:gravity="start|top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:paddingStart="10dp"
+                app:textInputLayoutFocusedRectEnabled="false" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/replyReviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="Confirm reply"
+            android:paddingStart="30dp"
+            android:paddingEnd="30dp"
+            android:backgroundTint="@color/appRed"
+            android:layout_gravity="center" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -1,6 +1,5 @@
 package com.example.helplah.viewmodel.consumer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +11,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.helplah.R;
 import com.example.helplah.adapters.AccountPagerAdapter;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.User;
-import com.example.helplah.viewmodel.login_screen.LoginScreen;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -71,12 +71,13 @@ public class AccountFragment extends Fragment {
     }
 
     private void getUserFromDataBase() {
+        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        ProfilePictureHandler.setProfilePicture(this.profilePicture, id, requireActivity());
         if (this.viewModel.getUser() != null) {
             bindData();
             return;
         }
 
-        String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DocumentReference doc = FirebaseFirestore.getInstance()
                 .collection(User.DATABASE_COLLECTION).document(id);
 
@@ -97,10 +98,7 @@ public class AccountFragment extends Fragment {
         ImageView settingsButton = this.rootView.findViewById(R.id.accountSettingsButton);
 
         settingsButton.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(requireActivity(), LoginScreen.class);
-            startActivity(intent);
-            requireActivity().finish();
+            Navigation.findNavController(v).navigate(R.id.action_accountFragment_to_consumerSettingsFragment);
         });
     }
 

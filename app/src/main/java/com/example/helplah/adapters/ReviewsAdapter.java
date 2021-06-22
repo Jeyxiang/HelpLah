@@ -5,12 +5,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.Review;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
@@ -61,6 +63,7 @@ public class ReviewsAdapter extends FirestorePagingAdapter<Review, ReviewsAdapte
         private final MaterialCardView cardView;
         private final TextView replyTitle;
         private final TextView replyText;
+        private final ImageView reviewerPicture;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,6 +75,7 @@ public class ReviewsAdapter extends FirestorePagingAdapter<Review, ReviewsAdapte
             this.cardView = itemView.findViewById(R.id.reviewReplyCardView);
             this.replyTitle = itemView.findViewById(R.id.reviewRepliedTitle);
             this.replyText = itemView.findViewById(R.id.reviewReplyText);
+            this.reviewerPicture = itemView.findViewById(R.id.reviewProfilePicture);
         }
 
         @SuppressLint("SetTextI18n")
@@ -81,6 +85,7 @@ public class ReviewsAdapter extends FirestorePagingAdapter<Review, ReviewsAdapte
             this.reviewUsername.setText(review.getUsername());
             this.reviewDate.setText(Review.getTimeAgo(review.getDateReviewed()));
             this.reviewService.setText("Service provided: " + review.getService());
+            ProfilePictureHandler.setProfilePicture(this.reviewerPicture, review.getUserId(), context);
 
             if (review.getReply() != null) {
                 this.cardView.setVisibility(View.VISIBLE);

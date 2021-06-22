@@ -20,16 +20,30 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-public class AccountNotificationsTab extends Fragment {
+public class AccountNotificationsTab extends Fragment
+        implements NotificationTabAdapter.NotificationClickedListener{
 
+    private boolean isBusiness;
     private RecyclerView recyclerView;
     private View rootView;
     private PagedList.Config rvConfig;
     private FirestorePagingOptions<Notification> options;
 
+    public AccountNotificationsTab() {}
+
+    public static AccountNotificationsTab newInstance(boolean isBusiness) {
+
+        Bundle args = new Bundle();
+        args.putBoolean("isBusiness", isBusiness);
+        AccountNotificationsTab fragment = new AccountNotificationsTab();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.isBusiness = getArguments().getBoolean("isBusiness");
         String id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Query query = FirebaseFirestore.getInstance()
                 .collection(User.DATABASE_COLLECTION)
@@ -52,7 +66,7 @@ public class AccountNotificationsTab extends Fragment {
     }
 
     private void getQuery() {
-        NotificationTabAdapter adapter = new NotificationTabAdapter(this.options);
+        NotificationTabAdapter adapter = new NotificationTabAdapter(this.options, this);
         adapter.setStateRestorationPolicy(RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         this.recyclerView.setAdapter(adapter);
@@ -73,5 +87,10 @@ public class AccountNotificationsTab extends Fragment {
                 .setLifecycleOwner(this)
                 .setQuery(query, this.rvConfig, Notification.class)
                 .build();
+    }
+
+    @Override
+    public void notificationClicked(Notification notification, View v) {
+        Notification.notificationClicked(notification, v, isBusiness, requireActivity());
     }
 }

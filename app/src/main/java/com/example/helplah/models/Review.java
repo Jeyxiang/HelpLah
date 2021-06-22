@@ -7,12 +7,15 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Review implements Parcelable {
@@ -20,7 +23,9 @@ public class Review implements Parcelable {
     private static final String TAG = "Reviews";
     public static final String DATABASE_COLLECTION = "Reviews";
 
-    public static final String FIELD_REVIEW_TEXT =  "reviewText";
+    public static final String FIELD_REVIEW_TEXT = "reviewText";
+    public static final String FIELD_REPLY_TEXT = "reply";
+    public static final String FIELD_DATE_REPLY = "dateReplied";
     public static final String FIELD_DATE_REVIEWED = "dateReviewed";
     public static final String FIELD_SCORE = "score";
     public static final String FIELD_USER_ID = "userId";
@@ -147,6 +152,42 @@ public class Review implements Parcelable {
             Toast.makeText(context, "Review submitted", Toast.LENGTH_SHORT).show();
             context.onBackPressed();
         });
+    }
+
+    public static void editReview(Review review, FragmentActivity context) {
+        CollectionReference listingReviews = FirebaseFirestore.getInstance()
+                .collection(Listings.DATABASE_COLLECTION)
+                .document(review.getBusinessId())
+                .collection(Review.DATABASE_COLLECTION);
+
+        Map<String, Object> changes = new HashMap<>();
+        changes.put(Review.FIELD_SCORE, review.getScore());
+        changes.put(Review.FIELD_REVIEW_TEXT, review.getReviewText());
+        listingReviews.document(review.getReviewId()).update(changes)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(context, "Review editted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    public static void replyReview(String reviewId, String replyText, String listingId,
+                                   FragmentActivity context) {
+
+        CollectionReference listingReviews = FirebaseFirestore.getInstance()
+                .collection(Listings.DATABASE_COLLECTION)
+                .document(listingId)
+                .collection(Review.DATABASE_COLLECTION);
+
+        listingReviews.document(reviewId)
+                .update(FIELD_REPLY_TEXT, replyText, FIELD_DATE_REPLY, new Date())
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(context, "Replied to review", Toast.LENGTH_SHORT).show();
+                    context.onBackPressed();
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(context, "Failed to reply. Please try again", Toast.LENGTH_SHORT).show();
+                });
     }
 
     public String getReviewText() {

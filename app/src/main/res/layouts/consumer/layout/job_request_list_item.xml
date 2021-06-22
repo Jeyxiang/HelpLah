@@ -41,7 +41,6 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginStart="10dp"
                 android:elevation="8dp"
-                android:src="@drawable/plumbing_logos"
                 app:layout_constraintStart_toEndOf="@id/requestAnchor"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -185,6 +184,31 @@
                     android:layout_height="wrap_content"
                     android:minHeight="50dp"
                     android:text="Free around 0800-1000  and from 1400-1600"
+                    android:fontFamily="@font/lato_regular"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <TextView
+                    android:id="@+id/requestCancellationTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cancellation Reason"
+                    android:fontFamily="@font/lato_bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginStart="15dp"/>
+
+                <TextView
+                    android:id="@+id/requestCancellationReason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:text="Could not make it"
                     android:fontFamily="@font/lato_regular"
                     android:textSize="14sp"
                     android:textColor="@color/white"
