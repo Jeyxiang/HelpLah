@@ -13,11 +13,9 @@ import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
 import com.example.helplah.R;
 import com.example.helplah.models.Constants;
-import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.User;
 import com.example.helplah.viewmodel.business.BusinessMainActivity;
 import com.example.helplah.viewmodel.login_screen.LoginScreen;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +23,6 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 public class MainActivity extends AppCompatActivity {
@@ -72,18 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-        CollectionReference db = FirebaseFirestore.getInstance().collection(JobRequests.DATABASE_COLLECTION);
-        db.get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                            String id = snapshot.getReference().getId();
-                            db.document(id).update(JobRequests.FIELD_USER_REMOVED, false);
-                        }
-                    }
-                });
     }
 
     private void goToConsumer() {
