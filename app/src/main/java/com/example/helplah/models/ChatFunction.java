@@ -7,10 +7,11 @@ import android.util.Log;
 import com.cometchat.pro.constants.CometChatConstants;
 import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
+import com.cometchat.pro.models.User;
 import com.cometchat.pro.uikit.ui_components.messages.message_list.CometChatMessageListActivity;
 import com.cometchat.pro.uikit.ui_resources.constants.UIKitConstants;
 
-public class ChatMessage {
+public class ChatFunction {
 
     private static final String TAG = "Chat message";
 
@@ -39,4 +40,37 @@ public class ChatMessage {
         });
     }
 
+    public static void updateChatUsername(String userId, String newName) {
+        User user = CometChat.getLoggedInUser();
+        user.setName(newName);
+        if (user.getUid().equals(userId.toLowerCase())) {
+            CometChat.updateCurrentUserDetails(user, new CometChat.CallbackListener<User>() {
+                @Override
+                public void onSuccess(User user) {
+                    Log.d(TAG, "onSuccess: Chat current user updated");
+                }
+
+                @Override
+                public void onError(CometChatException e) {
+                    Log.d(TAG, "onSuccess: Chat current user failed to update");
+                }
+            });
+        }
+    }
+
+    public static void updateChatProfilePicture(String profilePicture) {
+        User user = CometChat.getLoggedInUser();
+        user.setAvatar(profilePicture);
+        CometChat.updateCurrentUserDetails(user, new CometChat.CallbackListener<User>() {
+            @Override
+            public void onSuccess(User user) {
+                Log.d(TAG, "onSuccess: Chat current user updated");
+            }
+
+            @Override
+            public void onError(CometChatException e) {
+                Log.d(TAG, "onSuccess: Chat current user failed to update");
+            }
+        });
+    }
 }

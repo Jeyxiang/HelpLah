@@ -108,6 +108,8 @@ public class ReviewTabAdapter extends FirestorePagingAdapter<Review, ReviewTabAd
                 this.cardView.setVisibility(View.VISIBLE);
                 this.replyTitle.setText(review.getBusinessName() + " replied:");
                 this.replyText.setText(review.getReply());
+            } else {
+                this.cardView.setVisibility(View.GONE);
             }
             this.optionsButton.setVisibility(View.VISIBLE);
             configureOptions(review);

@@ -172,6 +172,7 @@ public class ConsumerPictureFragment extends Fragment {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Toast.makeText(getActivity(),"Profile picture updated successfully",Toast.LENGTH_LONG).show();
+                    ProfilePictureHandler.updateCometPicture(uid);
                     requireActivity().onBackPressed();
                 }
             }).addOnFailureListener(new OnFailureListener() {

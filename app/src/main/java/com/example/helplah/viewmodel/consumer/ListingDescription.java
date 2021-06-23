@@ -27,7 +27,7 @@ import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.adapters.DescriptionCategoryAdapter;
 import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.AvailabilityStatus;
-import com.example.helplah.models.ChatMessage;
+import com.example.helplah.models.ChatFunction;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.Review;
@@ -191,7 +191,7 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
     }
 
     private void chatButtonClicked(View v) {
-        ChatMessage.createChat(this.listingId, this.listing.getName(), getActivity());
+        ChatFunction.createChat(this.listingId, this.listing.getName(), getActivity());
     }
 
     private void viewReviews(View v) {

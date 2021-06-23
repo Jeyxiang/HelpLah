@@ -16,6 +16,7 @@ import com.example.helplah.models.Review;
 
 public class ReplyReviewFragment extends Fragment {
 
+    private boolean editMode;
     private Review review;
     private TextView title;
     private TextView text;
@@ -54,6 +55,7 @@ public class ReplyReviewFragment extends Fragment {
         this.reviewText.setText(this.review.getReviewText());
         if (this.review.getReply() != null) {
             this.reply.setText(this.review.getReply());
+            this.editMode = true;
         }
     }
 
@@ -64,6 +66,6 @@ public class ReplyReviewFragment extends Fragment {
         }
         String replyText = this.reply.getText().toString().trim();
         this.review.setReply(replyText);
-        Review.replyReview(this.review.getReviewId(), replyText, this.review.getBusinessId(), requireActivity());
+        Review.replyReview(this.review, requireActivity(), editMode);
     }
 }

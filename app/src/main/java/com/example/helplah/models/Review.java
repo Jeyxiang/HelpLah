@@ -7,7 +7,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -164,27 +163,27 @@ public class Review implements Parcelable {
         changes.put(Review.FIELD_SCORE, review.getScore());
         changes.put(Review.FIELD_REVIEW_TEXT, review.getReviewText());
         listingReviews.document(review.getReviewId()).update(changes)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(context, "Review editted", Toast.LENGTH_SHORT).show();
-                        context.onBackPressed();
-                    }
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(context, "Review editted", Toast.LENGTH_SHORT).show();
+                    context.onBackPressed();
                 });
     }
 
-    public static void replyReview(String reviewId, String replyText, String listingId,
-                                   FragmentActivity context) {
+    public static void replyReview(Review review, FragmentActivity context, boolean isEdit) {
 
         CollectionReference listingReviews = FirebaseFirestore.getInstance()
                 .collection(Listings.DATABASE_COLLECTION)
-                .document(listingId)
+                .document(review.getBusinessId())
                 .collection(Review.DATABASE_COLLECTION);
 
-        listingReviews.document(reviewId)
-                .update(FIELD_REPLY_TEXT, replyText, FIELD_DATE_REPLY, new Date())
+        listingReviews.document(review.getReviewId())
+                .update(FIELD_REPLY_TEXT, review.getReply(), FIELD_DATE_REPLY, new Date())
                 .addOnSuccessListener(unused -> {
                     Toast.makeText(context, "Replied to review", Toast.LENGTH_SHORT).show();
+                    review.setDateReplied(new Date());
+                    if (isEdit) {
+                        NotificationHandler.repliedReview(review);
+                    }
                     context.onBackPressed();
                 }).addOnFailureListener(e -> {
                     Toast.makeText(context, "Failed to reply. Please try again", Toast.LENGTH_SHORT).show();

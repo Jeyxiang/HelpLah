@@ -69,7 +69,7 @@ public class NotificationHandler {
         Notification notification = new Notification();
         notification.setType(Notification.JOB_REQUEST_CONFIRMED);
         String title = request.getBusinessName() + " confirmed your job request.";
-        String text = "Your job request has been confirmed.";
+        String text = "Your job request has been confirmed for " + request.getConfirmedTiming() + ".";
         notification.setText(text);
         notification.setTitle(title);
         notification.setDate(new Date());
@@ -95,8 +95,8 @@ public class NotificationHandler {
 
     public static void LeftAReview(Review review) {
         Notification notification = new Notification();
-        notification.setType(Notification.JOB_REQUEST_FINISHED);
-        String title = review.getBusinessName() + " has left a review.";
+        notification.setType(Notification.LEFT_A_REVIEW);
+        String title = review.getUsername() + " has left a review.";
         String text = "Click to view the review.";
         notification.setText(text);
         notification.setTitle(title);
@@ -104,6 +104,20 @@ public class NotificationHandler {
         notification.setActionId(review.getReviewId());
         notification.setRecipientId(review.getBusinessId());
         notification.setSenderId(review.getUserId());
+        sendNotification(notification);
+    }
+
+    public static void repliedReview(Review review) {
+        Notification notification = new Notification();
+        notification.setType(Notification.REPLIED_REVIEW);
+        String title = review.getUsername() + " has replied to your.";
+        String text = "Click to view the reply.";
+        notification.setText(text);
+        notification.setTitle(title);
+        notification.setDate(new Date());
+        notification.setActionId(review.getReviewId());
+        notification.setRecipientId(review.getUserId());
+        notification.setSenderId(review.getBusinessId());
         sendNotification(notification);
     }
 

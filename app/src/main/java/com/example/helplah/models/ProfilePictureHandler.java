@@ -1,7 +1,6 @@
 package com.example.helplah.models;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -24,9 +23,10 @@ public class ProfilePictureHandler {
                                         R.drawable.blank_profile_picture, null)));
     }
 
-    public static Bitmap compressBitmap(Bitmap bitmap) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        return null;
+    public static void updateCometPicture(String id) {
+        StorageReference reference = FirebaseStorage.getInstance().getReference()
+                .child("profilepic/" + id + "/profile.jpg");
+        reference.getDownloadUrl()
+                .addOnSuccessListener(uri -> ChatFunction.updateChatProfilePicture(uri.toString()));
     }
 }

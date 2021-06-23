@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.adapters.JobRequestsAdapter;
-import com.example.helplah.models.ChatMessage;
+import com.example.helplah.models.ChatFunction;
 import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.NotificationHandler;
@@ -384,7 +384,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     @Override
     public void onChatClicked(View v, JobRequests request) {
-        ChatMessage.createChat(request.getCustomerId(), request.getCustomerName(), getActivity());
+        ChatFunction.createChat(request.getCustomerId(), request.getCustomerName(), getActivity());
     }
 
     private void declineRequest(String documentId, String message, JobRequests request) {
@@ -420,6 +420,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
             Map<String, Object> updates = new HashMap<>();
             updates.put(JobRequests.FIELD_CONFIRMED_TIMING, time);
             updates.put(JobRequests.FIELD_STATUS, JobRequests.STATUS_CONFIRMED);
+            request.setConfirmedTiming(time);
             collection.document(requestId).update(updates);
             NotificationHandler.requestConfirmed(request);
             Toast.makeText(getActivity(), "Job request confirmed", Toast.LENGTH_SHORT).show();

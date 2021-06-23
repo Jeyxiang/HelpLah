@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.helplah.R;
 import com.example.helplah.adapters.ReviewsAdapter;
 import com.example.helplah.models.Listings;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.Review;
 import com.example.helplah.models.ReviewQuery;
 import com.example.helplah.models.Services;
@@ -30,6 +31,8 @@ import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewReviewsFragment extends Fragment {
 
@@ -98,6 +101,9 @@ public class ViewReviewsFragment extends Fragment {
         this.rvReviews = this.rootView.findViewById(R.id.reviewsRecyclerView);
         MaterialToolbar toolbar = this.rootView.findViewById(R.id.reviewsToolbar);
         TextView reviewScore = this.rootView.findViewById(R.id.reviewScore);
+        CircleImageView imageView = this.rootView.findViewById(R.id.reviewProfilePicture);
+
+        ProfilePictureHandler.setProfilePicture(imageView, this.listingId, requireActivity());
         toolbar.setNavigationOnClickListener(v -> requireActivity().onBackPressed());
         reviewScore.setText(String.format("%.1f",
                 getArguments().getDouble(Listings.FIELD_REVIEW_SCORE)));

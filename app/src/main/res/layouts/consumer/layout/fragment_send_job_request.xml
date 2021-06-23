@@ -246,7 +246,31 @@
                             android:gravity="left|center_vertical"
                             android:inputType="textCapSentences|textMultiLine"
                             android:paddingStart="10dp"
-                            android:layout_marginBottom="20dp"
+
+                            app:textInputLayoutFocusedRectEnabled="false" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeWidth="1dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="20dp"
+                        android:hint="Postal Code"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/jobPostalCode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/bariol_regular"
+                            android:gravity="left|center_vertical"
+                            android:inputType="number"
+                            android:maxLength="6"
+                            android:paddingStart="10dp"
                             app:textInputLayoutFocusedRectEnabled="false" />
 
                     </com.google.android.material.textfield.TextInputLayout>

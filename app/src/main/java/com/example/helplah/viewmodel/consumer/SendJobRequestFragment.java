@@ -51,6 +51,7 @@ public class SendJobRequestFragment extends Fragment {
     private TextView jobDate;
     private EditText jobAddress;
     private EditText jobNumber;
+    private EditText jobPostalCode;
     private TextView businessName;
     private TextView businessScore;
     private TextView businessPopularity;
@@ -62,6 +63,7 @@ public class SendJobRequestFragment extends Fragment {
     private String userId;
     private String username;
     private String address;
+    private int postalCode;
     private int phoneNumber;
     private String category;
     private Date date;
@@ -94,6 +96,7 @@ public class SendJobRequestFragment extends Fragment {
         this.businessName = this.rootView.findViewById(R.id.businessName);
         this.jobAddress = this.rootView.findViewById(R.id.jobAddress);
         this.jobNumber = this.rootView.findViewById(R.id.jobPhoneNumber);
+        this.jobPostalCode = this.rootView.findViewById(R.id.jobPostalCode);
         this.businessScore = this.rootView.findViewById(R.id.businessScore);
         this.businessPopularity = this.rootView.findViewById(R.id.businessPopularity);
         this.sendButton = this.rootView.findViewById(R.id.jobSendButton);
@@ -177,6 +180,11 @@ public class SendJobRequestFragment extends Fragment {
             this.jobAddress.setError("This field cannot be empty");
             allCorrect = false;
         }
+        if (this.jobPostalCode.length() != 6) {
+            this.jobPostalCode.setError("Invalid postal code. Please list your 6 digit " +
+                    "postal code number only");
+            allCorrect = false;
+        }
         if (this.jobDate.getText().toString().equals("Choose a date")) {
             this.jobDate.setError("This field cannot be empty");
             allCorrect = false;
@@ -195,16 +203,24 @@ public class SendJobRequestFragment extends Fragment {
         this.datePicker = buildDatePicker(true);
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
         this.jobDate.setText(formatter.format(this.previousRequest.getDateOfJob()));
+        String address = this.previousRequest.getAddress();
+        String[] addressElements = address.split(", S");
+        this.jobAddress.setText(addressElements[0]);
+        this.jobPostalCode.setText(addressElements[1]);
+        this.jobNumber.setText(this.previousRequest.getPhoneNumber() + "");
 
     }
 
     private void sendRequest() {
         if (checkFields() && queryDone) {
             // send request
+            String postalCode = this.jobPostalCode.getText().toString();
+            String address = this.jobAddress.getText().toString();
             JobRequests requests = new JobRequests(this.userId, this.businessId, this.category);
             requests.setCustomerName(this.username);
             requests.setBusinessName(this.listing.getName());
-            requests.setAddress(this.jobAddress.getText().toString());
+            requests.setAddress(address + ", S" + postalCode);
+            requests.setBusinessPhoneNumber(listing.getPhoneNumber());
             requests.setPhoneNumber(Integer.parseInt(this.jobNumber.getText().toString().trim()));
             requests.setJobDescription(this.jobDescription.getText().toString());
             requests.setDateOfJob(this.date);
@@ -265,7 +281,11 @@ public class SendJobRequestFragment extends Fragment {
                 phoneNumber = user.getPhoneNumber();
                 jobNumber.setText(String.valueOf(phoneNumber));
                 address = user.getAddress();
+                postalCode = user.getPostalCode();
                 jobAddress.setText(address);
+                if (postalCode != 0) {
+                    jobPostalCode.setText(String.valueOf(postalCode));
+                }
                 queryDone = true;
             }
         }).addOnFailureListener(e ->

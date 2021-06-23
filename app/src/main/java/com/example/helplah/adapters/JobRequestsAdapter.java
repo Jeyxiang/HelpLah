@@ -193,6 +193,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         private final TextView requestTime;
         private final TextView requestDescription;
         private final TextView requestTimingNote;
+        private final TextView requestAddress;
+        private final TextView requestContactNumber;
         private final TextView cancellationReason;
         private final TextView cancellationTitle;
         private final CircleImageView image;
@@ -211,6 +213,8 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             this.requestTime = itemView.findViewById(R.id.requestTiming);
             this.requestDescription = itemView.findViewById(R.id.requestDescription);
             this.requestTimingNote = itemView.findViewById(R.id.requestTimingNote);
+            this.requestAddress = itemView.findViewById(R.id.requestAddress);
+            this.requestContactNumber = itemView.findViewById(R.id.requestContactNumber);
             this.cancellationReason = itemView.findViewById(R.id.requestCancellationReason);
             this.cancellationTitle = itemView.findViewById(R.id.requestCancellationTitle);
             this.actionOneButton = itemView.findViewById(R.id.requestCancelButton);
@@ -234,9 +238,11 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
             if (isBusiness) {
                 this.requestName.setText(request.getCustomerName());
+                this.requestContactNumber.setText(request.getPhoneNumber() + "");
                 ProfilePictureHandler.setProfilePicture(this.image, request.getCustomerId(), context);
             } else {
                 this.requestName.setText(request.getBusinessName());
+                this.requestContactNumber.setText(request.getBusinessPhoneNumber() + "");
                 this.image.setOnClickListener(x -> goToListing(request));
                 ProfilePictureHandler.setProfilePicture(this.image, request.getBusinessId(), context);
             }
@@ -249,6 +255,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
             this.requestDescription.setText(request.getJobDescription());
             this.cancellationReason.setText(request.getDeclineMessage());
+            this.requestAddress.setText(request.getAddress());
 
             if (request.getDeclineMessage() == null) {
                 this.cancellationReason.setVisibility(View.GONE);

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
 import com.example.helplah.adapters.JobRequestsAdapter;
-import com.example.helplah.models.ChatMessage;
+import com.example.helplah.models.ChatFunction;
 import com.example.helplah.models.JobRequestQuery;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
@@ -314,7 +314,7 @@ public class JobRequestsFragment extends Fragment implements JobRequestsAdapter.
 
     @Override
     public void onChatClicked(View v, JobRequests request) {
-        ChatMessage.createChat(request.getBusinessId(), request.getBusinessName(), getActivity());
+        ChatFunction.createChat(request.getBusinessId(), request.getBusinessName(), getActivity());
     }
 
     public void editRequest(View v, JobRequests requests, String requestId) {

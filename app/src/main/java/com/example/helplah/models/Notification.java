@@ -29,6 +29,7 @@ public class Notification {
     public static final int JOB_REQUEST_CONFIRMED = 4;
     public static final int JOB_REQUEST_FINISHED = 5;
     public static final int LEFT_A_REVIEW = 6;
+    public static final int REPLIED_REVIEW = 7;
 
     private int type;
     private Date date;
@@ -96,6 +97,8 @@ public class Notification {
         this.senderId = senderId;
     }
 
+
+    // Handles the action when a notification is clicked
     public static void notificationClicked(Notification notification, View v,
                                            boolean isBusiness, Context context) {
         if (notification.getType() >= Notification.JOB_REQUEST_CREATED
@@ -135,6 +138,19 @@ public class Notification {
                         Navigation.findNavController(v)
                                 .navigate(R.id.action_businessAccountFragment_to_replyReviewFragment,
                                         bundle);
+                    });
+        } else if (notification.getType() == Notification.REPLIED_REVIEW && !isBusiness) {
+            FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION)
+                    .document(notification.getSenderId())
+                    .collection(Review.DATABASE_COLLECTION)
+                    .document(notification.getActionId())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        Review review = documentSnapshot.toObject(Review.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable(Review.DATABASE_COLLECTION, review);
+                        Navigation.findNavController(v)
+                                .navigate(R.id.action_accountFragment_to_viewReplyFragment, bundle);
                     });
         }
     }

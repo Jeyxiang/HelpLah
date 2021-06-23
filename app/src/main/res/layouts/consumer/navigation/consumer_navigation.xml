@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_accountFragment_to_editReviewFragment"
             app:destination="@id/editReviewFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_viewReplyFragment"
+            app:destination="@id/viewReplyFragment" />
     </fragment>
     <fragment
         android:id="@+id/jobRequestsFragment"
@@ -148,4 +151,8 @@
         android:id="@+id/editReviewFragment"
         android:name="com.example.helplah.viewmodel.consumer.EditReviewFragment"
         android:label="EditReviewFragment" />
+    <fragment
+        android:id="@+id/viewReplyFragment"
+        android:name="com.example.helplah.viewmodel.consumer.ViewReplyFragment"
+        android:label="ViewReplyFragment" />
 </navigation>

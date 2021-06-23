@@ -49,6 +49,7 @@ public class JobRequests implements Parcelable {
     private String declineMessage;
     private int status;
     private int phoneNumber;
+    private int businessPhoneNumber;
     private Date dateCreated;
     private String timingNote;
     private Date dateOfJob;
@@ -80,6 +81,7 @@ public class JobRequests implements Parcelable {
         declineMessage = in.readString();
         status = in.readInt();
         phoneNumber = in.readInt();
+        businessPhoneNumber = in.readInt();
         timingNote = in.readString();
         removed = in.readByte() != 0;
         userRemoved = in.readByte() != 0;
@@ -106,6 +108,7 @@ public class JobRequests implements Parcelable {
         dest.writeString(declineMessage);
         dest.writeInt(status);
         dest.writeInt(phoneNumber);
+        dest.writeInt(businessPhoneNumber);
         dest.writeString(timingNote);
         dest.writeByte((byte) (removed ? 1 : 0));
         dest.writeByte((byte) (userRemoved ? 1 : 0));
@@ -211,6 +214,14 @@ public class JobRequests implements Parcelable {
 
     public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public int getBusinessPhoneNumber() {
+        return businessPhoneNumber;
+    }
+
+    public void setBusinessPhoneNumber(int businessPhoneNumber) {
+        this.businessPhoneNumber = businessPhoneNumber;
     }
 
     public Date getDateCreated() {

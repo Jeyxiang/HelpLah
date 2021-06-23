@@ -68,9 +68,10 @@ public class EditConAccountFragment extends Fragment {
             oldEmail = user.getEmail();
             editEmail.setText(oldEmail);
             editLocation.setText(user.getAddress());
-            editPostal.setText(user.getPostalCode() + "");
+            if (user.getPostalCode() != 0) {
+                editPostal.setText(user.getPostalCode() + "");
+            }
             editContact.setText(user.getPhoneNumber() + "");
-
             newUser.setUsername(user.getUsername());
             newUser.setBusiness(false);
         });

@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     private void goToConsumer() {
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         String cometId = CometChat.getLoggedInUser().getUid();
-        if (!cometId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        if (!cometId.equals(FirebaseAuth.getInstance().getCurrentUser().getUid().toLowerCase())) {
             cometChatLogin();
         }
     }
