@@ -122,6 +122,20 @@ public class Notification {
                                     .navigate(R.id.action_accountFragment_to_userJobRequestNotification, bundle);
                         }
                     });
+        } else if (notification.getType() == Notification.LEFT_A_REVIEW && isBusiness) {
+            FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION)
+                    .document(notification.getRecipientId())
+                    .collection(Review.DATABASE_COLLECTION)
+                    .document(notification.getActionId())
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        Review review = documentSnapshot.toObject(Review.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("review", review);
+                        Navigation.findNavController(v)
+                                .navigate(R.id.action_businessAccountFragment_to_replyReviewFragment,
+                                        bundle);
+                    });
         }
     }
 }
