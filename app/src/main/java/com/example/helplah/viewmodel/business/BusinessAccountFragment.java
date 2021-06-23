@@ -32,6 +32,8 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class BusinessAccountFragment extends Fragment {
 
+    private static final String TAG = "Business account fragment";
+
     public static class BusinessAccountViewModel extends ViewModel {
 
         Listings listings;
