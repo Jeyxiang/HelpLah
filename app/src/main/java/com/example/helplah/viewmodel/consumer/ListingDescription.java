@@ -115,10 +115,10 @@ public class ListingDescription extends Fragment implements CategoriesAdapter.on
         this.numberOfReviews.setText("(" + this.listing.getNumberOfReviews() + ")");
         this.ratingBar.setRating((float) this.listing.getReviewScore());
         this.description.setText(this.listing.getDescription());
-        this.minPrice.setText("From " + (int) this.listing.getMinPrice());
+        this.minPrice.setText("From $" + (int) this.listing.getMinPrice());
         this.pricingNote.setText(this.listing.getPricingNote());
         this.availability.setText(AvailabilityStatus.getAvailabilityText(this.listing.getAvailability()));
-        this.website.setText(this.listing.getPricingNote());
+        this.website.setText(this.listing.getWebsite());
         ProfilePictureHandler.setProfilePicture(this.profilePicture, this.listingId, requireActivity());
         TextView viewReviewsButton = this.rootView.findViewById(R.id.goToReviewButton);
 
