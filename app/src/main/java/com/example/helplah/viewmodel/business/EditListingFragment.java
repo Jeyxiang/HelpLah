@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.helplah.R;
 import com.example.helplah.models.ChatFunction;
+import com.example.helplah.models.CloudFunctionCaller;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.Services;
 import com.example.helplah.models.User;
@@ -189,6 +190,8 @@ public class EditListingFragment extends Fragment implements AdapterView.OnItemC
             businessCollection.document(id).set(updatedListing).addOnSuccessListener(unused -> {
                 User.updateUsername(id, newName);
                 User.updatePhoneNumber(id, newNumber);
+                CloudFunctionCaller.contactChanged(id, newNumber, true);
+                CloudFunctionCaller.listingNameChanged(id, newName);
                 ChatFunction.updateChatUsername(id, newName);
             });
 

@@ -11,14 +11,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.helplah.R;
+import com.example.helplah.models.CloudFunctionCaller;
 import com.example.helplah.models.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.jetbrains.annotations.NotNull;
 
 public class EditConAccountFragment extends Fragment {
 
@@ -150,10 +155,19 @@ public class EditConAccountFragment extends Fragment {
         //update server with updated User;
         CollectionReference userCollection = FirebaseFirestore.getInstance().collection(User.DATABASE_COLLECTION);
         String id = mAuth.getCurrentUser().getUid();
-        userCollection.document(id).set(newUser);
-        Toast.makeText(getActivity(),"Account Updated Successfully",Toast.LENGTH_LONG).show();
-        getActivity().onBackPressed();
-        Log.d(TAG,"Account Updated Successfully");
+        userCollection.document(id).set(newUser).addOnSuccessListener(unused -> {
+            Toast.makeText(getActivity(),"Account Updated Successfully",Toast.LENGTH_SHORT).show();
+            getActivity().onBackPressed();
+            CloudFunctionCaller.contactChanged(id, Integer.parseInt(newContact), false);
+            Log.d(TAG,"Account Updated Successfully");
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Toast.makeText(getActivity(),"Account failed to update " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+                Log.d(TAG,"Account failed to update");
+            }
+        });
     }
 
     public boolean checkFields() {

@@ -11,14 +11,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.example.helplah.R;
 import com.example.helplah.models.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,7 +38,6 @@ public class EditAccountFragment extends Fragment {
     private EditText editEmail;
     private EditText editLocation;
     private EditText editPostal;
-    private EditText editContact;
     private Button updateAcctButton;
     private ImageView backAcctButton;
     private User newUser;
@@ -48,7 +51,7 @@ public class EditAccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.edit_account_detail_fragment, container, false);
+        View v = inflater.inflate(R.layout.business_edit_account_fragment, container, false);
         mAuth = FirebaseAuth.getInstance();
         String id = mAuth.getCurrentUser().getUid();
 
@@ -56,7 +59,6 @@ public class EditAccountFragment extends Fragment {
         editEmail = v.findViewById(R.id.editEmailAcct);
         editLocation = v.findViewById(R.id.editLocationAcct);
         editPostal = v.findViewById(R.id.editPostalAcct);
-        editContact = v.findViewById(R.id.editNumberAcct);
 
         updateAcctButton = v.findViewById(R.id.updateAcctButton);
         backAcctButton = v.findViewById(R.id.backAcctButton);
@@ -76,7 +78,6 @@ public class EditAccountFragment extends Fragment {
             if (user.getPostalCode() != 0) {
                 editPostal.setText(user.getPostalCode() + "");
             }
-            editContact.setText(user.getPhoneNumber() + "");
 
             newUser.setUsername(user.getUsername());
             newUser.setBusiness(true);
@@ -137,12 +138,10 @@ public class EditAccountFragment extends Fragment {
         String newEmail = editEmail.getText().toString().trim();
         String newLoc = editLocation.getText().toString().trim();
         String newPostal= editPostal.getText().toString().trim();
-        String newContact = editContact.getText().toString().trim();
 
         newUser.setEmail(newEmail);
         newUser.setAddress(newLoc);
         newUser.setPostalCode(Integer.parseInt(newPostal));
-        newUser.setPhoneNumber(Integer.parseInt(newContact));
         //Update Email
         if (emailChanged()) {
             mAuth.getCurrentUser().updateEmail(newEmail).addOnCompleteListener(
@@ -150,16 +149,24 @@ public class EditAccountFragment extends Fragment {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "Account Updated Successfully");
                         }
-
                     });
         }
         //update server with updated User;
         CollectionReference userCollection = FirebaseFirestore.getInstance().collection(User.DATABASE_COLLECTION);
         String id = mAuth.getCurrentUser().getUid();
-        userCollection.document(id).set(newUser);
-        Toast.makeText(getActivity(),"Account Updated Successfully",Toast.LENGTH_LONG).show();
-        getActivity().onBackPressed();
-        Log.d(TAG,"Account Updated Successfully");
+        userCollection.document(id).set(newUser).addOnSuccessListener(unused -> {
+            Toast.makeText(getActivity(),"Account Updated Successfully",Toast.LENGTH_SHORT).show();
+            getActivity().onBackPressed();
+            Log.d(TAG,"Account Updated Successfully");
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull @NotNull Exception e) {
+                Toast.makeText(getActivity(),"Account failed to update: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show();
+                getActivity().onBackPressed();
+                Log.d(TAG,"Account Updated Successfully");
+            }
+        });
     }
 
     public boolean checkFields() {
@@ -184,17 +191,6 @@ public class EditAccountFragment extends Fragment {
             this.editPostal.setError("This field is required");
             allCorrect = false;
         }
-        if (TextUtils.isEmpty(editContact.getText().toString())) {
-            this.editContact.setError("This field is required");
-            allCorrect = false;
-        } else {
-            if (editContact.length() != 8) {
-                this.editContact.setError("Minimum password length of 8 is required");
-                allCorrect = false;
-            }
-        }
-
         return allCorrect;
-
     }
 }

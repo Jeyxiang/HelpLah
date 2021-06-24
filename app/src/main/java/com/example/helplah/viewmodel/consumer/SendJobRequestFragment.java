@@ -185,7 +185,7 @@ public class SendJobRequestFragment extends Fragment {
                     "postal code number only");
             allCorrect = false;
         }
-        if (this.jobDate.getText().toString().equals("Choose a date")) {
+        if (this.jobDate.getText().toString().equals("Choose a date") || this.date == null) {
             this.jobDate.setError("This field cannot be empty");
             allCorrect = false;
         }
