@@ -47,6 +47,9 @@
             app:destination="@id/businessListingsFragment"
             app:restoreState="true"
             app:popUpToSaveState="true" />
+        <action
+            android:id="@+id/action_servicesCategoriesFragment_to_searchPageFragment"
+            app:destination="@id/searchPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -155,4 +158,13 @@
         android:id="@+id/viewReplyFragment"
         android:name="com.example.helplah.viewmodel.consumer.ViewReplyFragment"
         android:label="ViewReplyFragment" />
+    <fragment
+        android:id="@+id/searchPageFragment"
+        android:name="com.example.helplah.viewmodel.consumer.ListingSearchPageFragment"
+        android:label="fragment_search_page"
+        tools:layout="@layout/fragment_search_page" >
+        <action
+            android:id="@+id/action_searchPageFragment_to_listingDescription"
+            app:destination="@id/listingDescription" />
+    </fragment>
 </navigation>

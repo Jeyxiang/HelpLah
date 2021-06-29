@@ -13,5 +13,6 @@ public class Constants {
     public static final String ALGOLIA_APP_ID = "DN8T4ACQM0";
 
     public static final String ALGOLIA_LISTINGS_INDEX = "Businesses";
+
     public static final String ALGOLIA_JOB_REQUESTS_INDEX = "Job requests";
 }

@@ -225,6 +225,7 @@ public class SendJobRequestFragment extends Fragment {
             requests.setJobDescription(this.jobDescription.getText().toString());
             requests.setDateOfJob(this.date);
             requests.setTimingNote(this.jobDateNote.getText().toString());
+            requests.setStatus(JobRequests.STATUS_PENDING);
 
             DateFormat formatter = new SimpleDateFormat("E, dd MMM");
 

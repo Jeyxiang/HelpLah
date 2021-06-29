@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Abstracts a business listing in the app.
@@ -74,6 +75,11 @@ public class Listings implements Parcelable {
         this.website = website;
         this.servicesList = servicesList;
         this.language = language;
+    }
+
+    public Listings(String name, String listingId) {
+        this.name = name;
+        this.listingId = listingId;
     }
 
     public Listings(Parcel in) {
@@ -243,5 +249,18 @@ public class Listings implements Parcelable {
 
     public void setListingId(String listingId) {
         this.listingId = listingId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Listings listings = (Listings) o;
+        return listingId.equals(listings.listingId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(listingId);
     }
 }

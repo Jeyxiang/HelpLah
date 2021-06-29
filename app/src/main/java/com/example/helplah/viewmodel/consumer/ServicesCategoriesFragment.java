@@ -19,7 +19,8 @@ import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.models.Services;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
-public class ServicesCategoriesFragment extends Fragment implements CategoriesAdapter.onCategorySelected {
+public class ServicesCategoriesFragment extends Fragment
+        implements CategoriesAdapter.onCategorySelected, MaterialSearchBar.OnSearchActionListener {
 
     public static final String TAG = "ServicesCategoryActivities";
 
@@ -49,6 +50,7 @@ public class ServicesCategoriesFragment extends Fragment implements CategoriesAd
         this.recyclerView = this.rootview.findViewById(R.id.categoryRecyclerView);
         this.searchView = this.rootview.findViewById(R.id.categorySearchView);
         this.categories = Services.ALLSERVICES.toArray(new String[0]);
+        configureSearchBar();
 
         //handling the grid views
         CategoriesAdapter mAdapter = new CategoriesAdapter(getActivity(), categories, categoriesImages, this);
@@ -58,7 +60,12 @@ public class ServicesCategoriesFragment extends Fragment implements CategoriesAd
         this.recyclerView.setAdapter(mAdapter);
         ViewCompat.setNestedScrollingEnabled(this.recyclerView, false);
         this.recyclerView.setLayoutManager(gridLayoutManager);
+
         return this.rootview;
+    }
+
+    private void configureSearchBar() {
+        this.searchView.setOnSearchActionListener(this);
     }
 
     @Override
@@ -68,5 +75,26 @@ public class ServicesCategoriesFragment extends Fragment implements CategoriesAd
         Bundle bundle = new Bundle();
         bundle.putString(Services.SERVICE, category);
         Navigation.findNavController(v).navigate(R.id.goToListingsAction, bundle);
+    }
+
+    @Override
+    public void onSearchStateChanged(boolean enabled) {
+
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+        Log.d(TAG, "onSearchConfirmed: Searched for " + text);
+        goToSearch(text.toString());
+    }
+
+    @Override
+    public void onButtonClicked(int buttonCode) {}
+
+    private void goToSearch(String text) {
+        Bundle bundle = new Bundle();
+        bundle.putString("search", text);
+        Navigation.findNavController(requireView()).navigate(
+                R.id.action_servicesCategoriesFragment_to_searchPageFragment, bundle);
     }
 }

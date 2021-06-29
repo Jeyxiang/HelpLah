@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -197,6 +198,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         private final TextView requestContactNumber;
         private final TextView cancellationReason;
         private final TextView cancellationTitle;
+        private final TextView optionsButton;
         private final CircleImageView image;
         private final ExtendedFloatingActionButton actionOneButton;
         private final ExtendedFloatingActionButton actionTwoButton;
@@ -217,6 +219,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             this.requestContactNumber = itemView.findViewById(R.id.requestContactNumber);
             this.cancellationReason = itemView.findViewById(R.id.requestCancellationReason);
             this.cancellationTitle = itemView.findViewById(R.id.requestCancellationTitle);
+            this.optionsButton = itemView.findViewById(R.id.requestOptionsButton);
             this.actionOneButton = itemView.findViewById(R.id.requestCancelButton);
             this.actionTwoButton = itemView.findViewById(R.id.requestEditButton);
             this.chatButton = itemView.findViewById(R.id.requestChatButton);
@@ -252,7 +255,6 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             setActionOneAlpha(request);
             setActionTwoAlpha(request);
 
-
             this.requestDescription.setText(request.getJobDescription());
             this.cancellationReason.setText(request.getDeclineMessage());
             this.requestAddress.setText(request.getAddress());
@@ -272,6 +274,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
             configureActionTwo(request, documentId);
             configureActionOne(request, documentId);
+            configureOptions(request);
             this.chatButton.setOnClickListener(v -> mListener.onChatClicked(v, request));
         }
 
@@ -411,6 +414,32 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                     this.actionTwoErrorMessage = null;
                 }
             }
+        }
+
+        private void configureOptions(JobRequests requests) {
+            this.optionsButton.setOnClickListener(v -> {
+                PopupMenu popupMenu = new PopupMenu(context, optionsButton);
+                if (isBusiness) {
+                    popupMenu.inflate(R.menu.business_job_request_options);
+                } else {
+                    popupMenu.inflate(R.menu.user_job_request_options);
+                }
+                popupMenu.setOnMenuItemClickListener((PopupMenu.OnMenuItemClickListener) item -> {
+                    if (item.getItemId() == R.id.addRequestToCalendar && ! isBusiness) {
+                        // Open calendar
+                        Log.d(TAG, "configureOptions: Adding to calendar");
+                        JobRequests.goToCalendar(requests, context);
+                        return true;
+                    } else if (item.getItemId() == R.id.goToLocation) {
+                        // Open google maps
+                        Log.d(TAG, "configureOptions: Going to job address location " + requests.getAddress());
+                        JobRequests.goToAddress(requests, context);
+                        return true;
+                    }
+                    return false;
+                });
+                popupMenu.show();
+            });
         }
 
     }

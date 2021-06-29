@@ -1,19 +1,27 @@
 package com.example.helplah.models;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.provider.CalendarContract;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class JobRequests implements Parcelable {
 
+    private static final String TAG = "Job requests";
     public static final String DATABASE_COLLECTION = "Job requests";
-
     public static final String FIELD_CUSTOMER_ID = "customerId";
     public static final String FIELD_BUSINESS_ID = "businessId";
     public static final String FIELD_CUSTOMER_NAME = "customerName";
@@ -68,6 +76,12 @@ public class JobRequests implements Parcelable {
         this.dateCreated = new Date(System.currentTimeMillis());
     }
 
+    public JobRequests(String businessName, String customerName, long dateOfJob, String id) {
+        this.businessName = businessName;
+        this.customerName = customerName;
+        this.dateOfJob = new Date(dateOfJob);
+        this.id = id;
+    }
 
     protected JobRequests(Parcel in) {
         customerId = in.readString();
@@ -142,6 +156,49 @@ public class JobRequests implements Parcelable {
     public static void markAsReviewed(String requestId) {
         CollectionReference db = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION);
         db.document(requestId).update(FIELD_REVIEWED, true);
+    }
+
+    public static void goToAddress(JobRequests requests, Context context) {
+        String address = requests.getAddress();
+        String[] addressElements = address.split(", S");
+        Uri intentUri = Uri.parse("geo:1.3521,103.8198?q=" + addressElements[1] + ", Singapore");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, intentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        try {
+            context.startActivity(mapIntent);
+        } catch (Exception e) {
+            Log.d(TAG, "goToAddress: An error occurred " + e.getMessage());
+            Toast.makeText(context, "Unable to open google maps", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void goToCalendar(JobRequests requests, Context context) {
+        if (requests.getStatus() != JobRequests.STATUS_CONFIRMED || requests.getConfirmedTiming() == null) {
+            Toast.makeText(context, "You can only add the job request to your calendar " +
+                    "once it has been confirmed.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Calendar dayOfJob = Calendar.getInstance();
+        dayOfJob.setTime(requests.getDateOfJob());
+        int year = dayOfJob.get(Calendar.YEAR);
+        int month = dayOfJob.get(Calendar.MONTH);
+        int day = dayOfJob.get(Calendar.DAY_OF_MONTH);
+        String[] confirmedTime = requests.getConfirmedTiming().split(":");
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(year, month, day, Integer.parseInt(confirmedTime[0]), Integer.parseInt(confirmedTime[1]));
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, beginTime.getTimeInMillis() + 3600000)
+                .putExtra(CalendarContract.Events.TITLE, "Job request")
+                .putExtra(CalendarContract.Events.DESCRIPTION, "Job request with " + requests.getBusinessName())
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, requests.getAddress());
+        try {
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(context, "Unable to open calendar", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "goToCalendar: An error occurred " + e.getMessage());
+        }
     }
 
     public String getCustomerId() {
@@ -294,5 +351,18 @@ public class JobRequests implements Parcelable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JobRequests requests = (JobRequests) o;
+        return Objects.equals(id, requests.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

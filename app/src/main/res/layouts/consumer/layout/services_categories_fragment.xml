@@ -54,8 +54,8 @@
                     android:layout_marginEnd="15dp"
                     android:paddingTop="5dp"
                     app:mt_searchBarColor="#97ffffff"
-                    app:mt_placeholder="Search..."
-                    app:mt_hint="Search for a category or business"
+                    app:mt_placeholder="Search for a listing.."
+                    app:mt_hint="Enter listing here"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

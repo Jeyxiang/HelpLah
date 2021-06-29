@@ -13,6 +13,7 @@ import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -138,6 +139,7 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 sortOptionClicked();
                 return true;
             } else if (menuItem.getItemId() == R.id.topBarSearch) {
+                goToSearch();
                 return true;
             } else if (menuItem.getItemId() == R.id.topBarGetNew) {
                 changeSort();
@@ -435,6 +437,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         collection.document(requestId).update(updates);
         NotificationHandler.requestFinished(request);
         Toast.makeText(getActivity(), "Job request marked as finished", Toast.LENGTH_SHORT).show();
+    }
+
+    private void goToSearch() {
+        Navigation.findNavController(requireView()).navigate(
+                R.id.action_businessJobsRequestsFragment_to_requestSearchFragment);
     }
 
 }
