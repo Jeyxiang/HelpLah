@@ -6,6 +6,10 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * A class responsible for creating a firestore query to get the reviews of a particular business
+ * based on different sorts and filters.
+ */
 public class ReviewQuery {
 
     public static final String TAG = "Review query";

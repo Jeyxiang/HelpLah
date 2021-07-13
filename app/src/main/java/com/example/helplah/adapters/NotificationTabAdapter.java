@@ -18,9 +18,16 @@ import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * A recycler view adapter that fills the notification tab in the account page with the user's
+ * notification.
+ */
 public class NotificationTabAdapter extends FirestorePagingAdapter<Notification,
         NotificationTabAdapter.NotificationViewHolder> {
 
+    /**
+     * A listener interface that listens on when a particular notification is clicked.
+     */
     public interface NotificationClickedListener {
         void notificationClicked(Notification notification, View v);
     }
@@ -28,9 +35,9 @@ public class NotificationTabAdapter extends FirestorePagingAdapter<Notification,
     private final NotificationClickedListener listener;
 
     /**
-     * Construct a new FirestorePagingAdapter from the given {@link FirestorePagingOptions}.
-     *
-     * @param options
+     * Construct a new adapter.
+     * @param options A firestore paging options that contains the query and paging configuration.
+     * @param listener A listener to listen for notification clicks.
      */
     public NotificationTabAdapter(@NonNull FirestorePagingOptions<Notification> options, NotificationClickedListener listener) {
         super(options);

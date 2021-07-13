@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BusinessPictureFragment extends Fragment {
+
     private static File tempFile; //to store the camera picture temporarily
     private boolean isCamera = false;
     private Uri fileUri;

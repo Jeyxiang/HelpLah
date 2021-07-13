@@ -27,6 +27,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+/**
+ * Fragment for displaying all the business listings for a particular service category. Contain a
+ * dialog fragment which allows a user to filter the results.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * service - String: The service category of the listings to be displayed. The list of all services
+ * currently supported can be found in Services.ALLSERVICES.
+ */
 public class BusinessListingsFragment extends Fragment implements
         ListingsDialogFragment.FilterListener,
         ListingsAdapter.onListingSelectedListener {

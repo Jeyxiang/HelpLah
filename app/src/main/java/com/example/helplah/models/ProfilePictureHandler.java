@@ -12,6 +12,13 @@ import com.google.firebase.storage.StorageReference;
 
 public class ProfilePictureHandler {
 
+    /**
+     * Takes an image view and set the image of the imageview as the profile picture of the user.
+     * The profile picture is stored on firebase storage and is obtained from the user id.
+     * @param imageView The imageView to set the profile picture.
+     * @param id The id of the user.
+     * @param context The context of the imageView.
+     */
     public static void setProfilePicture(ImageView imageView, String id, Context context) {
         StorageReference reference = FirebaseStorage.getInstance().getReference()
                 .child("profilepic/" + id + "/profile.jpg");
@@ -23,6 +30,10 @@ public class ProfilePictureHandler {
                                         R.drawable.blank_profile_picture, null)));
     }
 
+    /**
+     * Updates the Comet Chat API account profile picture of a user.
+     * @param id The firebase authentication user id of the user.
+     */
     public static void updateCometPicture(String id) {
         StorageReference reference = FirebaseStorage.getInstance().getReference()
                 .child("profilepic/" + id + "/profile.jpg");

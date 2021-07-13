@@ -18,6 +18,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * A class to represent a job request made by a user.
+ *
+ * The static String field represents the name of the field in the firestore database. Use the static
+ * fields when updating or adding a field in the database.
+ */
 public class JobRequests implements Parcelable {
 
     private static final String TAG = "Job requests";
@@ -41,29 +47,51 @@ public class JobRequests implements Parcelable {
     public static final String FIELD_DATE_OF_JOB = "dateOfJob";
     public static final String FIELD_ID = "id";
 
+    // The different status of a job request.
     public static final int STATUS_CONFIRMED = 1;
     public static final int STATUS_FINISHED = 3;
     public static final int STATUS_CANCELLED = 2;
     public static final int STATUS_PENDING = 0;
 
+    // The id of the customer who made the job request.
     private String customerId;
+    // The id of the business who received the job request.
     private String businessId;
+    // The name of the customer hwo made the job request.
     private String customerName;
+    // The name of the business who received the job request.
     private String businessName;
+    // The service category of the job request.
     private String service;
+    // A description about the job.
     private String jobDescription;
+    // The address of the job location. The default value is the customer's address.
     private String address;
+    // The confirmed timing of the job request. The user sets a date for the job and the business
+    // confirms a particular timing on the day.
     private String confirmedTiming;
+    // If a job request is declined or cancelled, the reason for the decline is stored here.
     private String declineMessage;
+    // The current status of the job request.
     private int status;
+    // The phone number of the person who the business should contact about the job request.
     private int phoneNumber;
+    // The phone number of the business receiving the job request.
     private int businessPhoneNumber;
+    // The creation date of this job request.
     private Date dateCreated;
+    // A timing note that the user sets when he creates the job request to let the business know
+    // when he is free during the date of the job.
     private String timingNote;
+    // The date of the job.
     private Date dateOfJob;
+    // If this job request has been deleted by the business who received the job request.
     private boolean removed = false;
+    // If this job request has been deleted by the business who made the job request.
     private boolean userRemoved = false;
+    // If the job request has been reviewed.
     private boolean reviewed = false;
+    // The firestore id of the job request.
     private String id;
 
     public JobRequests() {}
@@ -148,16 +176,31 @@ public class JobRequests implements Parcelable {
         return formatter.format(date);
     }
 
+    /**
+     * Checks if a particular job request has passed.
+     * @param request The job request to check.
+     * @return True if the job request has passed, false otherwise.
+     */
     public static boolean isJobOver(JobRequests request) {
         long current_time = System.currentTimeMillis();
         return current_time > request.getDateOfJob().getTime();
     }
 
+    /**
+     * Marks a job request as reviewed and updates the database.
+     * @param requestId The firestore id of the job request to mark as reviewed.
+     */
     public static void markAsReviewed(String requestId) {
         CollectionReference db = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION);
         db.document(requestId).update(FIELD_REVIEWED, true);
     }
 
+    /**
+     * Opens google maps which shows the address of the job request. This feature is available to
+     * business users only.
+     * @param requests The job request whose address is to be displayed.
+     * @param context The context where this function is called from.
+     */
     public static void goToAddress(JobRequests requests, Context context) {
         String address = requests.getAddress();
         String[] addressElements = address.split(", S");
@@ -172,6 +215,13 @@ public class JobRequests implements Parcelable {
         }
     }
 
+    /**
+     * Opens the phone calendar app and allows a user to save a job request in his phone's calendar.
+     * The details of the calendar event will be automatically filled. This feature is only available
+     * to consumer users.
+     * @param requests The job request ot save to the calendar.
+     * @param context The context where this function is called from.
+     */
     public static void goToCalendar(JobRequests requests, Context context) {
         if (requests.getStatus() != JobRequests.STATUS_CONFIRMED || requests.getConfirmedTiming() == null) {
             Toast.makeText(context, "You can only add the job request to your calendar " +

@@ -12,17 +12,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
 
+/**
+ * A class that extracts a notification.
+ */
 public class Notification {
 
     private static final String TAG = "Notifications model";
     public static final String DATABASE_COLLECTION = "Notifications";
 
+    // The name of the field in the firestore database.
+    // Use these static fields when updating or adding to the firestore database.
     public static final String FIELD_TYPE = "type";
     public static final String FIELD_TITLE = "title";
     public static final String FIELD_TEXT = "text";
     public static final String FIELD_ACTION_ID = "actionId";
     public static final String FIELD_DATE = "date";
 
+    // The different types of notification
     public static final int JOB_REQUEST_CREATED = 1;
     public static final int JOB_REQUEST_EDITED = 2;
     public static final int JOB_REQUEST_CANCELLED = 3;
@@ -31,12 +37,20 @@ public class Notification {
     public static final int LEFT_A_REVIEW = 6;
     public static final int REPLIED_REVIEW = 7;
 
+    // The type of the notification.
     private int type;
+    // The ate of the notification.
     private Date date;
+    // The title of the notification.
     private String title;
+    // A description about the notification.
     private String text;
+    // The id related to the item of the notification. For example, if the notification is regarding
+    // a job request, then the actionId stores the firestore id of the job request.
     private String actionId;
+    // The user id of the recipient.
     private String recipientId;
+    // The user id of the sender.
     private String senderId;
 
     public Notification() {}
@@ -98,7 +112,14 @@ public class Notification {
     }
 
 
-    // Handles the action when a notification is clicked
+    /**
+     * Performs an action when a notification is clicked depending on the type of the notification
+     * and who clicked the notification.
+     * @param notification The notification clicked.
+     * @param v The view where the notification was clicked at.
+     * @param isBusiness Is the notification clicked by a business or consumer user.
+     * @param context The context in which the notification was clicked.
+     */
     public static void notificationClicked(Notification notification, View v,
                                            boolean isBusiness, Context context) {
         if (notification.getType() >= Notification.JOB_REQUEST_CREATED

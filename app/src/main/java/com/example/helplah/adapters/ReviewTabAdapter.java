@@ -2,6 +2,7 @@ package com.example.helplah.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,19 +11,39 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
+import com.example.helplah.models.Listings;
 import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.Review;
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+/**
+ * A recycler view adapter that fills the reviews tab in the account page with reviews. If the
+ * user is a business, then the adapter fills the page with the business's reviews. If the user is
+ * a consumer, then the adapter fills the page with the reviews written by the user.
+ *
+ * In order for the adapter to differentiate between a business and consumer user, a boolean is
+ * passed into the constructor depending on whether it is called from the business or consumer
+ * interface.
+ */
 public class ReviewTabAdapter extends FirestorePagingAdapter<Review, ReviewTabAdapter.ViewHolder> {
 
+    /**
+     * A listener interface that listens on when the option's tab on a reviews is clicked.
+     * Clicking the option's tab will open an overflow menu with different options.
+     *
+     * The options displayed is configured in the ConfigureOptions method in the viewHolder class
+     * below.
+     */
     public interface OptionsListener {
 
         void optionClicked(View v, Review review);
@@ -36,9 +57,11 @@ public class ReviewTabAdapter extends FirestorePagingAdapter<Review, ReviewTabAd
     private OptionsListener listener;
 
     /**
-     * Construct a new FirestorePagingAdapter from the given {@link FirestorePagingOptions}.
-     *
-     * @param options
+     * Construct a new ReviewTabAdapter.
+     * @param options A firestore paging options that contains the query and paging configuration.
+     * @param listener A listener to listen on clicks on each review's option tab.
+     * @param business A boolean to indicate of the adapter is being used by a business or consumer
+     *                 user.
      */
     public ReviewTabAdapter(@NonNull FirestorePagingOptions<Review> options,
                             OptionsListener listener, boolean business) {
@@ -100,6 +123,7 @@ public class ReviewTabAdapter extends FirestorePagingAdapter<Review, ReviewTabAd
             } else {
                 this.reviewUsername.setText("Reviewed: " + review.getBusinessName());
                 ProfilePictureHandler.setProfilePicture(this.image, review.getBusinessId(), this.context);
+                this.image.setOnClickListener(v -> goToBusinessListing(review));
             }
             this.reviewDate.setText(Review.getTimeAgo(review.getDateReviewed()));
             this.reviewService.setText("Service provided: " + review.getService());
@@ -115,6 +139,11 @@ public class ReviewTabAdapter extends FirestorePagingAdapter<Review, ReviewTabAd
             configureOptions(review);
         }
 
+
+        /**
+         * Configure the review option overflow tab of the review adapter item.
+         * @param review The individual reviews in the adapter.
+         */
         private void configureOptions(Review review) {
             this.optionsButton.setOnClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(context, optionsButton);
@@ -131,6 +160,26 @@ public class ReviewTabAdapter extends FirestorePagingAdapter<Review, ReviewTabAd
                     return false;
                 });
                 popupMenu.show();
+            });
+        }
+
+        /**
+         * Go to the business listing of a review. It is activated when a user clicks the profile
+         * picture of a review item. This is only applicable to the consumer user interface.
+         * @param review The review whose profile picture is clicked.
+         */
+        private void goToBusinessListing(Review review) {
+            String businessId = review.getBusinessId();
+            CollectionReference listingsDb = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
+            Bundle bundle = new Bundle();
+
+            listingsDb.document(businessId).get().addOnSuccessListener(snapshot -> {
+                Listings listing = snapshot.toObject(Listings.class);
+                bundle.putParcelable("listing", listing);
+                bundle.putString("id", businessId);
+                bundle.putString("category", review.getService());
+                Navigation.findNavController(itemView)
+                        .navigate(R.id.action_accountFragment_to_listingDescription, bundle);
             });
         }
     }

@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A class that abstracts a review for a job request.
+ */
 public class Review implements Parcelable {
 
     private static final String TAG = "Reviews";
@@ -33,11 +36,17 @@ public class Review implements Parcelable {
     public static final String FIELD_REVIEW_ID = "reviewId";
 
 
+    // The review text.
     private String reviewText;
+    // The date when the review was created.
     private Date dateReviewed;
+    // The reply to the review made bu the business. Null at the start.
     private String reply;
+    // The date of the reply.
     private Date dateReplied;
+    // The score of the review.
     private float score;
+    // The service provided by the business for the review.
     private String service;
     private String username;
     private String userId;
@@ -97,7 +106,11 @@ public class Review implements Parcelable {
         dest.writeString(reviewId);
     }
 
-    // Uses the information from a job request to initialise a review
+    /**
+     * Users the information from a job request to initialise a review.
+     * @param request The job request to elave a review on.
+     * @return The review.
+     */
     public static Review jobRequestToReview(JobRequests request) {
         Review review = new Review(request.getCustomerName(), request.getCustomerId(),
                 request.getBusinessName(), request.getBusinessId());
@@ -106,6 +119,11 @@ public class Review implements Parcelable {
         return review;
     }
 
+    /**
+     * Takes a date and returns a string that represents how long ago the date was.
+     * @param past The date.
+     * @return How long ago the date was.
+     */
     public static String getTimeAgo(Date past) {
         if (past == null) {
             return "";
@@ -132,12 +150,23 @@ public class Review implements Parcelable {
         }
     }
 
+    /**
+     * Submit a review by uploading it to the appropriate location in the firestore database.
+     * @param review The review to be submitted.
+     * @param context The context where this function was called from.
+     */
     public static void submitReview(Review review, FragmentActivity context) {
 
         CollectionReference listingReviews = FirebaseFirestore.getInstance()
                 .collection(Listings.DATABASE_COLLECTION)
                 .document(review.getBusinessId())
                 .collection(Review.DATABASE_COLLECTION);
+
+        if (!checkReview(review)) {
+            Log.d(TAG, "submitReview: Error while submitting review.");
+            Toast.makeText(context, "Failed to submit review. Please try again.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         listingReviews.add(review).addOnSuccessListener(documentReference -> {
             Log.d(TAG, "submitReview: Review added for " + review.getBusinessName());
@@ -153,6 +182,24 @@ public class Review implements Parcelable {
         });
     }
 
+    /**
+     * Checks if the review object has all the necessary fields before uploading it to the database.
+     * @param review The review to be uploaded to the database.
+     * @return True if it is safe to upload to the database, false otherwise.
+     */
+    public static boolean checkReview(Review review) {
+        return review.getReviewText() != null && review.getBusinessName() != null &&
+                review.getUsername() != null && review.getBusinessId() != null &&
+                review.getJobRequestId() != null && review.getUserId() != null &&
+                review.getScore() != 0.0 && review.getDateReviewed() != null &&
+                review.getService() != null;
+    }
+
+    /**
+     * Edit a review by updating it to the appropriate location in the firestore database.
+     * @param review The review to be edited.
+     * @param context The context where this function was called from.
+     */
     public static void editReview(Review review, FragmentActivity context) {
         CollectionReference listingReviews = FirebaseFirestore.getInstance()
                 .collection(Listings.DATABASE_COLLECTION)
@@ -169,6 +216,12 @@ public class Review implements Parcelable {
                 });
     }
 
+    /**
+     * Reply to a review by updating the review in the firestore database and adding in the reply.
+     * @param review The review to be replied.
+     * @param context The context where this function was called from.
+     * @param isEdit Is this reply new or an edited reply.
+     */
     public static void replyReview(Review review, FragmentActivity context, boolean isEdit) {
 
         CollectionReference listingReviews = FirebaseFirestore.getInstance()

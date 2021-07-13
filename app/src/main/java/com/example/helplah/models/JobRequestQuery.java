@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
+/**
+ * A class responsible for creating a firestore query on the Job Requests collection.
+ */
 public class JobRequestQuery {
 
     public static final String TAG = "Job request query";

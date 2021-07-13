@@ -6,6 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.helplah.databinding.SearchListItemBinding
 import com.example.helplah.models.Listings
 
+/**
+ * A viewHolder that displays listings search results. It is meant to be used as the viewHolder in a
+ * SearchListingAdapter.
+ */
 class SearchListingViewHolder(private val view : View,
                               private val listener: SearchListingAdapter.OnListingClickedListener)
     : RecyclerView.ViewHolder(view), View.OnClickListener {

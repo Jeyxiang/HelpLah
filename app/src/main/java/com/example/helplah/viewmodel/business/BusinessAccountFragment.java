@@ -30,6 +30,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+/**
+ * Fragment for displaying the account tab of a business user. Contains a viewpager which
+ * allows a user to swipe between the notifications and reviews tab.
+ */
 public class BusinessAccountFragment extends Fragment {
 
     private static final String TAG = "Business account fragment";

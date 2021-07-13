@@ -14,6 +14,12 @@ import androidx.fragment.app.Fragment;
 import com.example.helplah.R;
 import com.example.helplah.models.Review;
 
+/**
+ * Fragment that displays a UI for a business to reply to review made by a user.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * review - Review (implements Parcelable): The review to reply to.
+ */
 public class ReplyReviewFragment extends Fragment {
 
     private boolean editMode;

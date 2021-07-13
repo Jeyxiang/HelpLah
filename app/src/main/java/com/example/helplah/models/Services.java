@@ -7,10 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * A class that abstracts the services that a particular business provides to customers.
+ */
 public class Services implements Parcelable {
 
     public static final String SERVICE = "Service";
 
+    // The different services currently supported by the app,
     public static final String ELECTRICIAN = "Electrician";
     public static final String PLUMBER = "Plumber";
     public static final String CLEANER = "Cleaning";

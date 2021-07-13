@@ -13,6 +13,10 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * An API for the app to send emails. It is used in order for the user to send complaints about the
+ * app, which is sent to the app's emails account in order for administrators to view them.
+ */
 public class JavaMailAPI extends AsyncTask<Void,Void,Void> {
     private String mailhost = "smtp.gmail.com";
     private Context context;

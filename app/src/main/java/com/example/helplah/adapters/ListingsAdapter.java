@@ -20,8 +20,15 @@ import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+/**
+ * A recycler view adapter that fills a listing page with the business listings obtained from the
+ * firestore database.
+ */
 public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAdapter.ListingsViewHolder> {
 
+    /**
+     * A listener interface that listens on when a particular listing is clicked.
+     */
     public interface onListingSelectedListener {
 
         void onListingClicked(DocumentSnapshot listing, View v);
@@ -30,6 +37,11 @@ public class ListingsAdapter extends FirestorePagingAdapter<Listings, ListingsAd
 
     private onListingSelectedListener mListener;
 
+    /**
+     * A constructor to initialise the adapter.
+     * @param options A firestore paging options that contains the query and paging configuration.
+     * @param listener A listener to listen to clicks on a particular listing.
+     */
     public ListingsAdapter(FirestorePagingOptions<Listings> options, onListingSelectedListener listener) {
         super(options);
         this.mListener = listener;

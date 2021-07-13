@@ -27,6 +27,14 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.My
     int[] categoriesImages;
     Context context;
 
+    /**
+     * A constructor for the adapter.
+     * @param context The context of the adapter.
+     * @param categories The listings categories the app currently supports.
+     * @param img Each listing category respective icon.
+     * @param fragment The fragment that calls the adapter and implements the OnCategorySelected
+     *                 interface.
+     */
     public CategoriesAdapter(Context context, String[] categories, int[] img, Fragment fragment) {
         this.categories = categories;
         this.mListener = (onCategorySelected) fragment;

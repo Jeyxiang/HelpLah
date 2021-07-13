@@ -5,7 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
-// Populates the database with random Businesses
+// Populates the database with random Businesses. (To be used for testing only)
 public class RandomData {
 
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";

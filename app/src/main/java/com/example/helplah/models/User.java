@@ -33,12 +33,22 @@ public class User {
         this.isBusiness = isBusiness;
     }
 
+    /**
+     * Updates the username of the user.
+     * @param id The firebase userId of the user.
+     * @param newName The new username of the user.
+     */
     public static void updateUsername(String id, String newName) {
         DocumentReference docRef = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION)
                 .document(id);
         docRef.update(FIELD_USERNAME, newName);
     }
 
+    /**
+     * Updates the phone number of the user.
+     * @param id The firebase userId of the user.
+     * @param newNumber The new phone number.
+     */
     public static void updatePhoneNumber(String id, int newNumber) {
         DocumentReference docRef = FirebaseFirestore.getInstance().collection(DATABASE_COLLECTION)
                 .document(id);

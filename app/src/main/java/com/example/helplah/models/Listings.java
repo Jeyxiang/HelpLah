@@ -41,19 +41,33 @@ public class Listings implements Parcelable {
     public static final ArrayList<String> ALL_LANGUAGES= new ArrayList<>(Arrays.asList(LANGUAGE_ENGLISH,
             LANGUAGE_CHINESE, LANGUAGE_MALAY, LANGUAGE_TAMIL));
 
+    // The name of the business.
     private String name;
+    // The description about the business listing.
     private String description;
+    // A detailed description about how the business charges consumers.
     private String pricingNote;
+    // The languages spoken by the business.
     private String language;
+    // The min price charged by the business.
     private double minPrice = -1;
+    // Is the business a company or an individual. (Not used currently)
     private boolean isCompany;
+    // The review score.
     private double reviewScore = 0;
+    /// The number of reviews.
     private int numberOfReviews = 0;
+    // The availability of the business.
     private int availability;
+    // The link of the business's profile picture. (Not used currently)
     private String profilePic;
+    // The phone number of the business.
     private int phoneNumber;
+    // The website of the business. (Optional)
     private String website = "";
+    // The list of all services provided by the business.
     private Services servicesList;
+    // The firestore id of the business listing.
     private String listingId;
 
     // Firestore requires empty constructor to run

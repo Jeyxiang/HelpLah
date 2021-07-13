@@ -27,6 +27,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Fragment for displaying the account tab of a consumer user. Contains a viewpager which
+ * allows a user to swipe between the notifications and reviews tab.
+ */
 public class AccountFragment extends Fragment {
 
     public static class UserAccountViewModel extends ViewModel {

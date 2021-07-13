@@ -1,5 +1,8 @@
 package com.example.helplah.models;
 
+/**
+ * Static class to represent the current availability of a business.
+ */
 public class AvailabilityStatus {
 
     public static final int fourHours = 1;

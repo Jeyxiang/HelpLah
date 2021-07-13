@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_accountFragment_to_viewReplyFragment"
             app:destination="@id/viewReplyFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_listingDescription"
+            app:destination="@id/listingDescription" />
     </fragment>
     <fragment
         android:id="@+id/jobRequestsFragment"

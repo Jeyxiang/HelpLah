@@ -9,6 +9,10 @@ import com.example.helplah.R
 import com.example.helplah.databinding.SearchListItemBinding
 import com.example.helplah.models.Listings
 
+/**
+ * A paged list adapter that fills a page with search results of different listings when the user
+ * uses the search bar at the home screen to search for a particular listing.
+ */
 class SearchListingAdapter(private val listener: OnListingClickedListener) :
         PagedListAdapter<Listings, SearchListingViewHolder>(SearchListingAdapter) {
 

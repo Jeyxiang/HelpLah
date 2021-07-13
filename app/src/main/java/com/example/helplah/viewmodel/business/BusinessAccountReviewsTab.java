@@ -20,6 +20,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+/**
+ * Fragment that shows all the reviews received by the business. This fragment is meant to be
+ * used in a viewpager in the BusinessAccountFragment tab.
+ */
 public class BusinessAccountReviewsTab extends Fragment implements ReviewTabAdapter.OptionsListener {
 
     private FirestorePagingOptions<Review> options;

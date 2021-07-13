@@ -23,14 +23,17 @@ import java.util.Objects;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+/**
+ * A recycler view adapter that fills the reviews page with a particular listing's review.
+ */
 public class ReviewsAdapter extends FirestorePagingAdapter<Review, ReviewsAdapter.ViewHolder> {
 
+    // The context in which this adapter is used.
     private Context context;
 
     /**
-     * Construct a new FirestorePagingAdapter from the given {@link FirestorePagingOptions}.
-     *
-     * @param options
+     * Construct a new Reviews adapter.
+     * @param options A firestore paging options that contains the query and paging configuration.
      */
     public ReviewsAdapter(@NonNull FirestorePagingOptions<Review> options) {
         super(options);

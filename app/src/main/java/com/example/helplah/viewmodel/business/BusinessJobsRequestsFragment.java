@@ -13,7 +13,6 @@ import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,9 +41,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link BusinessJobsRequestsFragment} factory method to
- * create an instance of this fragment.
+ * A fragment that shows a list of the business job requests. It uses a recycler view to display the
+ * job requests and also hosts a dialog fragment that allows a business user to filter and sort
+ * the job requests displayed.
  */
 public class BusinessJobsRequestsFragment extends Fragment implements 
         JobRequestsAdapter.RequestClickedListener,
@@ -52,6 +51,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
 
     private static final String TAG = "Business job request fragment";
 
+    /**
+     * A viewModel to save the query so that it survives configuration changes. This means
+     * that when a user switches tabs in the bottom navigation bar, the query is saved so that
+     * the results does not change when the user returns to this fragment.
+     */
     public static class BusinessJobRequestViewModel extends ViewModel {
 
         private Query query;
@@ -88,6 +92,8 @@ public class BusinessJobsRequestsFragment extends Fragment implements
             return;
         }
 
+        // Creates the default query nn which the job requests are sorted by the date of job
+        // in descending order
         JobRequestQuery requestQuery = new JobRequestQuery(FirebaseFirestore.getInstance(),
                 this.userId, true);
         requestQuery.setSortBy(JobRequests.FIELD_DATE_OF_JOB, false);
@@ -113,6 +119,10 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         return this.rootView;
     }
 
+    /**
+     * Sets up the firestore options for the recycler view.
+     * @param query The firestore query to be displayed in the recycler view.
+     */
     public void configureFirestore(Query query) {
 
         this.options = new FirestoreRecyclerOptions.Builder<JobRequests>()
@@ -120,6 +130,9 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 .build();
     }
 
+    /**
+     * Configures the recycler view by creating an adapter to display the query results.
+     */
     public void getQuery() {
         Log.d(TAG, "getQuery: Getting query");
 
@@ -130,6 +143,9 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         this.rvJobRequests.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    /**
+     * Configures the recycler view by creating an adapter to display the query results.
+     */
     public void setToolbar() {
         this.toolbar.setOnMenuItemClickListener(menuItem -> {
             if (this.mode != null) {
@@ -137,9 +153,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
             }
             if (menuItem.getItemId() == R.id.topBarFilter) {
                 sortOptionClicked();
-                return true;
-            } else if (menuItem.getItemId() == R.id.topBarSearch) {
-                goToSearch();
                 return true;
             } else if (menuItem.getItemId() == R.id.topBarGetNew) {
                 changeSort();
@@ -175,8 +188,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         });
     }
 
-    // Deletes all cancelled requests (Does not actually delete the request, only prevents it from
-    // being shown. Only the customer who made the original request can delete it from the database)
+    /**
+     * Deletes all the job request that the business or consumer has previously cancelled. This method
+     * does not delete the job request from the backend database but rather marks it as removed,
+     * preventing the business user from seeing it.
+     */
     public void removeAllCancelledRequest() {
         String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -206,6 +222,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 });
     }
 
+    /**
+     * Deletes all the finished job request. This method does not delete the job
+     * request from the backend database but rather marks it as removed, preventing the user from
+     * seeing it.
+     */
     public void removeFinishedRequests() {
         String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -235,8 +256,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 });
     }
 
-    // Remove requests older than a week (Does not actually delete the request, only prevents it from
-    // being shown. Only the customer who made the original request can delete it from the database)
+    /**
+     * Deletes all the job requests that are older than a week. This methods will delete all
+     * old request regardless of the status. This method does not delete the job request from the
+     * backend database but rather marks it as removed, preventing the user from seeing it.
+     */
     public void removeOldRequests() {
         String businessId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         long currentTime = System.currentTimeMillis();
@@ -268,6 +292,10 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 });
     }
 
+    /**
+     * Allows the business user to quickly sort the job requests by date created rether than
+     * date of job.
+     */
     private void changeSort() {
         JobRequestFilterDialog.RequestFilterViewModel viewModel = this.filterDialog.getViewModel();
         viewModel.setSpinnerPosition(2);
@@ -277,10 +305,16 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         changeQuery(query.createQuery());
     }
 
+    /**
+     * Resets the filter dialog.
+     */
     private void resetFilter() {
         changeQuery(this.filterDialog.reset(this.userId));
     }
 
+    /**
+     * Opens up the filter dialog fragment when the sort option button is clicked.
+     */
     private void sortOptionClicked() {
         this.filterDialog.show(requireActivity().getSupportFragmentManager(), TAG);
     }
@@ -330,15 +364,31 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         this.mode = activity.startSupportActionMode(callback);
     }
 
+    /**
+     * Deletes and cancels all the selected item that are selected by the user in multi-select mode.
+     * Job requests that have status as confirmed cannot be deleted this way. They have to be deleted
+     * manually. This method does not delete the job request from the backend database but rather
+     * marks it as removed, preventing the user from seeing it.
+     * @param arrayList The list of all the job requests to delete.
+     */
     @Override
-    public void deleteSelection(ArrayList<String> arrayList) {
+    public void deleteSelection(ArrayList<JobRequests> arrayList) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference jobsCollection = db.collection(JobRequests.DATABASE_COLLECTION);
         WriteBatch batch = db.batch();
-        for (String id : arrayList) {
-            DocumentReference doc = jobsCollection.document(id);
+        for (JobRequests request : arrayList) {
+            if (request.getStatus() == JobRequests.STATUS_CONFIRMED) {
+                continue;
+            }
+            DocumentReference doc = jobsCollection.document(request.getId());
             batch.update(doc, JobRequests.FIELD_REMOVED, true);
+            if (request.getStatus() == JobRequests.STATUS_PENDING) {
+                request.setDeclineMessage("Others");
+                NotificationHandler.requestCancelled(request, false);
+                batch.update(doc, JobRequests.FIELD_STATUS, JobRequests.STATUS_CANCELLED);
+                batch.update(doc, JobRequests.FIELD_DECLINE_MESSAGE, "Others");
+            }
         }
 
         batch.commit()
@@ -354,7 +404,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
                 });
     }
 
-    // Confirms the request and confirms a time
     @Override
     public void actionTwoClicked(View v, JobRequests requests, String requestId) {
 
@@ -365,8 +414,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         }
     }
 
-
-    // Declines the request
     @Override
     public void actionOneClicked(JobRequests request, String documentId) {
 
@@ -389,6 +436,14 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         ChatFunction.createChat(request.getCustomerId(), request.getCustomerName(), getActivity());
     }
 
+    /**
+     * Allows a business user to decline a request. The request status is changed to cancelled and
+     * a decline reason the user selected is added to the request. The changes are then updated to
+     * the database and a notification will be send to the user who made the job request.
+     * @param documentId The id of the job request to be declined.
+     * @param message The decline message that the business user has selected.
+     * @param request The request to be declined.
+     */
     private void declineRequest(String documentId, String message, JobRequests request) {
         Map<String, Object> updates = new HashMap<>();
         updates.put(JobRequests.FIELD_DECLINE_MESSAGE, message);
@@ -401,6 +456,13 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         Log.d(TAG, "declineRequest: " + message);
     }
 
+    /**
+     * Confirms the job request. Shows a time picker where the user can confirm a specific timing on
+     * the day of the job request. The update is then updated to the database and a notification sent
+     * to the user who made the job request.
+     * @param request The request to be confirmed.
+     * @param requestId The id of the request to be confirmed.
+     */
     private void confirmJob(JobRequests request, String requestId) {
         MaterialTimePicker timePicker =
                 new MaterialTimePicker.Builder()
@@ -429,6 +491,11 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         });
     }
 
+    /**
+     * Marks a job as finished.
+     * @param request The request to mark as finished.
+     * @param requestId The id of the request to mark as finished.
+     */
     private void markJobAsFinished(JobRequests request, String requestId) {
         CollectionReference collection = FirebaseFirestore.getInstance()
                 .collection(JobRequests.DATABASE_COLLECTION);
@@ -437,11 +504,6 @@ public class BusinessJobsRequestsFragment extends Fragment implements
         collection.document(requestId).update(updates);
         NotificationHandler.requestFinished(request);
         Toast.makeText(getActivity(), "Job request marked as finished", Toast.LENGTH_SHORT).show();
-    }
-
-    private void goToSearch() {
-        Navigation.findNavController(requireView()).navigate(
-                R.id.action_businessJobsRequestsFragment_to_requestSearchFragment);
     }
 
 }

@@ -36,6 +36,16 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * A recycler view adapter that fills the Job Request adapter. This adapter is used for both
+ * the consumer and business job request fragment. To distinguish between whether the adapter is
+ * being used for business or consumer or interface, a boolean isBusiness is passed into the adapter's
+ * constructor.
+ * Clicking a job request item in the recycler view will expand it to review more information and
+ * clicking it again will hide the extra information. Long clicking a job request item will enter
+ * multi-select mode where the user can select multiple request and delete them.
+ */
+
 public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, JobRequestsAdapter.RequestsViewHolder>
     implements ActionMode.Callback {
 
@@ -45,7 +55,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
         void onChatClicked(View v, JobRequests request);
 
-        void deleteSelection(ArrayList<String> arrayList);
+        void deleteSelection(ArrayList<JobRequests> arrayList);
 
         void configureSupportAction(ActionMode.Callback callback);
 
@@ -59,16 +69,17 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
     private int mExpandedPosition = RecyclerView.NO_POSITION;
     private boolean multiSelect = false;
     private int numberOfSelected = 0;
-    private ArrayList<String> selectedItems = new ArrayList<>();
+    private ArrayList<JobRequests> selectedItems = new ArrayList<>();
     private ActionMode actionMode;
     private Context context;
     private final boolean isBusiness;
 
     /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
+     * Creates a new recycler view adapter that listens to firestore query in real time.
+     * @param options The firestore options for the adapter.
+     * @param listener The listener responsible for actions in the adspter's viewholder.
+     * @param isBusiness Whether the adapter is being used in the business or consuemr interface.
+     * @param rv The recycler view of the constructed adapter.
      */
     public JobRequestsAdapter(@NonNull FirestoreRecyclerOptions<JobRequests> options,
                               RequestClickedListener listener, boolean isBusiness, RecyclerView rv) {
@@ -86,6 +97,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         return new RequestsViewHolder(inflater.inflate(R.layout.job_request_list_item, parent, false));
     }
 
+
     @Override
     protected void onBindViewHolder(@NonNull RequestsViewHolder holder, int position, @NonNull JobRequests model) {
 
@@ -100,7 +112,7 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
 
         holder.itemView.setOnClickListener(v -> {
             if (this.multiSelect) {
-                selectRequest(holder, documentId);
+                selectRequest(holder, request);
                 return;
             }
             mExpandedPosition = isExpanded ? -1 : position;
@@ -111,23 +123,34 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         });
 
         holder.itemView.setOnLongClickListener(v -> {
+            if (request.getStatus() == JobRequests.STATUS_CONFIRMED) {
+                Toast.makeText(this.context, "You can only perform actions a confirmed request manually",
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            }
             if (!this.multiSelect) {
                 this.multiSelect = true;
                 this.mListener.configureSupportAction(JobRequestsAdapter.this);
-                selectRequest(holder, documentId);
+                selectRequest(holder, request);
             }
             return true;
         });
     }
 
-    private void selectRequest(RequestsViewHolder holder, String documentId) {
+    private void selectRequest(RequestsViewHolder holder, JobRequests selectedRequest) {
+
+        if (selectedRequest.getStatus() == JobRequests.STATUS_CONFIRMED) {
+            Toast.makeText(this.context, "You can only delete a confirmed request manually",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
         CardView card = holder.itemView.findViewById(R.id.requestCardView);
-        if (this.selectedItems.contains(documentId)) {
-            this.selectedItems.remove(documentId);
+        if (this.selectedItems.contains(selectedRequest)) {
+            this.selectedItems.remove(selectedRequest);
             this.numberOfSelected--;
             card.setAlpha(1.0f);
         } else {
-            this.selectedItems.add(documentId);
+            this.selectedItems.add(selectedRequest);
             this.numberOfSelected++;
             card.setAlpha(0.3f);
         }
@@ -171,6 +194,9 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
         notifyDataSetChanged();
     }
 
+    /**
+     * Calls the listeners delete selection method.
+     */
     private void deleteSelectedItems() {
         new MaterialAlertDialogBuilder(this.context)
                 .setTitle("Are you sure you want to remove selected requests?")
@@ -184,6 +210,11 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                 .show();
     }
 
+    /**
+     * ViewHolder responsible for displaying a job request information. Each job request also
+     * has 2 action methods that differs based on the status of the job request and whether the adapter
+     * is being used in the consumer or business context.
+     */
     public class RequestsViewHolder extends RecyclerView.ViewHolder {
 
         private static final float DEACTIVATED = 0.3f;
@@ -278,6 +309,11 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             this.chatButton.setOnClickListener(v -> mListener.onChatClicked(v, request));
         }
 
+        /**
+         * Sets the color of the view holder depending on the status of the job request.
+         * @param request The request displayed in the viewHolder.
+         * @return The resource id of the respective status color.
+         */
         private int getColor(JobRequests request) {
             if (request.getStatus() == JobRequests.STATUS_PENDING) {
                 return ContextCompat.getColor(context, R.color.jobRequestPending);
@@ -290,6 +326,12 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             }
         }
 
+        /**
+         * Go to the listing of the job request in the viewHolder. This method is activated when
+         * the user clicks the profile picture of the viewHolder. This method is only available to
+         * consumer users and not business users.
+         * @param request The request of the viewHolder.
+         */
         private void goToListing(JobRequests request) {
             String businessId = request.getBusinessId();
             CollectionReference listingsDb = FirebaseFirestore.getInstance().collection(Listings.DATABASE_COLLECTION);
@@ -299,11 +341,18 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                 Listings listing = snapshot.toObject(Listings.class);
                 bundle.putParcelable("listing", listing);
                 bundle.putString("id", businessId);
+                bundle.putString("category", request.getService());
                 Navigation.findNavController(itemView)
                         .navigate(R.id.action_jobRequests_to_listingDescription, bundle);
             });
         }
 
+        /**
+         * Configures the action one button based on the isBusiness boolean. It then
+         * calls the listener action one clicked method if the button is activated.
+         * @param request The request of the viewHolder.
+         * @param documentId The firestore id of the job request.
+         */
         private void configureActionOne(JobRequests request, String documentId) {
             this.actionOneButton.setOnClickListener(x -> {
                 if (this.actionOneErrorMessage == null) {
@@ -325,6 +374,12 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             });
         }
 
+        /**
+         * Configures the action two button based on the isBusiness boolean. It then
+         * calls the listener action two clicked method if the button is activated.
+         * @param request The request of the viewHolder.
+         * @param documentId The firestore id of the job request.
+         */
         private void configureActionTwo(JobRequests request, String documentId) {
             this.actionTwoButton.setOnClickListener(v -> {
                 if (actionTwoErrorMessage != null) {
@@ -338,6 +393,10 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             });
         }
 
+        /**
+         * Sets the text for the action one button.
+         * @param request The request in the viewHolder.
+         */
         private void setActionOneText(JobRequests request) {
             if (isBusiness) {
                 this.actionOneButton.setText(R.string.action_one_decline);
@@ -346,6 +405,10 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             }
         }
 
+        /**
+         * Sets the text for the action two button.
+         * @param request The request in the viewHolder.
+         */
         private void setActionTwoText(JobRequests request) {
             if (isBusiness) {
                 if (request.getStatus() == JobRequests.STATUS_CONFIRMED ||
@@ -363,6 +426,14 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             }
         }
 
+        /**
+         * Sets whether the action button is activated or not depending on the status of the
+         * respective job request. If the button is not activated, it becomes translucent and
+         * clicking it, will show the user the error message for the action one button about why the
+         * action item cannot be clicked. If the action one button is activated, it will not
+         * have an error message.
+         * @param request The request of the ViewHolder
+         */
         private void setActionOneAlpha(JobRequests request) {
             if (request.getStatus() == JobRequests.STATUS_CANCELLED) {
                 this.actionOneButton.setAlpha(DEACTIVATED);
@@ -379,6 +450,14 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             }
         }
 
+        /**
+         * Sets whether the action button is activated or not depending on the status of the
+         * respective job request. If the button is not activated, it becomes translucent and
+         * clicking it, will show the user the error message for the action two button about why the
+         * action item cannot be clicked. If the action two button is activated, it will not
+         * have an error message.
+         * @param request The request of the ViewHolder
+         */
         private void setActionTwoAlpha(JobRequests request) {
             if (isBusiness) {
                 if (request.getStatus() == JobRequests.STATUS_FINISHED) {
@@ -416,6 +495,12 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
             }
         }
 
+
+        /**
+         * Configures each viewHolder overflow options pop up tab. The tab provides different options
+         * for each respective job request.
+         * @param requests
+         */
         private void configureOptions(JobRequests requests) {
             this.optionsButton.setOnClickListener(v -> {
                 PopupMenu popupMenu = new PopupMenu(context, optionsButton);

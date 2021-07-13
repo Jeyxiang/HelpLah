@@ -17,6 +17,7 @@ import com.example.helplah.R;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.NotificationHandler;
+import com.example.helplah.models.ProfilePictureHandler;
 import com.example.helplah.models.User;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
@@ -82,6 +83,17 @@ public class SendJobRequestFragment extends Fragment {
         } catch (Exception e) {
             Toast.makeText(getActivity(), "An unexpected error occurred", Toast.LENGTH_SHORT).show();
         }
+
+        // Checks that there is the required information in the bundle passed to this fragment. If not
+        // return to the previous screen.
+        if (this.listing == null || this.businessId == null || this.category == null) {
+            // Todo To be removed
+            if (this.category == null) {
+                return;
+            }
+            Toast.makeText(getActivity(), "An unexpected error occurred", Toast.LENGTH_SHORT).show();
+            requireActivity().onBackPressed();
+        }
     }
 
     @Override
@@ -102,6 +114,8 @@ public class SendJobRequestFragment extends Fragment {
         this.sendButton = this.rootView.findViewById(R.id.jobSendButton);
 
         this.jobDate.setFocusable(false);
+        ImageView profilePicture = this.rootView.findViewById(R.id.businessImage);
+        ProfilePictureHandler.setProfilePicture(profilePicture, this.businessId, requireContext());
 
         getUserInformation();
         bind();

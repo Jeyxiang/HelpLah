@@ -10,13 +10,6 @@
         android:contentDescription="@string/content_description_filter" />
 
     <item
-        android:id="@+id/topBarSearch"
-        android:title="Search"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:contentDescription="@string/content_description_search" />
-
-    <item
         android:id="@+id/topBarGetNew"
         android:title="Show new requests"
         app:showAsAction="never"

@@ -9,10 +9,20 @@ import com.google.firebase.functions.HttpsCallableResult;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class responsible for calling the https firebase cloud function.
+ */
 public class CloudFunctionCaller {
 
     private static final String TAG = "Cloud function caller";
 
+    /**
+     * It is called when the contact number of a user is changed. The cloud functions then makes the
+     * necessary changes in the database.
+     * @param id The user id of the user.
+     * @param newNumber The new number.
+     * @param isBusiness Is the user who made the change a business user or consumer user.
+     */
     public static void contactChanged(String id, int newNumber, boolean isBusiness) {
         Map<String, Object> data = new HashMap<>();
         data.put("newNumber", newNumber);
@@ -33,6 +43,12 @@ public class CloudFunctionCaller {
                 });
     }
 
+    /**
+     * It is called when a business changes its business name. The cloud function then makes the
+     * necessary changes in the database.
+     * @param listingId The id of the listing whose name was changed.
+     * @param newName The new name.
+     */
     public static void listingNameChanged(String listingId, String newName) {
         Map<String, Object> data = new HashMap<>();
         data.put("listingId", listingId);

@@ -31,11 +31,7 @@
         android:id="@+id/businessJobsRequestsFragment"
         android:name="com.example.helplah.viewmodel.business.BusinessJobsRequestsFragment"
         android:label="fragment_business_jobs_requests"
-        tools:layout="@layout/fragment_business_jobs_requests" >
-        <action
-            android:id="@+id/action_businessJobsRequestsFragment_to_requestSearchFragment"
-            app:destination="@id/requestSearchFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_business_jobs_requests" />
     <fragment
         android:id="@+id/businessChatFragment"
         android:name="com.example.helplah.viewmodel.business.BusinessChatFragment"
@@ -104,12 +100,4 @@
         android:name="com.example.helplah.viewmodel.business.BusinessJobRequestNotification"
         android:label="business_job_request_notification_fragment"
         tools:layout="@layout/business_job_request_notification_fragment" />
-    <fragment
-        android:id="@+id/requestSearchFragment"
-        android:name="com.example.helplah.viewmodel.business.RequestSearchFragment"
-        android:label="RequestSearchFragment" >
-        <action
-            android:id="@+id/action_requestSearchFragment_to_businessJobRequestNotification"
-            app:destination="@id/businessJobRequestNotification" />
-    </fragment>
 </navigation>

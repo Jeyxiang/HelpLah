@@ -6,7 +6,7 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 
 /**
- * Class to construct a query made based on filters and sort.
+ * Class to construct a firestore query made based on the different filters and sort.
  */
 public class ListingsQuery {
 
