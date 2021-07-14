@@ -27,6 +27,8 @@ import java.util.Objects;
 public class JobRequests implements Parcelable {
 
     private static final String TAG = "Job requests";
+
+    // Static fields to query the database. Use these static Strings so as to prevent any typos.
     public static final String DATABASE_COLLECTION = "Job requests";
     public static final String FIELD_CUSTOMER_ID = "customerId";
     public static final String FIELD_BUSINESS_ID = "businessId";

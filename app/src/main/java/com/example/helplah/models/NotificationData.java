@@ -3,11 +3,11 @@ package com.example.helplah.models;
 public class NotificationData {
 
     public Data data;
-    public String token;
+    public String to;
 
-    public NotificationData(Data data, String token) {
+    public NotificationData(Data data, String to) {
         this.data = data;
-        this.token = token;
+        this.to = to;
     }
 
     public NotificationData() {}
