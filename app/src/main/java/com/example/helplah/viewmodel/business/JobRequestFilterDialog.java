@@ -28,9 +28,8 @@ import java.util.Date;
 import java.util.Objects;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link JobRequestFilterDialog} factory method to
- * create an instance of this fragment.
+ * A filter dialog that contains different sort and filter options for job requests. It is to
+ * be used in the business JobRequestFragment.
  */
 public class JobRequestFilterDialog extends DialogFragment implements
         View.OnClickListener,

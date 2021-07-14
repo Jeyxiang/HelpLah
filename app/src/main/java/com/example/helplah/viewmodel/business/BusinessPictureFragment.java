@@ -42,6 +42,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A fragment which allows the current business user to view and change his profile picture.
+ */
 public class BusinessPictureFragment extends Fragment {
 
     private static File tempFile; //to store the camera picture temporarily

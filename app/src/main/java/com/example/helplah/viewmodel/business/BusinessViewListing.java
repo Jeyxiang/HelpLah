@@ -33,6 +33,16 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+
+/**
+ * A fragment for the current business user to see how their listing is currently displayed
+ * to consumers.
+ *
+ *  * This fragment requires the following arguments in the bundle when navigating to it:
+ *  * id - String: The listing id of the listing, which is the same as the business firebase
+ *  authentication id.
+ *  listing - Parcelable: The listing to display. (Obtained from cloud firestore)
+ */
 public class BusinessViewListing extends Fragment implements CategoriesAdapter.onCategorySelected {
 
     private static final String TAG = "Business View Listing";

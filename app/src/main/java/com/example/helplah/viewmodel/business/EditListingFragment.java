@@ -30,6 +30,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Allows a business user to edit his business listing.
+ */
 public class EditListingFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "Edit Listings";

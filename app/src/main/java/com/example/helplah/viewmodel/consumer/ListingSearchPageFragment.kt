@@ -25,9 +25,7 @@ import com.example.helplah.models.Listings
 import com.google.firebase.firestore.FirebaseFirestore
 
 /**
- * A simple [Fragment] subclass.
- * Use the [ListingSearchPageFragment.newInstance] factory method to
- * create an instance of this fragment.
+ * When a user searches for a listing by name, this page shows the results of that search to the user.
  */
 class ListingSearchPageFragment : Fragment(), SearchListingAdapter.OnListingClickedListener {
 

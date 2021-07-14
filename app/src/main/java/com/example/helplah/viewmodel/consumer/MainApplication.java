@@ -9,6 +9,9 @@ import com.cometchat.pro.exceptions.CometChatException;
 import com.cometchat.pro.uikit.ui_settings.UIKitSettings;
 import com.example.helplah.models.Constants;
 
+/**
+ * This code is run during the start up of the app. It confutres the CometChat UIKIT settings.
+ */
 public class MainApplication extends Application {
 
     private static final String TAG = "Main Application";

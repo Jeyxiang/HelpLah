@@ -19,6 +19,11 @@ import com.example.helplah.adapters.CategoriesAdapter;
 import com.example.helplah.models.Services;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+/**
+ * Home page for the user interface. Shows all the different service categories the app currently
+ * supports. Users can click on a category to see all the listing that provides that particular
+ * service category.
+ */
 public class ServicesCategoriesFragment extends Fragment
         implements CategoriesAdapter.onCategorySelected, MaterialSearchBar.OnSearchActionListener {
 

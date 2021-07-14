@@ -19,9 +19,11 @@ import com.example.helplah.models.Review;
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link WriteReviewFragment} factory method to
- * create an instance of this fragment.
+ * Allows a user to write a review for the business after a job request ahs been marked as
+ * completed.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * JobRequests - Parcelable: The job request linked to the review to be made.
  */
 public class WriteReviewFragment extends Fragment {
 

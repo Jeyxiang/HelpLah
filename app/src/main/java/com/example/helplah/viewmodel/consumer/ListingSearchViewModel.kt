@@ -19,6 +19,9 @@ import com.example.helplah.models.Listings
 import io.ktor.client.features.logging.*
 import kotlinx.serialization.json.jsonPrimitive
 
+/**
+ * A view model for the Listing Search Page Fragment.
+ */
 class ListingSearchViewModel : ViewModel() {
 
     val client = ClientSearch(ApplicationID(Constants.ALGOLIA_APP_ID),

@@ -1,9 +1,22 @@
 package com.example.helplah.models;
 
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.example.helplah.APIs.NotificationAPI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Class which contains methods to create new notifications and adding it to a database. The recipient
@@ -37,7 +50,7 @@ public class NotificationHandler {
         if (request.getStatus() == JobRequests.STATUS_CONFIRMED) {
             Notification notification = new Notification();
             notification.setType(Notification.JOB_REQUEST_EDITED);
-            String title = request.getCustomerName() + " changed a job request.";
+            String title = request.getCustomerName() + " changed a confirmed job request.";
             String text = "Please view the changes and then re-confirm or cancel the edited request.";
             notification.setDate(new Date());
             notification.setText(text);
@@ -165,6 +178,56 @@ public class NotificationHandler {
                 .document(userId)
                 .collection(Notification.DATABASE_COLLECTION);
 
+        popNotification(notification.getRecipientId(), notification.getTitle(), notification.getText());
         db.add(notification);
+    }
+
+    public static void popNotification(String userid, String title, String message) {
+        String TAG = "Notification Result";
+        Log.d(TAG, "popNotification: Sending notification");
+        NotificationAPI apiService = Client.getClient("https://fcm.googleapis.com/").create(NotificationAPI.class);
+        DocumentReference userDoc = FirebaseFirestore.getInstance().collection(Token.DATABASE_COLLECTION)
+                .document(userid);
+        userDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String usertoken = (String) document.get("token");
+                        Log.d(TAG, "onComplete: usertoken for " + userid + "is " + usertoken);
+                        Data data = new Data(title, message);
+                        NotificationData sender = new NotificationData(data, usertoken);
+                        apiService.sendNotification(sender).enqueue(new Callback<MyResponse>() {
+                            @Override
+                            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                if (response.code() == 200) {
+                                    if (response.body().success != 1) {
+                                        //fail to send notification
+                                        Log.e(TAG, "Fail to send notification");
+                                        Log.d(TAG, "onResponse: Failed to sent notification.");
+                                    } else {
+                                        Log.e(TAG, "notification sent");
+                                        Log.d(TAG, "onResponse: Notification send");
+                                    }
+                                } else {
+                                    Log.d(TAG, "onResponse: Respond code not 200" + response);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<MyResponse> call, Throwable t) {
+                                Log.d(TAG, "Fail to send notification");
+                                Log.d(TAG, "onFailure: Failed to send notification.");
+                            }
+                        });
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

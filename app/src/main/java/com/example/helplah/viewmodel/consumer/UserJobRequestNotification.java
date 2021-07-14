@@ -17,6 +17,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+/**
+ * Fragment for displaying a single job request. It is opened when a user opens a job request
+ * notification. The fragment will display the job request of the notification. It is similar to
+ * the  job request fragment but only shows one job request.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * id - String: The id of the job request in the notification
+ */
 public class UserJobRequestNotification extends JobRequestsFragment {
 
     private FirestoreRecyclerOptions<JobRequests> options;

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -13,9 +14,13 @@ import com.cometchat.pro.core.CometChat;
 import com.cometchat.pro.exceptions.CometChatException;
 import com.example.helplah.R;
 import com.example.helplah.models.Constants;
+import com.example.helplah.models.FCMHandler;
+import com.example.helplah.models.Token;
 import com.example.helplah.models.User;
 import com.example.helplah.viewmodel.business.BusinessMainActivity;
 import com.example.helplah.viewmodel.login_screen.LoginScreen;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
+        updateToken();
     }
 
     private void goToConsumer() {
@@ -157,5 +162,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    //initialise Token in the firebase
+    private void updateToken(){
+        //update the new FCM
+        FCMHandler.enableFCM();
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String refreshToken = task.getResult();
+                        Token token= new Token(refreshToken);
+                        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        FirebaseFirestore.getInstance().collection(Token.DATABASE_COLLECTION).document(userid).set(token);
+                    }
+                });
     }
 }

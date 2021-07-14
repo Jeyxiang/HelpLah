@@ -3,6 +3,7 @@ package com.example.helplah.viewmodel.consumer;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,11 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.helplah.R;
+import com.example.helplah.models.FCMHandler;
+import com.example.helplah.models.Token;
 import com.example.helplah.viewmodel.login_screen.LoginScreen;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.StorageReference;
 
 
@@ -68,8 +72,12 @@ public class ConsumerSettingsFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), LoginScreen.class);
                 startActivity(i);
+                String userid = FirebaseAuth.getInstance().getUid();
                 FirebaseAuth.getInstance().signOut(); //sign user out
+                assert userid != null;
+                FirebaseFirestore.getInstance().collection(Token.DATABASE_COLLECTION).document(userid).set(new Token());
                 requireActivity().finish();
+                FCMHandler.disableFCM(); //remove token from firebase cloud
             }
         });
 
@@ -108,6 +116,16 @@ public class ConsumerSettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(v).navigate(R.id.action_consumerSettingsFragment_to_editConPasswordFragment);
+            }
+        });
+
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, requireActivity().getPackageName());
+                startActivity(settingsIntent);
             }
         });
 

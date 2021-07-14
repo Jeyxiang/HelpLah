@@ -20,6 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+/**
+ * Fragment for displaying a recycler view that displays the user's notifications. It is to be used
+ * in a viewPager in the Account Fragment of consumer users and business users. This part is reused in
+ * both interfaces since they have the same functionality.
+ */
 public class AccountNotificationsTab extends Fragment
         implements NotificationTabAdapter.NotificationClickedListener{
 
@@ -31,6 +36,11 @@ public class AccountNotificationsTab extends Fragment
 
     public AccountNotificationsTab() {}
 
+    /**
+     * Creates a new instance of this fragment.
+     * @param isBusiness Whether this fragment is being used by a busines user or consumer user.
+     * @return The fragment created.
+     */
     public static AccountNotificationsTab newInstance(boolean isBusiness) {
 
         Bundle args = new Bundle();

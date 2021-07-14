@@ -29,7 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.jetbrains.annotations.NotNull;
 
-
+/**
+ * Allows a user to change his password.
+ */
 public class EditConPasswordFragment extends Fragment {
 
     private FirebaseAuth mAuth;

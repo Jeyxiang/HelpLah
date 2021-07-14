@@ -11,6 +11,13 @@ import androidx.fragment.app.Fragment;
 import com.example.helplah.R;
 import com.example.helplah.models.Review;
 
+/**
+ * Allows the user to view a reply to their review after the business had replied to
+ * a previously made review.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * Review - Parcelable: The review replied to.
+ */
 public class ViewReplyFragment extends Fragment {
 
     private Review review;

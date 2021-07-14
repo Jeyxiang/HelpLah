@@ -43,10 +43,18 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ListingDescription} factory method to
- * create an instance of this fragment.
- */
+ * Shows more information about a listing.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * id - String: The id of the listing to be displayed.
+ * listing - Parcelable: The listing object to be displayed.
+ * Service - String: This is an optional argument. It is only used when a consumer user searches for a
+ * listing using the different categories tabs in the home page. This argument will allow the user to
+ * filter the reviews to only show the reviews provided for a certain service. for example, if a business
+ * provides multiple services and the user is searching for plumbers, then "plumber is passed as an
+ * argument to this fragment. The user can then filter to displays reviews where the business has
+ * been hired for a plumber job.
+ * */
 public class ListingDescription extends Fragment implements CategoriesAdapter.onCategorySelected {
 
     private static final String TAG = "Listing description";

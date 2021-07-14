@@ -2,6 +2,7 @@ package com.example.helplah.viewmodel.business;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,14 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import com.example.helplah.R;
+import com.example.helplah.models.FCMHandler;
+import com.example.helplah.models.Token;
 import com.example.helplah.viewmodel.login_screen.LoginScreen;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link BusinessSettingsFragment} factory method to
- * create an instance of this fragment.
+ * Shows the setting menu for the current business user.
  */
 public class BusinessSettingsFragment extends Fragment {
 
@@ -62,8 +64,12 @@ public class BusinessSettingsFragment extends Fragment {
         logoutButton.setOnClickListener(v -> {
             Intent i = new Intent(getActivity(), LoginScreen.class);
             startActivity(i);
+            String userid = FirebaseAuth.getInstance().getUid();
             FirebaseAuth.getInstance().signOut(); //sign user out
+            assert userid != null;
+            FirebaseFirestore.getInstance().collection(Token.DATABASE_COLLECTION).document(userid).set(new Token()); //remove token from db
             requireActivity().finish();
+            FCMHandler.disableFCM();
         });
 
 
@@ -80,6 +86,16 @@ public class BusinessSettingsFragment extends Fragment {
 
         passwordButton.setOnClickListener(v ->
                 Navigation.findNavController(v).navigate(R.id.action_business_edit_password));
+
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingsIntent = new Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, requireActivity().getPackageName());
+                startActivity(settingsIntent);
+            }
+        });
 
         return rootView;
     }

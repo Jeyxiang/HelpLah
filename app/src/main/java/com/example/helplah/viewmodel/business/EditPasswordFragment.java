@@ -30,9 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditPasswordFragment} factory method to
- * create an instance of this fragment.
+ * Allows a user to change his password.
  */
 public class EditPasswordFragment extends Fragment {
 

@@ -22,6 +22,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+/**
+ * Fragment that shows all the reviews received made by the user. This fragment is meant to be
+ * used in a viewpager in the BusinessAccountFragment tab.
+ */
 public class UserAccountReviewsTab extends Fragment implements ReviewTabAdapter.OptionsListener {
 
     private FirestorePagingOptions<Review> options;

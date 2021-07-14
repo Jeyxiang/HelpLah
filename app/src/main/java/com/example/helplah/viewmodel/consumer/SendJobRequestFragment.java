@@ -35,9 +35,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link SendJobRequestFragment} factory method to
- * create an instance of this fragment.
+ * A fragment for users to send job requests to businesses or edit previously made requests.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * id - String: The Firestore id of the business who will receive the job requests.
+ * listing - Parcelable: The listing object who will receive the job request.
+ * Service - String: The service the user requires from the business.
+ * Request - Parcelable: The previous request. (Only needed if editing a previous job request, not
+ * needed if creating a new job request.)
+ * requestId - String: The Firestore id of the previous request. (Only needed if editing a previous
+ * job request, not needed if creating a new job request.)
  */
 public class SendJobRequestFragment extends Fragment {
 
@@ -117,16 +124,18 @@ public class SendJobRequestFragment extends Fragment {
         ImageView profilePicture = this.rootView.findViewById(R.id.businessImage);
         ProfilePictureHandler.setProfilePicture(profilePicture, this.businessId, requireContext());
 
-        getUserInformation();
-        bind();
-
         JobRequests request = this.getArguments().getParcelable("request");
 
         if (request != null) {
             this.previousRequest = request;
             this.previousRequestId = this.getArguments().getString("requestId");
             setEditMode();
+            getUserInformation(true);
+        } else {
+            getUserInformation(false);
         }
+
+        bind();
 
         return this.rootView;
     }
@@ -267,6 +276,7 @@ public class SendJobRequestFragment extends Fragment {
                     .addOnFailureListener(e ->
                             Toast.makeText(getActivity(),
                                     "Failed to edit request", Toast.LENGTH_SHORT).show());
+            NotificationHandler.requestChanged(this.previousRequest);
             return;
         }
 
@@ -283,7 +293,7 @@ public class SendJobRequestFragment extends Fragment {
                                 "Request failed to send", Toast.LENGTH_SHORT).show());
     }
 
-    private void getUserInformation() {
+    private void getUserInformation(boolean editMode) {
 
         this.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -294,13 +304,16 @@ public class SendJobRequestFragment extends Fragment {
                 User user = snapshot.toObject(User.class);
                 username = user.getUsername();
                 phoneNumber = user.getPhoneNumber();
-                jobNumber.setText(String.valueOf(phoneNumber));
                 address = user.getAddress();
                 postalCode = user.getPostalCode();
-                jobAddress.setText(address);
-                if (postalCode != 0) {
-                    jobPostalCode.setText(String.valueOf(postalCode));
+                if (!editMode) {
+                    jobNumber.setText(String.valueOf(phoneNumber));
+                    jobAddress.setText(address);
+                    if (postalCode != 0) {
+                        jobPostalCode.setText(String.valueOf(postalCode));
+                    }
                 }
+
                 queryDone = true;
             }
         }).addOnFailureListener(e ->

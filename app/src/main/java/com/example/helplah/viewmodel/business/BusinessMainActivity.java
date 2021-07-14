@@ -1,15 +1,27 @@
 package com.example.helplah.viewmodel.business;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.helplah.R;
+import com.example.helplah.models.FCMHandler;
+import com.example.helplah.models.Token;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+/***
+ * The main activity of the business interface which hosts all the fragments and navigation component.
+ */
 public class BusinessMainActivity extends AppCompatActivity {
 
     private NavController navController;
@@ -37,5 +49,35 @@ public class BusinessMainActivity extends AppCompatActivity {
                     navController.popBackStack(R.id.businessAccountFragment, false);
             }
         });
+        updateToken();
+        //navigate to page upon clicking of notification
+        boolean fromNav = getIntent().getBooleanExtra("fromNotification",false);
+        if (fromNav) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean("fromNotification",true);
+            navController.navigate(R.id.businessAccountFragment, bundle);
+        }
+    }
+
+    private void updateToken(){
+        //update the token of the device into the firestore
+        FCMHandler.enableFCM();
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("Business Main Activity", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String refreshToken = task.getResult();
+                        Token token= new Token(refreshToken);
+                        String userid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        FirebaseFirestore.getInstance().collection(Token.DATABASE_COLLECTION).document(userid).set(token);
+
+                    }
+                });
     }
 }

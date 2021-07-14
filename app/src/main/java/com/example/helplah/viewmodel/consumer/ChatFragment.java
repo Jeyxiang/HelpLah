@@ -18,6 +18,9 @@ import com.cometchat.pro.uikit.ui_resources.constants.UIKitConstants;
 import com.cometchat.pro.uikit.ui_resources.utils.item_clickListener.OnItemClickListener;
 import com.example.helplah.R;
 
+/**
+ * Displays all the chat for the current user.
+ */
 public class ChatFragment extends Fragment {
 
     private static final String TAG = "Chat fragment";

@@ -1,6 +1,8 @@
 package com.example.helplah.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.helplah.R;
+import com.example.helplah.models.ChatFunction;
 import com.example.helplah.models.JobRequests;
 import com.example.helplah.models.Listings;
 import com.example.helplah.models.ProfilePictureHandler;
@@ -520,6 +523,14 @@ public class JobRequestsAdapter extends FirestoreRecyclerAdapter<JobRequests, Jo
                         Log.d(TAG, "configureOptions: Going to job address location " + requests.getAddress());
                         JobRequests.goToAddress(requests, context);
                         return true;
+                    } else if (item.getItemId() == R.id.call) {
+                        int number = isBusiness ? requests.getPhoneNumber() : requests.getBusinessPhoneNumber();
+                        Intent call = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));
+                        context.startActivity(call);
+                    } else if (item.getItemId() == R.id.chat) {
+                        String recipientName = isBusiness ? requests.getCustomerName() : requests.getBusinessName();
+                        String recipientId = isBusiness ? requests.getCustomerId() : requests.getBusinessId();
+                        ChatFunction.createChat(recipientId, recipientName, context);
                     }
                     return false;
                 });

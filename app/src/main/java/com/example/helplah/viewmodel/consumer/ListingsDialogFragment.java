@@ -26,10 +26,17 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * A dialog fragment that shows all the filter and sort options for business listings. Allows the user
+ * to sort and filter listings.
+ */
 public class ListingsDialogFragment extends DialogFragment implements View.OnClickListener {
 
     public static final String TAG = "ListingsFilterDialog";
 
+    /**
+     * The listener listens for the filter and sorts options.
+     */
     public interface FilterListener {
 
         void onFilter(Query query);

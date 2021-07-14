@@ -18,6 +18,13 @@ import com.example.helplah.models.Review;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
+/**
+ * Allows the user to edit a previously made review.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * Review - Parcelable: The review to be edited.
+ * Job Request - Parcelable: The job request that the review is linked to.
+ */
 public class EditReviewFragment extends Fragment {
 
     private static final String TAG = "Write review fragment";

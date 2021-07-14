@@ -25,6 +25,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Allows the user to edit his account information and syncs it into the firestore database.
+ */
 public class EditConAccountFragment extends Fragment {
 
     private static final String TAG = "Edit Listings";

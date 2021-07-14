@@ -34,6 +34,19 @@ import java.util.Arrays;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+/**
+ * Shows all the reviews of a particular listing.
+ *
+ * This fragment requires the following arguments in the bundle when navigating to it:
+ * id - String: The id of the listing whose reviews are to be displayed.
+ * Service - String: This is an optional argument. It is only used when a consumer user searches for a
+ * listing using the different categories tabs in the home page. This argument will allow the user to
+ * filter the reviews to only show the reviews provided for a certain service. for example, if a business
+ * provides multiple services and the user is searching for plumbers, then "plumber is passed as an
+ * argument to this fragment. The user can then filter to displays reviews where the business has
+ * been hired for a plumber job.
+ * reviewScore - double: The average review score of the listing.
+ */
 public class ViewReviewsFragment extends Fragment {
 
     public static final String  TAG = "View review fragment";

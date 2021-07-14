@@ -17,6 +17,9 @@ import com.cometchat.pro.uikit.ui_resources.constants.UIKitConstants;
 import com.cometchat.pro.uikit.ui_resources.utils.item_clickListener.OnItemClickListener;
 import com.example.helplah.R;
 
+/**
+ * Shows the all the chats of the Business user. Clicking a chat opens it.
+ */
 public class BusinessChatFragment extends Fragment {
 
     @Override

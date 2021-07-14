@@ -22,6 +22,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * Allows the user to write a complaint about the app. The complaint will be received by the app
+ * administrator.
+ */
 public class ConsumerComplainFragment extends Fragment {
 
     private FirebaseAuth mAuth;

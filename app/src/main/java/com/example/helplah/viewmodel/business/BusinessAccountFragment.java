@@ -82,7 +82,6 @@ public class BusinessAccountFragment extends Fragment {
         getListingFromDatabase();
         configureViewPager();
 
-
         return rootView;
     }
 
@@ -144,6 +143,22 @@ public class BusinessAccountFragment extends Fragment {
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) ->
                 tab.setText(position == 0 ? "My reviews" : "Notifications")
         ).attach();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            boolean fromNotification = bundle.getBoolean("fromNotification", false);
+            if (fromNotification) {
+                tabLayout.setScrollPosition(1, 0f, true);
+                viewPager.setCurrentItem(1);
+                bundle.remove("fromNotification");
+            } else {
+                tabLayout.setScrollPosition(0, 0f, true);
+                viewPager.setCurrentItem(0);
+            }
+        } else {
+            tabLayout.setScrollPosition(0, 0f, true);
+            viewPager.setCurrentItem(0);
+        }
     }
 
     private void configureAppBarScroll(AppBarLayout appBarLayout) {

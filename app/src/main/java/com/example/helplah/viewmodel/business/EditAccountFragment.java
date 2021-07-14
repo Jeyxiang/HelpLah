@@ -25,9 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditAccountFragment} factory method to
- * create an instance of this fragment.
+ * Allows the user to edit his account information and syncs it into the firestore database.
  */
 public class EditAccountFragment extends Fragment {
 
