@@ -51,11 +51,16 @@ public class BusinessMainActivity extends AppCompatActivity {
         });
         updateToken();
         //navigate to page upon clicking of notification
-        boolean fromNav = getIntent().getBooleanExtra("fromNotification",false);
-        if (fromNav) {
+        boolean gotoNotification = getIntent().getBooleanExtra("gotoNotification",false);
+        boolean gotoChat = getIntent().getBooleanExtra("gotoChat",false);
+        if (gotoNotification) {
             Bundle bundle = new Bundle();
-            bundle.putBoolean("fromNotification",true);
+            bundle.putBoolean("gotoNotification",true);
+            Log.d("Normal Notification result","directing to account fragment");
             navController.navigate(R.id.businessAccountFragment, bundle);
+        } else if (gotoChat) {
+            Log.d("Comet Notification result","directing to chat fragment");
+            navController.navigate(R.id.businessChatFragment);
         }
     }
 

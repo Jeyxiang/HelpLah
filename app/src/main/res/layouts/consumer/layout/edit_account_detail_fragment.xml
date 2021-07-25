@@ -116,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="15dp"
-                        android:hint="Postal code"
+                        android:hint="Postal code number"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox" >
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -126,8 +126,8 @@
                             android:layout_marginTop="15dp"
                             android:fontFamily="@font/bariol_regular"
                             android:gravity="center_vertical|left"
-                            android:inputType="textCapSentences"
-                            android:maxLength="10"
+                            android:inputType="number"
+                            android:maxLength="6"
                             android:paddingStart="10dp"
                             android:textColor="@color/white"
                             android:textColorHint="@color/white" />
