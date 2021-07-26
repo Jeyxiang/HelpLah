@@ -8,6 +8,9 @@ About our application.
 We have created an android app using Android Studio that serves as a centralised platform that allows providers of maintenance services in Singapore to advertise their services and for customers to view them. Our app also contains a hiring system where customers can send a job request to a provider for a job on a certain date and time. We also provide a chat functionality for customers to talk to businesses and a review system for customers to leave their feedback for other potential customers to view.
 
 You can find more information about our project in the links below:
+
 Project idea: https://docs.google.com/document/d/1vnDHWM8fVGRpZmxwylgtVtkC8OpMLKbbjqLIsawDjK8/edit?usp=sharing
-Project milestone 3 submission:
-Project video:
+
+Project milestone 3 submission: https://drive.google.com/file/d/15c4xY-bNc_I8YPzcp1yto8CpcRmzipUZ/view?usp=sharing
+
+Project video: https://drive.google.com/file/d/1rIYEYfu-jg8PIdY-ZVpfbOPJGwoYXgpZ/view?usp=sharing
