@@ -13,6 +13,6 @@ Project idea: https://docs.google.com/document/d/1vnDHWM8fVGRpZmxwylgtVtkC8OpMLK
 
 Project milestone 3 submission: https://drive.google.com/file/d/15c4xY-bNc_I8YPzcp1yto8CpcRmzipUZ/view?usp=sharing
 
-Project video: https://drive.google.com/file/d/1rIYEYfu-jg8PIdY-ZVpfbOPJGwoYXgpZ/view?usp=sharing
+Project video: https://www.youtube.com/watch?v=3CsEJuicw48
 
 Project Done by: Tey Hao Ze https://github.com/Haozeee, Si Jian Xiang https://github.com/Jeyxiang
